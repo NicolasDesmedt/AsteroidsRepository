@@ -11,7 +11,7 @@ public class Ship {
 	public Ship(double x, double y, double xVelocity, double yVelocity, double radius, double orientation)
 		throws IllegalPositionException{
 		this.setPosition(new double[] {x,y});
-		this.setVelocity(xVelocity, yVelocity);
+		this.setVelocity(new double[] {xVelocity,yVelocity});
 		this.setRadius(radius);
 		this.setOrientation(orientation);
 	}
@@ -44,12 +44,45 @@ public class Ship {
 	}
 	
 	public double[] getVelocity(){
-		double[] velocity = {this.xVelocity, this.yVelocity};
-		return velocity;
+		return this.velocity;
 	}
-	public void setVelocity(double yVelocity){
-		
+	public void setVelocity(double[] velocity){
+		if (Double.isInfinite(velocity[0]) && (Double.isInfinite(velocity[1]))){
+			if (velocity[0] > 0){
+				velocity[0] = SPEED_OF_LIGHT/Math.sqrt(2);
+			} else{
+				velocity[0] = -SPEED_OF_LIGHT/Math.sqrt(2);
+			}
+			if (velocity[1] > 0){
+				velocity[1] = SPEED_OF_LIGHT/Math.sqrt(2);
+			} else{
+				velocity[1] = -SPEED_OF_LIGHT/Math.sqrt(2);
+			}
+		} else if (Double.isInfinite(velocity[0])){
+			if (velocity[0] > 0){
+				velocity[0] = SPEED_OF_LIGHT;
+			} else{
+				velocity[0] = -SPEED_OF_LIGHT;
+			}
+			velocity[1] = 0;
+		} else if (Double.isInfinite(velocity[1])){
+			if (velocity[1] > 0){
+				velocity[1] = SPEED_OF_LIGHT;
+			} else{
+				velocity[1] = -SPEED_OF_LIGHT;
+			}
+			velocity[0] = 0;
+		} else if (speed > SPEED_OF_LIGHT){
+			this.velocity[0] = (velocity[0]*SPEED_OF_LIGHT)/speed;
+			this.velocity[1] = (velocity[1]*SPEED_OF_LIGHT)/speed;
+		} 
+		else{
+			this.velocity = velocity;
+		} 
 	}
+	
+	public double[] velocity = new double[2];
+	public double speed = computeSpeed(velocity);
 	
 	public double getRadius(){
 		return this.radius;
@@ -65,7 +98,10 @@ public class Ship {
 		this.orientation = orientation;
 		return;
 	}
-	public double computeSpeed(){
+	public double computeSpeed(double[] velocity){
+		if (Double.isNaN(velocity[0]) || Double.isNaN(velocity[1])){
+			setVelocity(new double[] {0,0});
+		}
 		double speed = Math.sqrt(Math.pow(this.getVelocity()[0], 2) + Math.pow(this.getVelocity()[1], 2));
 		return speed;
 	}
