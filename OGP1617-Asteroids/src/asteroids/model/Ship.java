@@ -9,7 +9,7 @@ public class Ship {
 	private static final double MIN_ANGLE = 0;
 	
 	public Ship(double x, double y, double xVelocity, double yVelocity, double radius, double orientation){
-		this.setPosition(x,y);
+		this.setPosition(new double[x,y]);
 		this.setVelocity(xVelocity, yVelocity);
 		this.setRadius(radius);
 		this.setOrientation(orientation);
