@@ -3,11 +3,13 @@ package asteroids.model;
 public class IllegalPositionException 
 	extends RuntimeException
 {
+
+	
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
-	
+	private static final long serialVersionUID = -8515716498560806880L;
+
 	public IllegalPositionException(double[] position, Ship ship){
 		this.position = position;
 		this.ship = ship;

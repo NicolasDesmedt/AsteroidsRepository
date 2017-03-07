@@ -7,6 +7,8 @@ public class Ship {
 	private static final double SPEED_OF_LIGHT = 300000;
 	private static final double MAX_ANGLE = 2 * Math.PI;
 	private static final double MIN_ANGLE = 0;
+	private static final double MIN_RADIUS = 10;
+
 	
 	public Ship(double x, double y, double xVelocity, double yVelocity, double radius, double orientation)
 		throws IllegalPositionException{
@@ -16,9 +18,9 @@ public class Ship {
 		this.setOrientation(orientation);
 	}
 	public Ship(){
-		this.setPosition(0,0);
-		this.setVelocity(0,0);
-		this.setRadius(minRadius);
+		this.setPosition(new double[] {0,0});
+		this.setVelocity(new double[] {0,0});
+		this.setRadius(MIN_RADIUS);
 		this.setOrientation(math.PI/2);
 	}
 	
@@ -87,10 +89,15 @@ public class Ship {
 	public double getRadius(){
 		return this.radius;
 	}
-	public void setRadius(double radius){
+	public void setRadius(double radius)
+			throws IllegalRadiusException{
+		if (!isValidRadius(radius)) throw new IllegalRadiusException(radius, this);
 		this.radius = radius;
 		return;
 	}
+	
+	public double radius;
+	
 	public double getOrientation(){
 		return this.getOrientation();
 	}
@@ -104,5 +111,13 @@ public class Ship {
 		}
 		double speed = Math.sqrt(Math.pow(this.getVelocity()[0], 2) + Math.pow(this.getVelocity()[1], 2));
 		return speed;
+	}
+	public static boolean isValidRadius(double radius){
+		if ((radius < MIN_RADIUS) || (Double.isInfinite(radius)) || (Double.isNaN(radius))) {
+			return false;
+		}
+		else{
+			return true;
+		}
 	}
 }
