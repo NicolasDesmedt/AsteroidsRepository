@@ -83,21 +83,23 @@ public class Ship {
 	
 	public double[] velocity = new double[2];
 	public double speed = computeSpeed(velocity);
+	public double orientation;
 	
 	public double getRadius(){
 		return this.radius;
 	}
+		
 	public void setRadius(double radius){
 		this.radius = radius;
 		return;
 	}
 	public double getOrientation(){
-		return this.getOrientation();
+		return this.orientation;
 	}
 	public void setOrientation(double orientation){
 		this.orientation = orientation;
-		return;
 	}
+	
 	public double computeSpeed(double[] velocity){
 		if (Double.isNaN(velocity[0]) || Double.isNaN(velocity[1])){
 			setVelocity(new double[] {0,0});
