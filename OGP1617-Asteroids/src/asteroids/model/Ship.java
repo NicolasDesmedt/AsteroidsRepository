@@ -5,8 +5,6 @@ import java.lang.Math;
 public class Ship {
 	
 	private static final double SPEED_OF_LIGHT = 300000;
-	private static final double MAX_ANGLE = 2 * Math.PI;
-	private static final double MIN_ANGLE = 0;
 	private static final double MIN_RADIUS = 10;
 
 	
@@ -21,7 +19,7 @@ public class Ship {
 		this.setPosition(new double[] {0,0});
 		this.setVelocity(new double[] {0,0});
 		this.setRadius(MIN_RADIUS);
-		this.setOrientation(math.PI/2);
+		this.setOrientation(Math.PI/2);
 	}
 	
 	public double[] getPosition(){
@@ -85,10 +83,12 @@ public class Ship {
 	
 	public double[] velocity = new double[2];
 	public double speed = computeSpeed(velocity);
+	public double orientation;
 	
 	public double getRadius(){
 		return this.radius;
 	}
+
 	public void setRadius(double radius)
 			throws IllegalRadiusException{
 		if (!isValidRadius(radius)) throw new IllegalRadiusException(radius, this);
@@ -99,12 +99,12 @@ public class Ship {
 	public double radius;
 	
 	public double getOrientation(){
-		return this.getOrientation();
+		return this.orientation;
 	}
 	public void setOrientation(double orientation){
 		this.orientation = orientation;
-		return;
 	}
+	
 	public double computeSpeed(double[] velocity){
 		if (Double.isNaN(velocity[0]) || Double.isNaN(velocity[1])){
 			setVelocity(new double[] {0,0});
