@@ -102,7 +102,12 @@ public class Ship {
 		return this.orientation;
 	}
 	public void setOrientation(double orientation){
+		assert isValidOrientation(orientation);
 		this.orientation = orientation;
+	}
+	
+	public boolean isValidOrientation(double orientation){
+		return (orientation>=0 && orientation<=2*Math.PI && !Double.isNaN(orientation));
 	}
 	
 	public double computeSpeed(double[] velocity){
@@ -112,12 +117,47 @@ public class Ship {
 		double speed = Math.sqrt(Math.pow(this.getVelocity()[0], 2) + Math.pow(this.getVelocity()[1], 2));
 		return speed;
 	}
+	
 	public static boolean isValidRadius(double radius){
 		if ((radius < MIN_RADIUS) || (Double.isInfinite(radius)) || (Double.isNaN(radius))) {
 			return false;
 		}
 		else{
 			return true;
+		}
+	}
+	
+	public void move(Ship ship, double duration)
+		throws IllegalDurationException{
+		if (! isValidDuration(duration)) throw new IllegalDurationException(duration, this);
+		double newX = (ship.getPosition()[0] + duration*ship.getVelocity()[0]);
+		double newY = (ship.getPosition()[1] + duration*ship.getVelocity()[1]);
+		double[] newPosition = {newX, newY};
+		ship.setPosition(newPosition);
+	}
+	
+	public static boolean isValidDuration(double duration){
+		if (Double.isNaN(duration) || Double.isInfinite(duration) || (duration < 0)) {
+			return false;
+		}
+		else{
+			return true;
+		}
+	}
+	
+	public void turn(Ship ship, double angle){
+		assert isValidOrientation(ship.getOrientation() + angle);
+		setOrientation(ship.getOrientation() + angle);
+	}
+	
+	public void thrust(Ship ship, double amount){
+		if (amount < 0 || Double.isNaN(amount)){
+			return;
+		}else{
+		double newXVelocity = (ship.getVelocity()[0] + amount*Math.cos(ship.getOrientation()));
+		double newYVelocity = (ship.getVelocity()[1] + amount*Math.sin(ship.getOrientation()));
+		double[] newVelocity= {newXVelocity, newYVelocity};
+		ship.setVelocity(newVelocity);
 		}
 	}
 }
