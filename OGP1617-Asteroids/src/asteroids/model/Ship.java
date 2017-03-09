@@ -2,6 +2,8 @@ package asteroids.model;
 
 import java.lang.Math;
 
+import asteroids.util.ModelException;
+
 public class Ship {
 	
 	private static final double SPEED_OF_LIGHT = 300000;
@@ -171,6 +173,63 @@ public class Ship {
 			return true;
 		}else{
 			return false;
+		}
+	}
+	
+	public double getTimeToCollision(Ship ship1, Ship ship2)
+			throws IllegalArgumentException{
+		if (overlap(ship1, ship2)) throw new IllegalArgumentException("The ships overlap");
+		double diffX = ship1.getPosition()[0] - ship2.getPosition()[0];
+		double diffY = ship1.getPosition()[1] - ship2.getPosition()[1];
+		double diffVX = ship1.getVelocity()[0] - ship2.getVelocity()[0];
+		double diffVY = ship1.getVelocity()[1] - ship2.getVelocity()[1];
+		double distanceCentersSquared = (Math.pow(diffX, 2) + Math.pow(diffY, 2));
+		double varD = (Math.pow((diffVX*diffX + diffVY*diffY), 2) - (Math.pow(diffVX,2) + Math.pow(diffVY,2))*((Math.pow(diffX,2) + Math.pow(diffY,2)) - distanceCentersSquared));
+		if ((diffVX*diffX + diffVY*diffY) >= 0 || varD <= 0){
+			return Double.POSITIVE_INFINITY;
+		}else{
+			double timeToCollision = -(((diffVX*diffX + diffVY*diffY) + Math.sqrt(varD))/(Math.pow(diffVX,2) + Math.pow(diffVY,2)));
+			return timeToCollision;
+		}
+	}
+	
+	public double[] getCollisionPosition(Ship ship1, Ship ship2){
+		if (overlap(ship1, ship2)) throw new IllegalArgumentException("The ships overlap");
+		
+		if (getTimeToCollision(ship1, ship2) == Double.POSITIVE_INFINITY){
+			return null;
+		}else{
+			double duration = getTimeToCollision(ship1, ship2);
+			double collisionX1 = (ship1.getPosition()[0] + duration*ship1.getVelocity()[0]);
+			double collisionY1 = (ship1.getPosition()[1] + duration*ship1.getVelocity()[1]);
+			double collisionX2 = (ship2.getPosition()[0] + duration*ship2.getVelocity()[0]);
+			double collisionY2 = (ship2.getPosition()[1] + duration*ship2.getVelocity()[1]);
+			double diffX = collisionX2 - collisionX1;
+			double diffY = collisionY2 - collisionY1;
+			double angleCenters = 0;
+			if (diffX*diffY >= 0){
+				if (diffX == 0){
+					if (diffY > 0){
+						angleCenters = (Math.PI/2);
+					}else{
+						angleCenters = -(Math.PI/2);
+					}
+				}else if ((diffX > 0) || (diffY == 0)){
+					angleCenters = Math.atan(diffY/diffX);
+				}else if((diffX < 0) || (diffY == 0)){
+					angleCenters = Math.atan(diffY/diffX) + Math.PI;
+				}
+			}else {
+				if (diffY > 0){
+					angleCenters = Math.atan(diffY/diffX);
+				}else if(diffY < 0){
+					angleCenters = Math.atan(diffY/diffX) + Math.PI;
+				}
+			}
+			
+			double[] collisionPoint = {collisionX1 + ship1.getRadius()*Math.cos(angleCenters), collisionY1 + ship1.getRadius()*Math.sin(angleCenters)};
+			return collisionPoint;
+			
 		}
 	}
 	
