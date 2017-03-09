@@ -160,4 +160,18 @@ public class Ship {
 		ship.setVelocity(newVelocity);
 		}
 	}
+	
+	public double getDistanceBetween(Ship ship1, Ship ship2){
+		double distance = (Math.sqrt(Math.pow((ship1.getPosition()[0] - ship2.getPosition()[0]), 2) + Math.pow((ship1.getPosition()[1] - ship2.getPosition()[1]), 2)) - ship1.getRadius() - ship2.getRadius());
+		return distance;
+	}
+	
+	public boolean overlap(Ship ship1, Ship ship2){
+		if (getDistanceBetween(ship1, ship2) < 0){
+			return true;
+		}else{
+			return false;
+		}
+	}
+	
 }
