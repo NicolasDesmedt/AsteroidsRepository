@@ -1,3 +1,4 @@
+
 package asteroids.facade;
 
 import asteroids.model.Ship;
@@ -45,7 +46,7 @@ public class Facade implements IFacade {
 	@Override
 	public void move(Ship ship, double dt) throws ModelException {
 		// TODO Auto-generated method stub
-		ship.move(ship, dt);
+		ship.move(dt);
 	}
 
 	@Override
