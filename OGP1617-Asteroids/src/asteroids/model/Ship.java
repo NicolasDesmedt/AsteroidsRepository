@@ -146,37 +146,37 @@ public class Ship {
 		setOrientation(getOrientation() + angle);
 	}
 	
-	public void thrust(Ship ship, double amount){
+	public void thrust(double amount){
 		if (amount < 0 || Double.isNaN(amount)){
 			return;
 		}else{
-		double newXVelocity = (ship.getVelocity()[0] + amount*Math.cos(ship.getOrientation()));
-		double newYVelocity = (ship.getVelocity()[1] + amount*Math.sin(ship.getOrientation()));
+		double newXVelocity = (this.getVelocity()[0] + amount*Math.cos(this.getOrientation()));
+		double newYVelocity = (this.getVelocity()[1] + amount*Math.sin(this.getOrientation()));
 		double[] newVelocity= {newXVelocity, newYVelocity};
-		ship.setVelocity(newVelocity);
+		this.setVelocity(newVelocity);
 		}
 	}
 	
-	public double getDistanceBetween(Ship ship1, Ship ship2){
-		double distance = (Math.sqrt(Math.pow((ship1.getPosition()[0] - ship2.getPosition()[0]), 2) + Math.pow((ship1.getPosition()[1] - ship2.getPosition()[1]), 2)) - ship1.getRadius() - ship2.getRadius());
+	public double getDistanceBetween(Ship ship2){
+		double distance = (Math.sqrt(Math.pow((this.getPosition()[0] - ship2.getPosition()[0]), 2) + Math.pow((this.getPosition()[1] - ship2.getPosition()[1]), 2)) - this.getRadius() - ship2.getRadius());
 		return distance;
 	}
 	
-	public boolean overlap(Ship ship1, Ship ship2){
-		if (getDistanceBetween(ship1, ship2) < 0){
+	public boolean overlap(Ship ship2){
+		if (this.getDistanceBetween(ship2) < 0){
 			return true;
 		}else{
 			return false;
 		}
 	}
 	
-	public double getTimeToCollision(Ship ship1, Ship ship2)
+	public double getTimeToCollision(Ship ship2)
 			throws IllegalArgumentException{
-		if (overlap(ship1, ship2)) throw new IllegalArgumentException("The ships overlap");
-		double diffX = ship1.getPosition()[0] - ship2.getPosition()[0];
-		double diffY = ship1.getPosition()[1] - ship2.getPosition()[1];
-		double diffVX = ship1.getVelocity()[0] - ship2.getVelocity()[0];
-		double diffVY = ship1.getVelocity()[1] - ship2.getVelocity()[1];
+		if (this.overlap(ship2)) throw new IllegalArgumentException("The ships overlap");
+		double diffX = ship2.getPosition()[0] - this.getPosition()[0];
+		double diffY = ship2.getPosition()[1] - this.getPosition()[1];
+		double diffVX = ship2.getVelocity()[0] - this.getVelocity()[0];
+		double diffVY = ship2.getVelocity()[1] - this.getVelocity()[1];
 		double distanceCentersSquared = (Math.pow(diffX, 2) + Math.pow(diffY, 2));
 		double varD = (Math.pow((diffVX*diffX + diffVY*diffY), 2) - (Math.pow(diffVX,2) + Math.pow(diffVY,2))*((Math.pow(diffX,2) + Math.pow(diffY,2)) - distanceCentersSquared));
 		if ((diffVX*diffX + diffVY*diffY) >= 0 || varD <= 0){
@@ -187,15 +187,15 @@ public class Ship {
 		}
 	}
 	
-	public double[] getCollisionPosition(Ship ship1, Ship ship2){
-		if (overlap(ship1, ship2)) throw new IllegalArgumentException("The ships overlap");
+	public double[] getCollisionPosition(Ship ship2){
+		if (this.overlap(ship2)) throw new IllegalArgumentException("The ships overlap");
 		
-		if (getTimeToCollision(ship1, ship2) == Double.POSITIVE_INFINITY){
+		if (getTimeToCollision(ship2) == Double.POSITIVE_INFINITY){
 			return null;
 		}else{
-			double duration = getTimeToCollision(ship1, ship2);
-			double collisionX1 = (ship1.getPosition()[0] + duration*ship1.getVelocity()[0]);
-			double collisionY1 = (ship1.getPosition()[1] + duration*ship1.getVelocity()[1]);
+			double duration = this.getTimeToCollision(ship2);
+			double collisionX1 = (this.getPosition()[0] + duration*this.getVelocity()[0]);
+			double collisionY1 = (this.getPosition()[1] + duration*this.getVelocity()[1]);
 			double collisionX2 = (ship2.getPosition()[0] + duration*ship2.getVelocity()[0]);
 			double collisionY2 = (ship2.getPosition()[1] + duration*ship2.getVelocity()[1]);
 			double diffX = collisionX2 - collisionX1;
@@ -209,9 +209,9 @@ public class Ship {
 						angleCenters = -(Math.PI/2);
 					}
 				}else if ((diffX > 0) || (diffY == 0)){
-					angleCenters = Math.atan(diffY/diffX);
-				}else if((diffX < 0) || (diffY == 0)){
 					angleCenters = Math.atan(diffY/diffX) + Math.PI;
+				}else if((diffX < 0) || (diffY == 0)){
+					angleCenters = Math.atan(diffY/diffX);
 				}
 			}else {
 				if (diffY > 0){
@@ -221,7 +221,7 @@ public class Ship {
 				}
 			}
 			
-			double[] collisionPoint = {collisionX1 + ship1.getRadius()*Math.cos(angleCenters), collisionY1 + ship1.getRadius()*Math.sin(angleCenters)};
+			double[] collisionPoint = {collisionX2 + ship2.getRadius()*Math.cos(angleCenters), collisionY2 + ship2.getRadius()*Math.sin(angleCenters)};
 			return collisionPoint;
 			
 		}

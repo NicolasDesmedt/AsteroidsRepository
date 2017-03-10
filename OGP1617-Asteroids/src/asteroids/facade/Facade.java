@@ -51,7 +51,7 @@ public class Facade implements IFacade {
 	@Override
 	public void thrust(Ship ship, double amount) throws ModelException {
 		// TODO Auto-generated method stub
-		thrust(ship, amount);
+		ship.thrust(amount);
 	}
 
 	@Override
@@ -62,22 +62,22 @@ public class Facade implements IFacade {
 
 	@Override
 	public double getDistanceBetween(Ship ship1, Ship ship2) throws ModelException {
-		return getDistanceBetween(ship1, ship2);
+		return ship1.getDistanceBetween(ship2);
 	}
 
 	@Override
 	public boolean overlap(Ship ship1, Ship ship2) throws ModelException {
-		return overlap(ship1, ship2);
+		return ship1.overlap(ship2);
 	}
 
 	@Override
 	public double getTimeToCollision(Ship ship1, Ship ship2) throws ModelException {
-		return getTimeToCollision(ship1, ship2);
+		return ship1.getTimeToCollision(ship2);
 	}
 
 	@Override
 	public double[] getCollisionPosition(Ship ship1, Ship ship2) throws ModelException {
-		return getCollisionPosition(ship1, ship2);
+		return ship1.getCollisionPosition(ship2);
 	}
 
 }

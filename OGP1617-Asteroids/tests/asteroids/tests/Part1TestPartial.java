@@ -78,4 +78,12 @@ public class Part1TestPartial {
 		assertNotNull(orientation);
 		assertEquals(Math.PI, orientation, EPSILON);
 	}
+	
+	@Test
+	public void testTimeToCollision() throws ModelException {
+		Ship ship1 = facade.createShip(0, 0, 10, 0, 10, 0);
+		Ship ship2 = facade.createShip(100, 0, -10, 0, 10, 0);
+		double timeToColission = facade.getTimeToCollision(ship1, ship2);
+		assertEquals(4, timeToColission, EPSILON);
+	}
 }
