@@ -177,8 +177,8 @@ public class Ship {
 		double diffY = ship2.getPosition()[1] - this.getPosition()[1];
 		double diffVX = ship2.getVelocity()[0] - this.getVelocity()[0];
 		double diffVY = ship2.getVelocity()[1] - this.getVelocity()[1];
-		double distanceCentersSquared = (Math.pow(diffX, 2) + Math.pow(diffY, 2));
-		double varD = (Math.pow((diffVX*diffX + diffVY*diffY), 2) - (Math.pow(diffVX,2) + Math.pow(diffVY,2))*((Math.pow(diffX,2) + Math.pow(diffY,2)) - distanceCentersSquared));
+		double distanceCentersSquared = Math.pow((this.getRadius() + ship2.getRadius()), 2);
+		double varD = (Math.pow((diffX*diffVX + diffY*diffVY), 2) - (Math.pow(diffVX,2) + Math.pow(diffVY,2))*((Math.pow(diffX,2) + Math.pow(diffY,2)) - distanceCentersSquared));
 		if ((diffVX*diffX + diffVY*diffY) >= 0 || varD <= 0){
 			return Double.POSITIVE_INFINITY;
 		}else{
