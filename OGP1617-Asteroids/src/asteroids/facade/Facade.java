@@ -4,26 +4,29 @@ import asteroids.model.Ship;
 import asteroids.part1.facade.IFacade;
 import asteroids.util.ModelException;
 
-public class Facade implements IFacade  {
+public class Facade implements IFacade {
 
 	@Override
 	public Ship createShip() throws ModelException {
-		// TODO Auto-generated method stub
 		return new Ship();
 	}
 
-	
 	@Override
-	public Ship createShip(double x, double y, double xVelocity, double yVelocity, double radius, double orientation)
+	public Ship createShip(double x, double y, double xVelocity,
+			double yVelocity, double radius, double orientation)
 			throws ModelException {
-		return new Ship( x,  y,  xVelocity,  yVelocity,  radius,  orientation);
+		try {	
+			return new Ship(x,y,xVelocity,yVelocity,radius,orientation);
+		} catch(IllegalArgumentException exc){
+			throw new ModelException(exc.getMessage());
+		}
 	}
 
 	@Override
 	public double[] getShipPosition(Ship ship) throws ModelException {
 		return ship.getPosition();
 	}
-
+	
 	@Override
 	public double[] getShipVelocity(Ship ship) throws ModelException {
 		return ship.getVelocity();
@@ -54,7 +57,7 @@ public class Facade implements IFacade  {
 	@Override
 	public void turn(Ship ship, double angle) throws ModelException {
 		// TODO Auto-generated method stub
-		turn(ship, angle);
+		ship.turn(angle);
 	}
 
 	@Override

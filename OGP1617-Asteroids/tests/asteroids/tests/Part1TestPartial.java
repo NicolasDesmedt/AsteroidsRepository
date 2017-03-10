@@ -27,12 +27,29 @@ public class Part1TestPartial {
 		Ship ship = facade.createShip(100, 200, 10, -10, 20, Math.PI);
 		assertNotNull(ship);
 		double[] position = facade.getShipPosition(ship);
+		double[] velocity = facade.getShipVelocity(ship);
 		assertNotNull(position);
 		assertEquals(100, position[0], EPSILON);
 		assertEquals(200, position[1], EPSILON);
+		assertEquals(10, velocity[0], EPSILON);
+		assertEquals(-10, velocity[1], EPSILON);
 		assertEquals(20, facade.getShipRadius(ship), EPSILON);
 	}
-
+	
+	@Test
+	public void testCreateShipNoArguments() throws ModelException {
+		Ship ship = facade.createShip();
+		assertNotNull(ship);
+		double[] position = facade.getShipPosition(ship);
+		double[] velocity = facade.getShipVelocity(ship);
+		assertNotNull(position);
+		assertEquals(0, position[0], EPSILON);
+		assertEquals(0, position[1], EPSILON);
+		assertEquals(0, velocity[0], EPSILON);
+		assertEquals(0, velocity[1], EPSILON);
+		assertEquals(10, facade.getShipRadius(ship), EPSILON);
+	}
+	
 	@Test(expected = ModelException.class)
 	public void testCreateShipXIsNan() throws ModelException {
 		facade.createShip(Double.NaN, 200, 10, -10, 20, -Math.PI);
@@ -42,7 +59,7 @@ public class Part1TestPartial {
 	public void testCreateShipRadiusNegative() throws ModelException {
 		facade.createShip(100, 200, 10, -10, -20, -Math.PI);
 	}
-
+	
 	@Test
 	public void testMove() throws ModelException {
 		Ship ship = facade.createShip(100, 100, 30, -15, 20, 0);
@@ -51,5 +68,14 @@ public class Part1TestPartial {
 		assertNotNull(position);
 		assertEquals(130, position[0], EPSILON);
 		assertEquals(85, position[1], EPSILON);
+	}
+	
+	@Test
+	public void testTurn() throws ModelException {
+		Ship ship = facade.createShip(100, 100, 30, -15, 20, 0);
+		facade.turn(ship, Math.PI);
+		double orientation = facade.getShipOrientation(ship);
+		assertNotNull(orientation);
+		assertEquals(Math.PI, orientation, EPSILON);
 	}
 }

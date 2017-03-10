@@ -9,19 +9,20 @@ public class Ship {
 	private static final double SPEED_OF_LIGHT = 300000;
 	private static final double MIN_RADIUS = 10;
 
+	private double[] position = new double[2];
+	public double[] velocity = new double[2];
+	private double orientation;
+	private double radius;
 	
 	public Ship(double x, double y, double xVelocity, double yVelocity, double radius, double orientation)
-		throws IllegalPositionException{
+		throws IllegalArgumentException{
 		this.setPosition(new double[] {x,y});
 		this.setVelocity(new double[] {xVelocity,yVelocity});
 		this.setRadius(radius);
 		this.setOrientation(orientation);
 	}
 	public Ship(){
-		this.setPosition(new double[] {0,0});
-		this.setVelocity(new double[] {0,0});
-		this.setRadius(MIN_RADIUS);
-		this.setOrientation(Math.PI/2);
+		this(0,0,0,0,MIN_RADIUS,(Math.PI/2));
 	}
 	
 	public double[] getPosition(){
@@ -29,13 +30,11 @@ public class Ship {
 	}
 	
 	public void setPosition(double[] position)
-		throws IllegalPositionException{
-		if (!isValidPosition(position)) throw new IllegalPositionException(position, this);
+		throws IllegalArgumentException{
+		if (!isValidPosition(position)) throw new IllegalArgumentException("The given position isn't a valid one");
 		this.position = position;
 	}
-	
-	public double[] position = new double[2];
-	
+		
 	public static boolean isValidPosition(double[] position){
 		if (Double.isNaN(position[0]) || Double.isNaN(position[1]) || Double.isInfinite(position[0]) || Double.isInfinite(position[0]) || (position.length != 2)) {
 			return false;
@@ -49,6 +48,7 @@ public class Ship {
 		return this.velocity;
 	}
 	public void setVelocity(double[] velocity){
+		double speed = computeSpeed(velocity);
 		if (Double.isInfinite(velocity[0]) && (Double.isInfinite(velocity[1]))){
 			if (velocity[0] > 0){
 				velocity[0] = SPEED_OF_LIGHT/Math.sqrt(2);
@@ -83,22 +83,16 @@ public class Ship {
 		} 
 	}
 	
-	public double[] velocity = new double[2];
-	public double speed = computeSpeed(velocity);
-	public double orientation;
-	
 	public double getRadius(){
 		return this.radius;
 	}
 
 	public void setRadius(double radius)
-			throws IllegalRadiusException{
-		if (!isValidRadius(radius)) throw new IllegalRadiusException(radius, this);
+			throws IllegalArgumentException{
+		if (!isValidRadius(radius)) throw new IllegalArgumentException("The given radius isn't a valid one");
 		this.radius = radius;
 		return;
 	}
-	
-	public double radius;
 	
 	public double getOrientation(){
 		return this.orientation;
@@ -130,8 +124,8 @@ public class Ship {
 	}
 	
 	public void move(Ship ship, double duration)
-		throws IllegalDurationException{
-		if (! isValidDuration(duration)) throw new IllegalDurationException(duration, this);
+		throws IllegalArgumentException{
+		if (! isValidDuration(duration)) throw new IllegalArgumentException("The given duration isn't a valid one");
 		double newX = (ship.getPosition()[0] + duration*ship.getVelocity()[0]);
 		double newY = (ship.getPosition()[1] + duration*ship.getVelocity()[1]);
 		double[] newPosition = {newX, newY};
@@ -147,9 +141,9 @@ public class Ship {
 		}
 	}
 	
-	public void turn(Ship ship, double angle){
-		assert isValidOrientation(ship.getOrientation() + angle);
-		setOrientation(ship.getOrientation() + angle);
+	public void turn(double angle){
+		assert isValidOrientation(getOrientation() + angle);
+		setOrientation(getOrientation() + angle);
 	}
 	
 	public void thrust(Ship ship, double amount){
