@@ -123,11 +123,11 @@ public class Ship {
 		}
 	}
 	
-	public void move(Ship ship, double duration)
+	public void move(double duration)
 		throws IllegalArgumentException{
 		if (! isValidDuration(duration)) throw new IllegalArgumentException("The given duration isn't a valid one");
-		double newX = (ship.getPosition()[0] + duration*ship.getVelocity()[0]);
-		double newY = (ship.getPosition()[1] + duration*ship.getVelocity()[1]);
+		double newX = (getPosition()[0] + duration*getVelocity()[0]);
+		double newY = (getPosition()[1] + duration*getVelocity()[1]);
 		double[] newPosition = {newX, newY};
 		setPosition(newPosition);
 	}
