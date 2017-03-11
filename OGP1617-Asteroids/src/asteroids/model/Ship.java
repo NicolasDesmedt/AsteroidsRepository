@@ -6,8 +6,8 @@ import asteroids.util.ModelException;
 
 public class Ship {
 	
-	private static final double SPEED_OF_LIGHT = 300000;
-	private static final double MIN_RADIUS = 10;
+	public static final double SPEED_OF_LIGHT = 300000;
+	public static final double MIN_RADIUS = 10;
 
 	private double[] position = new double[2];
 	public double[] velocity = new double[2];
@@ -21,6 +21,7 @@ public class Ship {
 		this.setRadius(radius);
 		this.setOrientation(orientation);
 	}
+	
 	public Ship(){
 		this(0,0,0,0,MIN_RADIUS,(Math.PI/2));
 	}
@@ -47,33 +48,38 @@ public class Ship {
 	public double[] getVelocity(){
 		return this.velocity;
 	}
+	
 	public void setVelocity(double[] velocity){
+		if (Double.isNaN(velocity[0]) || Double.isNaN(velocity[1])){
+			this.setVelocity(new double[] {0,0});
+			return;
+		}
 		double speed = computeSpeed(velocity);
 		if (Double.isInfinite(velocity[0]) && (Double.isInfinite(velocity[1]))){
 			if (velocity[0] > 0){
-				velocity[0] = SPEED_OF_LIGHT/Math.sqrt(2);
+				this.velocity[0] = SPEED_OF_LIGHT/Math.sqrt(2);
 			} else{
-				velocity[0] = -SPEED_OF_LIGHT/Math.sqrt(2);
+				this.velocity[0] = -SPEED_OF_LIGHT/Math.sqrt(2);
 			}
 			if (velocity[1] > 0){
-				velocity[1] = SPEED_OF_LIGHT/Math.sqrt(2);
+				this.velocity[1] = SPEED_OF_LIGHT/Math.sqrt(2);
 			} else{
-				velocity[1] = -SPEED_OF_LIGHT/Math.sqrt(2);
+				this.velocity[1] = -SPEED_OF_LIGHT/Math.sqrt(2);
 			}
 		} else if (Double.isInfinite(velocity[0])){
 			if (velocity[0] > 0){
-				velocity[0] = SPEED_OF_LIGHT;
+				this.velocity[0] = SPEED_OF_LIGHT;
 			} else{
-				velocity[0] = -SPEED_OF_LIGHT;
+				this.velocity[0] = -SPEED_OF_LIGHT;
 			}
-			velocity[1] = 0;
+			this.velocity[1] = 0;
 		} else if (Double.isInfinite(velocity[1])){
 			if (velocity[1] > 0){
-				velocity[1] = SPEED_OF_LIGHT;
+				this.velocity[1] = SPEED_OF_LIGHT;
 			} else{
-				velocity[1] = -SPEED_OF_LIGHT;
+				this.velocity[1] = -SPEED_OF_LIGHT;
 			}
-			velocity[0] = 0;
+			this.velocity[0] = 0;
 		} else if (speed > SPEED_OF_LIGHT){
 			this.velocity[0] = (velocity[0]*SPEED_OF_LIGHT)/speed;
 			this.velocity[1] = (velocity[1]*SPEED_OF_LIGHT)/speed;
@@ -107,10 +113,7 @@ public class Ship {
 	}
 	
 	public double computeSpeed(double[] velocity){
-		if (Double.isNaN(velocity[0]) || Double.isNaN(velocity[1])){
-			setVelocity(new double[] {0,0});
-		}
-		double speed = Math.sqrt(Math.pow(this.getVelocity()[0], 2) + Math.pow(this.getVelocity()[1], 2));
+		double speed = Math.sqrt(Math.pow(velocity[0], 2) + Math.pow(velocity[1], 2));
 		return speed;
 	}
 	
@@ -158,12 +161,15 @@ public class Ship {
 	}
 	
 	public double getDistanceBetween(Ship ship2){
-		double distance = (Math.sqrt(Math.pow((this.getPosition()[0] - ship2.getPosition()[0]), 2) + Math.pow((this.getPosition()[1] - ship2.getPosition()[1]), 2)) - this.getRadius() - ship2.getRadius());
+		if (this.getPosition() == ship2.getPosition()){
+			return 0;
+		}
+		double distance = (Math.sqrt(Math.pow((ship2.getPosition()[0] - this.getPosition()[0]), 2) + Math.pow((ship2.getPosition()[1] - this.getPosition()[1]), 2)) - this.getRadius() - ship2.getRadius());
 		return distance;
 	}
 	
-	public boolean overlap(Ship ship2){
-		if (this.getDistanceBetween(ship2) < 0){
+	public boolean overlap(Ship ship2) throws IllegalArgumentException{
+		if (this.getDistanceBetween(ship2) <= 0){
 			return true;
 		}else{
 			return false;
@@ -172,7 +178,7 @@ public class Ship {
 	
 	public double getTimeToCollision(Ship ship2)
 			throws IllegalArgumentException{
-		if (this.overlap(ship2)) throw new IllegalArgumentException("The ships overlap");
+		if (this.overlap(ship2)) throw new IllegalArgumentException("This method does not apply to ships that overlap");
 		double diffX = ship2.getPosition()[0] - this.getPosition()[0];
 		double diffY = ship2.getPosition()[1] - this.getPosition()[1];
 		double diffVX = ship2.getVelocity()[0] - this.getVelocity()[0];
@@ -188,7 +194,7 @@ public class Ship {
 	}
 	
 	public double[] getCollisionPosition(Ship ship2){
-		if (this.overlap(ship2)) throw new IllegalArgumentException("The ships overlap");
+		if (this.overlap(ship2)) throw new IllegalArgumentException("This method does not apply to ships that overlap");
 		
 		if (getTimeToCollision(ship2) == Double.POSITIVE_INFINITY){
 			return null;
