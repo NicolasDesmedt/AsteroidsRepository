@@ -27,16 +27,17 @@ public class Ship {
 	/**
 	 * Variable registering the maximum speed, being the speed of light, that applies to all ships.
 	 */
-	private static final double MAX_SPEED = 300000;
+	public static final double MAX_SPEED = 300000;
 	
 	/**
 	 * Variable registering the minimum radius that applies to all ships.
 	 */
-	private static final double MIN_RADIUS = 10;
+	public static final double MIN_RADIUS = 10;
 	
 	/**
 	 * Variable registering the position of this ship.
 	 */
+
 	private double[] position = new double[2];
 	
 	/**
@@ -90,6 +91,7 @@ public class Ship {
 		this.setOrientation(orientation);
 	}
 	
+
 	/**
 	 * Initialize this new ship in the origin of the axes with zero velocity, with a radius 
 	 * set to its lowest possible value and with an orientation facing up at an angle of PI/2.
@@ -99,6 +101,7 @@ public class Ship {
 	 * 			and the orientation of the ship being PI/2.
 	 * 			| this(0,0,0,0,MIN_RADIUS,(Math.PI/2));
 	 */
+
 	public Ship(){
 		this(0,0,0,0,MIN_RADIUS,(Math.PI/2));
 	}
@@ -215,6 +218,7 @@ public class Ship {
 				| if (Double.isNaN(velocity[1])) {
 				|	then new.getVelocity() == setVelocity({velocity[0],0})
 	 */
+	
 	public void setVelocity(double[] velocity){
 		if (Double.isNaN(velocity[0])) {
 			setVelocity(new double[] {0,velocity[1]});
@@ -240,14 +244,14 @@ public class Ship {
 			} else{
 				this.velocity[0] = -MAX_SPEED;
 			}
-			velocity[1] = 0;
+			this.velocity[1] = 0;
 		} else if (Double.isInfinite(velocity[1])){
 			if (velocity[1] > 0){
 				this.velocity[1] = MAX_SPEED;
 			} else{
 				this.velocity[1] = -MAX_SPEED;
 			}
-			velocity[0] = 0;
+			this.velocity[0] = 0;
 		} else if (speed > MAX_SPEED){
 			this.velocity[0] = (velocity[0]*MAX_SPEED)/speed;
 			this.velocity[1] = (velocity[1]*MAX_SPEED)/speed;
@@ -414,12 +418,15 @@ public class Ship {
 	}
 	
 	public double getDistanceBetween(Ship ship2){
-		double distance = (Math.sqrt(Math.pow((this.getPosition()[0] - ship2.getPosition()[0]), 2) + Math.pow((this.getPosition()[1] - ship2.getPosition()[1]), 2)) - this.getRadius() - ship2.getRadius());
+		if (this.getPosition() == ship2.getPosition()){
+			return 0;
+		}
+		double distance = (Math.sqrt(Math.pow((ship2.getPosition()[0] - this.getPosition()[0]), 2) + Math.pow((ship2.getPosition()[1] - this.getPosition()[1]), 2)) - this.getRadius() - ship2.getRadius());
 		return distance;
 	}
 	
-	public boolean overlap(Ship ship2){
-		if (this.getDistanceBetween(ship2) < 0){
+	public boolean overlap(Ship ship2) throws IllegalArgumentException{
+		if (this.getDistanceBetween(ship2) <= 0){
 			return true;
 		}else{
 			return false;
@@ -428,7 +435,7 @@ public class Ship {
 	
 	public double getTimeToCollision(Ship ship2)
 			throws IllegalArgumentException{
-		if (this.overlap(ship2)) throw new IllegalArgumentException("The ships overlap");
+		if (this.overlap(ship2)) throw new IllegalArgumentException("This method does not apply to ships that overlap");
 		double diffX = ship2.getPosition()[0] - this.getPosition()[0];
 		double diffY = ship2.getPosition()[1] - this.getPosition()[1];
 		double diffVX = ship2.getVelocity()[0] - this.getVelocity()[0];
@@ -444,7 +451,7 @@ public class Ship {
 	}
 	
 	public double[] getCollisionPosition(Ship ship2){
-		if (this.overlap(ship2)) throw new IllegalArgumentException("The ships overlap");
+		if (this.overlap(ship2)) throw new IllegalArgumentException("This method does not apply to ships that overlap");
 		
 		if (getTimeToCollision(ship2) == Double.POSITIVE_INFINITY){
 			return null;
