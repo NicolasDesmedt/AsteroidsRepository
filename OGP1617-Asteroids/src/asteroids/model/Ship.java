@@ -24,25 +24,20 @@ import asteroids.util.ModelException;
  */
 public class Ship {
 	
-<<<<<<< HEAD
-	public static final double SPEED_OF_LIGHT = 300000;
-	public static final double MIN_RADIUS = 10;
-
-=======
 	/**
 	 * Variable registering the maximum speed, being the speed of light, that applies to all ships.
 	 */
-	private static final double MAX_SPEED = 300000;
+	public static final double MAX_SPEED = 300000;
 	
 	/**
 	 * Variable registering the minimum radius that applies to all ships.
 	 */
-	private static final double MIN_RADIUS = 10;
+	public static final double MIN_RADIUS = 10;
 	
 	/**
 	 * Variable registering the position of this ship.
 	 */
->>>>>>> 8d6bb1472cf4968b24c24f3ecda95966e0fde06d
+
 	private double[] position = new double[2];
 	
 	/**
@@ -96,8 +91,7 @@ public class Ship {
 		this.setOrientation(orientation);
 	}
 	
-<<<<<<< HEAD
-=======
+
 	/**
 	 * Initialize this new ship in the origin of the axes with zero velocity, with a radius 
 	 * set to its lowest possible value and with an orientation facing up at an angle of PI/2.
@@ -107,7 +101,7 @@ public class Ship {
 	 * 			and the orientation of the ship being PI/2.
 	 * 			| this(0,0,0,0,MIN_RADIUS,(Math.PI/2));
 	 */
->>>>>>> 8d6bb1472cf4968b24c24f3ecda95966e0fde06d
+
 	public Ship(){
 		this(0,0,0,0,MIN_RADIUS,(Math.PI/2));
 	}
@@ -166,30 +160,6 @@ public class Ship {
 		return this.velocity;
 	}
 	
-<<<<<<< HEAD
-	public void setVelocity(double[] velocity){
-		if (Double.isNaN(velocity[0]) || Double.isNaN(velocity[1])){
-			this.setVelocity(new double[] {0,0});
-			return;
-		}
-		double speed = computeSpeed(velocity);
-		if (Double.isInfinite(velocity[0]) && (Double.isInfinite(velocity[1]))){
-			if (velocity[0] > 0){
-				this.velocity[0] = SPEED_OF_LIGHT/Math.sqrt(2);
-			} else{
-				this.velocity[0] = -SPEED_OF_LIGHT/Math.sqrt(2);
-			}
-			if (velocity[1] > 0){
-				this.velocity[1] = SPEED_OF_LIGHT/Math.sqrt(2);
-			} else{
-				this.velocity[1] = -SPEED_OF_LIGHT/Math.sqrt(2);
-			}
-		} else if (Double.isInfinite(velocity[0])){
-			if (velocity[0] > 0){
-				this.velocity[0] = SPEED_OF_LIGHT;
-			} else{
-				this.velocity[0] = -SPEED_OF_LIGHT;
-=======
 	/**
 	 * Set the velocity of this ship to the given velocity.
 	 * 
@@ -202,48 +172,41 @@ public class Ship {
 	 * 			|	then new.getVelocity() == velocity
 	 * @post	
 	 */
+	
 	public void setVelocity(double[] velocity){
-		double speed = getSpeed(velocity);
+		if (Double.isNaN(velocity[0]) || Double.isNaN(velocity[1])){
+			this.setVelocity(new double[] {0,0});
+			return;
+		}
+		double speed = computeSpeed(velocity);
 		if (Double.isInfinite(velocity[0]) && (Double.isInfinite(velocity[1]))){
 			if (velocity[0] > 0){
-				velocity[0] = MAX_SPEED/Math.sqrt(2);
+				this.velocity[0] = MAX_SPEED/Math.sqrt(2);
 			} else{
-				velocity[0] = -MAX_SPEED/Math.sqrt(2);
+				this.velocity[0] = -MAX_SPEED/Math.sqrt(2);
 			}
 			if (velocity[1] > 0){
-				velocity[1] = MAX_SPEED/Math.sqrt(2);
+				this.velocity[1] = MAX_SPEED/Math.sqrt(2);
 			} else{
-				velocity[1] = -MAX_SPEED/Math.sqrt(2);
+				this.velocity[1] = -MAX_SPEED/Math.sqrt(2);
 			}
 		} else if (Double.isInfinite(velocity[0])){
 			if (velocity[0] > 0){
-				velocity[0] = MAX_SPEED;
+				this.velocity[0] = MAX_SPEED;
 			} else{
-				velocity[0] = -MAX_SPEED;
->>>>>>> 8d6bb1472cf4968b24c24f3ecda95966e0fde06d
+				this.velocity[0] = -MAX_SPEED;
 			}
 			this.velocity[1] = 0;
 		} else if (Double.isInfinite(velocity[1])){
 			if (velocity[1] > 0){
-<<<<<<< HEAD
-				this.velocity[1] = SPEED_OF_LIGHT;
+				this.velocity[1] = MAX_SPEED;
 			} else{
-				this.velocity[1] = -SPEED_OF_LIGHT;
+				this.velocity[1] = -MAX_SPEED;
 			}
 			this.velocity[0] = 0;
-		} else if (speed > SPEED_OF_LIGHT){
-			this.velocity[0] = (velocity[0]*SPEED_OF_LIGHT)/speed;
-			this.velocity[1] = (velocity[1]*SPEED_OF_LIGHT)/speed;
-=======
-				velocity[1] = MAX_SPEED;
-			} else{
-				velocity[1] = -MAX_SPEED;
-			}
-			velocity[0] = 0;
 		} else if (speed > MAX_SPEED){
 			this.velocity[0] = (velocity[0]*MAX_SPEED)/speed;
 			this.velocity[1] = (velocity[1]*MAX_SPEED)/speed;
->>>>>>> 8d6bb1472cf4968b24c24f3ecda95966e0fde06d
 		} 
 		else{
 			this.velocity = velocity;
@@ -282,16 +245,8 @@ public class Ship {
 		return (orientation>=0 && orientation<=2*Math.PI && !Double.isNaN(orientation));
 	}
 	
-<<<<<<< HEAD
 	public double computeSpeed(double[] velocity){
 		double speed = Math.sqrt(Math.pow(velocity[0], 2) + Math.pow(velocity[1], 2));
-=======
-	public double getSpeed(double[] velocity){
-		if (Double.isNaN(velocity[0]) || Double.isNaN(velocity[1])){
-			setVelocity(new double[] {0,0});
-		}
-		double speed = Math.sqrt(Math.pow(this.getVelocity()[0], 2) + Math.pow(this.getVelocity()[1], 2));
->>>>>>> 8d6bb1472cf4968b24c24f3ecda95966e0fde06d
 		return speed;
 	}
 	
