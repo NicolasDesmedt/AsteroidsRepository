@@ -4,16 +4,90 @@ import java.lang.Math;
 
 import asteroids.util.ModelException;
 
+/**
+ * A class for flying a ship in space involving the position, radius, velocity
+ * and orientation of the ship. With facilities to move the ship by accelerating
+ * and turning and a facility to predict the time and location of it colliding 
+ * with an other ship.
+ * 
+ * @invar	The position of each ship must be a valid position for any ship.
+ * 			| isValidPosition(getPosition())
+ * @invar	The velocity of each ship must be a valid velocity for any ship.
+ * 			| isValidVelocity(getVelocity())
+ * @invar	The radius of each ship must be a valid radius for any ship.
+ * 			| isValidRadius(getRadius())
+ * @invar	The orientation of each ship must be a valid orientation for any ship.
+ * 			| isValidOrientation(getOrientation())
+ * 
+ * @version	1.0
+ * @author 	Lucas Desard and Nicolas Desmedt
+ */
 public class Ship {
 	
+<<<<<<< HEAD
 	public static final double SPEED_OF_LIGHT = 300000;
 	public static final double MIN_RADIUS = 10;
 
+=======
+	/**
+	 * Variable registering the maximum speed, being the speed of light, that applies to all ships.
+	 */
+	private static final double MAX_SPEED = 300000;
+	
+	/**
+	 * Variable registering the minimum radius that applies to all ships.
+	 */
+	private static final double MIN_RADIUS = 10;
+	
+	/**
+	 * Variable registering the position of this ship.
+	 */
+>>>>>>> 8d6bb1472cf4968b24c24f3ecda95966e0fde06d
 	private double[] position = new double[2];
-	public double[] velocity = new double[2];
+	
+	/**
+	 * Variable registering the velocity of this ship.
+	 */
+	private double[] velocity = new double[2];
+	
+	/**
+	 * Variable registering the orientation of this ship.
+	 */
 	private double orientation;
+	
+	/**
+	 * Variable registering the radius of this ship.
+	 */
 	private double radius;
 	
+	
+	/**
+	 * Initialize this new ship with given position, given velocity, given radius and given orientation.
+	 * 
+	 * @param 	x
+	 * 			The x-coordinate of the position of this new ship (in km).
+	 * @param 	y
+	 * 			The y-coordinate of the position of this new ship (in km).
+	 * @param 	xVelocity
+	 * 			The movement per unit time of this new ship in the x direction (in km/s).
+	 * @param 	yVelocity
+	 * 			The movement per unit time of this new ship in the y direction (in km/s).
+	 * @param 	radius
+	 * 			The radius of this new circle-shaped ship (in km).
+	 * @param 	orientation
+	 * 			The direction in which this new ship is faced (in radians).
+	 * @post	The new position of this new ship is equal to the given position.
+	 * 			| new.getPosition() == double[] {x,y}
+	 * @post	The new velocity of this new ship is equal to the given velocity.
+	 * 			| new.getVelocity() == double[] {xVelocity,yVelocity}
+	 * @post	The new radius of this new ship is equal to the given radius.
+	 * 			| new.getRadius == radius
+	 * @post	The new orientation of this new ship is equal to the given orientation.
+	 * 			| new.getOrientation == orientation
+	 * @throws 	IllegalArgumentException
+	 * 			The given argument is not a valid argument for a ship.
+	 * 			| (! isValidPosition(position)) ||  (! isValidRadius(radius)) 
+	 */
 	public Ship(double x, double y, double xVelocity, double yVelocity, double radius, double orientation)
 		throws IllegalArgumentException{
 		this.setPosition(new double[] {x,y});
@@ -22,20 +96,57 @@ public class Ship {
 		this.setOrientation(orientation);
 	}
 	
+<<<<<<< HEAD
+=======
+	/**
+	 * Initialize this new ship in the origin of the axes with zero velocity, with a radius 
+	 * set to its lowest possible value and with an orientation facing up at an angle of PI/2.
+	 * 
+	 * @effect	This new ship is initialized with the x-coordinate, y-coordinate, 
+	 * 			xVelocity and yVelocity being zero, the radius being of minimal value MIN_RADIUS,
+	 * 			and the orientation of the ship being PI/2.
+	 * 			| this(0,0,0,0,MIN_RADIUS,(Math.PI/2));
+	 */
+>>>>>>> 8d6bb1472cf4968b24c24f3ecda95966e0fde06d
 	public Ship(){
 		this(0,0,0,0,MIN_RADIUS,(Math.PI/2));
 	}
 	
+	/**
+	 * Return the position of this ship.
+	 * 	The position of a ship locates the ship in an unbounded two-dimensional space.
+	 */
 	public double[] getPosition(){
 		return this.position;
 	}
 	
+	/**
+	 * Set the position of this ship to the given position.
+	 * 
+	 * @param 	position
+	 * 			The new position for this ship.
+	 * @post	The position of this new ship is equal to the given position.
+	 *       	| new.getPosition() == position
+	 * @throws 	IllegalArgumentException
+	 *  		The given position is not a valid position for any ship.
+	 *       	| ! isValidPosition(position)
+	 */
 	public void setPosition(double[] position)
 		throws IllegalArgumentException{
 		if (!isValidPosition(position)) throw new IllegalArgumentException("The given position isn't a valid one");
 		this.position = position;
 	}
-		
+	
+	/**
+	 * Check whether the given position is a valid position for
+	 * any ship.
+	 *  
+	 * @param  position
+	 *         The position to check.
+	 * @return True if and only if the position consists of a double containing two real numbers who are not infinite.
+	 *         | result == ! ((Double.isNaN(position[0]) || Double.isNaN(position[1]) 
+	 *         				|| Double.isInfinite(position[0]) || Double.isInfinite(position[0]) || (position.length != 2))
+	 */
 	public static boolean isValidPosition(double[] position){
 		if (Double.isNaN(position[0]) || Double.isNaN(position[1]) || Double.isInfinite(position[0]) || Double.isInfinite(position[0]) || (position.length != 2)) {
 			return false;
@@ -45,10 +156,17 @@ public class Ship {
 		}
 	}
 	
+	/**
+	 * Return the velocity of this ship.
+	 * 	The velocity of a ship consists of a component in the x direction 
+	 *  and a component in the y direction who determine the vessel’s movement 
+	 *  per time unit in the x and y direction respectively.
+	 */
 	public double[] getVelocity(){
 		return this.velocity;
 	}
 	
+<<<<<<< HEAD
 	public void setVelocity(double[] velocity){
 		if (Double.isNaN(velocity[0]) || Double.isNaN(velocity[1])){
 			this.setVelocity(new double[] {0,0});
@@ -71,10 +189,43 @@ public class Ship {
 				this.velocity[0] = SPEED_OF_LIGHT;
 			} else{
 				this.velocity[0] = -SPEED_OF_LIGHT;
+=======
+	/**
+	 * Set the velocity of this ship to the given velocity.
+	 * 
+	 * @param 	velocity
+	 * 			The new velocity for this ship.
+	 * @post	If the given velocity does not result in a total speed 
+	 * 			which exceeds the maximum speed for all ships, 
+	 * 			the velocity of this ship is equal to the given velocity.
+	 * 			| if ( getSpeed(velocity) < MAX_SPEED )
+	 * 			|	then new.getVelocity() == velocity
+	 * @post	
+	 */
+	public void setVelocity(double[] velocity){
+		double speed = getSpeed(velocity);
+		if (Double.isInfinite(velocity[0]) && (Double.isInfinite(velocity[1]))){
+			if (velocity[0] > 0){
+				velocity[0] = MAX_SPEED/Math.sqrt(2);
+			} else{
+				velocity[0] = -MAX_SPEED/Math.sqrt(2);
+			}
+			if (velocity[1] > 0){
+				velocity[1] = MAX_SPEED/Math.sqrt(2);
+			} else{
+				velocity[1] = -MAX_SPEED/Math.sqrt(2);
+			}
+		} else if (Double.isInfinite(velocity[0])){
+			if (velocity[0] > 0){
+				velocity[0] = MAX_SPEED;
+			} else{
+				velocity[0] = -MAX_SPEED;
+>>>>>>> 8d6bb1472cf4968b24c24f3ecda95966e0fde06d
 			}
 			this.velocity[1] = 0;
 		} else if (Double.isInfinite(velocity[1])){
 			if (velocity[1] > 0){
+<<<<<<< HEAD
 				this.velocity[1] = SPEED_OF_LIGHT;
 			} else{
 				this.velocity[1] = -SPEED_OF_LIGHT;
@@ -83,10 +234,29 @@ public class Ship {
 		} else if (speed > SPEED_OF_LIGHT){
 			this.velocity[0] = (velocity[0]*SPEED_OF_LIGHT)/speed;
 			this.velocity[1] = (velocity[1]*SPEED_OF_LIGHT)/speed;
+=======
+				velocity[1] = MAX_SPEED;
+			} else{
+				velocity[1] = -MAX_SPEED;
+			}
+			velocity[0] = 0;
+		} else if (speed > MAX_SPEED){
+			this.velocity[0] = (velocity[0]*MAX_SPEED)/speed;
+			this.velocity[1] = (velocity[1]*MAX_SPEED)/speed;
+>>>>>>> 8d6bb1472cf4968b24c24f3ecda95966e0fde06d
 		} 
 		else{
 			this.velocity = velocity;
 		} 
+	}
+	
+	public static boolean isValidVelocity(double[] velocity){
+		if (Double.isNaN(velocity[0]) || Double.isNaN(velocity[1]) || (velocity.length != 2)) {
+			return false;
+		}
+		else{
+			return true;
+		}
 	}
 	
 	public double getRadius(){
@@ -112,8 +282,16 @@ public class Ship {
 		return (orientation>=0 && orientation<=2*Math.PI && !Double.isNaN(orientation));
 	}
 	
+<<<<<<< HEAD
 	public double computeSpeed(double[] velocity){
 		double speed = Math.sqrt(Math.pow(velocity[0], 2) + Math.pow(velocity[1], 2));
+=======
+	public double getSpeed(double[] velocity){
+		if (Double.isNaN(velocity[0]) || Double.isNaN(velocity[1])){
+			setVelocity(new double[] {0,0});
+		}
+		double speed = Math.sqrt(Math.pow(this.getVelocity()[0], 2) + Math.pow(this.getVelocity()[1], 2));
+>>>>>>> 8d6bb1472cf4968b24c24f3ecda95966e0fde06d
 		return speed;
 	}
 	
