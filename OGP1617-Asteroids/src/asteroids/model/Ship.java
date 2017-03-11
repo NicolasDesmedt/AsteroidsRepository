@@ -167,33 +167,85 @@ public class Ship {
 	 * 			the velocity of this ship is equal to the given velocity.
 	 * 			| if ( getSpeed(velocity) < MAX_SPEED )
 	 * 			|	then new.getVelocity() == velocity
-	 * @post	
+	 * @post	If the given velocity does result in a total speed which 
+	 * 			exceeds the maximum speed for all ships and is not infinite,
+	 * 			the velocity of this ship is reduced until the total speed
+	 * 			equals the maximum speed, without changing the ratio between 
+	 * 			the given velocity in the x direction and in the y direction.
+	 * 			| if ( getSpeed(velocity) > MAX_SPEED )
+	 * 			| 	then ( (new.getVelocity()[0] == (velocity[0]*MAX_SPEED/getSpeed(velocity))) 
+	 * 			|		 && (new.getVelocity()[1] == (velocity[1]*MAX_SPEED/getSpeed(velocity))) )
+	 * @post	If the given velocity is infinite in the positive 
+	 * 			or negative x direction and not infinite in the y direction, 
+	 * 			the velocity of this ship is equal to 
+	 * 			the maximum speed in that direction.
+	 * 			| if ( Double.isInfinite(velocity[0]) && (velocity[0] > 0) )
+	 * 			|	then new.getVelocity()[0] == MAX_SPEED
+	 * 			| else if ( Double.isInfinite(velocity[0]) && (velocity[0] < 0) )
+	 * 			|	then new.getVelocity()[0] == - MAX_SPEED ) )
+	 * 			| new.getVelocity()[1] == 0
+	 * @post	If the given velocity is infinite in the positive 
+	 * 			or negative y direction and not infinite in the x direction, 
+	 * 			the velocity of this ship is equal to 
+	 * 			the maximum speed in that direction.
+	 * 			| if ( Double.isInfinite(velocity[1]) && (velocity[1] > 0) )
+	 * 			|	then new.getVelocity[1] == MAX_SPEED
+	 * 			| else if ( Double.isInfinite(velocity[1]) && (velocity[1] < 0) )
+	 * 			|	then new.getVelocity[1] == - MAX_SPEED ) )
+	 * 			| new.getVelocity[0] == 0
+	 * @post	If the given velocity is infinite in both the 
+	 * 			negative or positive x and the negative or positive y direction,
+	 * 			the velocity of this ship is equal to the maximum speed
+	 * 			in the direction PI/4 radians from the axes, with signs of
+	 * 			both the velocity in the x direction as in the y direction
+	 * 			equal to the signs of the given velocity in their respective directions.
+ 	 *			| if (Double.isInfinite(velocity[0]) && (Double.isInfinite(velocity[1])))
+	 *			|	if (velocity[0] > 0)
+	 *			|		then new.getVelocity[0] == MAX_SPEED/Math.sqrt(2)
+	 *		 	|	else
+	 *			|		then new.getVelocity[0] == -MAX_SPEED/Math.sqrt(2)
+	 *			|	if (velocity[1] > 0)
+	 *			|		then new.getVelocity[1] == MAX_SPEED/Math.sqrt(2)
+	 *		 	|	else
+	 *			|		then new.getvelocity[1] == -MAX_SPEED/Math.sqrt(2)
+	 * @post	If the given velocity in the x or y direction is not a number,
+	 * 			the velocity of this ship in that direction is zero.
+	 * 			| if (Double.isNaN(velocity[0])) {
+			    |	then new.getVelocity() == setVelocity({0,velocity[1]})
+				| if (Double.isNaN(velocity[1])) {
+				|	then new.getVelocity() == setVelocity({velocity[0],0})
 	 */
 	public void setVelocity(double[] velocity){
+		if (Double.isNaN(velocity[0])) {
+			setVelocity(new double[] {0,velocity[1]});
+		}
+		if (Double.isNaN(velocity[1])) {
+			setVelocity(new double[] {velocity[0],0});
+		}
 		double speed = getSpeed(velocity);
 		if (Double.isInfinite(velocity[0]) && (Double.isInfinite(velocity[1]))){
 			if (velocity[0] > 0){
-				velocity[0] = MAX_SPEED/Math.sqrt(2);
+				this.velocity[0] = MAX_SPEED/Math.sqrt(2);
 			} else{
-				velocity[0] = -MAX_SPEED/Math.sqrt(2);
+				this.velocity[0] = -MAX_SPEED/Math.sqrt(2);
 			}
 			if (velocity[1] > 0){
-				velocity[1] = MAX_SPEED/Math.sqrt(2);
+				this.velocity[1] = MAX_SPEED/Math.sqrt(2);
 			} else{
-				velocity[1] = -MAX_SPEED/Math.sqrt(2);
+				this.velocity[1] = -MAX_SPEED/Math.sqrt(2);
 			}
 		} else if (Double.isInfinite(velocity[0])){
 			if (velocity[0] > 0){
-				velocity[0] = MAX_SPEED;
+				this.velocity[0] = MAX_SPEED;
 			} else{
-				velocity[0] = -MAX_SPEED;
+				this.velocity[0] = -MAX_SPEED;
 			}
 			velocity[1] = 0;
 		} else if (Double.isInfinite(velocity[1])){
 			if (velocity[1] > 0){
-				velocity[1] = MAX_SPEED;
+				this.velocity[1] = MAX_SPEED;
 			} else{
-				velocity[1] = -MAX_SPEED;
+				this.velocity[1] = -MAX_SPEED;
 			}
 			velocity[0] = 0;
 		} else if (speed > MAX_SPEED){
@@ -205,6 +257,15 @@ public class Ship {
 		} 
 	}
 	
+	/**
+	 * Check whether the given velocity is a valid velocity for
+	 * any ship.
+	 *  
+	 * @param  velocity
+	 *         The velocity to check.
+	 * @return True if and only if the velocity consists of a double containing two real numbers.
+	 *         | result == ! ((Double.isNaN(velocity[0]) || Double.isNaN(velocity[1]) || (velocity.length != 2))
+	 */
 	public static boolean isValidVelocity(double[] velocity){
 		if (Double.isNaN(velocity[0]) || Double.isNaN(velocity[1]) || (velocity.length != 2)) {
 			return false;
@@ -214,10 +275,26 @@ public class Ship {
 		}
 	}
 	
+	/**
+	 * Return the radius of this ship.
+	 * 	The radius of a ship is the distance between the
+	 *  center of the ship and the outer edge of the ship.
+	 */
 	public double getRadius(){
 		return this.radius;
 	}
-
+	
+	/**
+	 * Set the radius of this ship to the given radius.
+	 * 
+	 * @param 	radius
+	 * 			The new radius for this ship.
+	 * @post	The radius of this new ship is equal to the given radius.
+	 *       	| new.getRadius() == radius
+	 * @throws 	IllegalArgumentException
+	 * 			The given radius is not a valid radius for any ship.
+	 * 			| ! isValidRadius(radius)
+	 */
 	public void setRadius(double radius)
 			throws IllegalArgumentException{
 		if (!isValidRadius(radius)) throw new IllegalArgumentException("The given radius isn't a valid one");
@@ -225,26 +302,69 @@ public class Ship {
 		return;
 	}
 	
+	/**
+	 * Return the orientation of this ship.
+	 * 	The orientation is the direction in which the ship is faced
+	 * 	expressed as an angle in radians. For example, the orientation
+	 *  of a ship facing right is 0, a ship facing up is at angle PI/2.
+	 */
 	public double getOrientation(){
 		return this.orientation;
 	}
+	
+	/**
+	 * Set the orientation of this ship to the given orientation.
+	 * 
+	 * @param 	orientation
+	 * 			The new orientation for this ship.
+	 * @pre	  	The given orientation must be a valid orientation for a ship.
+     *        	| isValidOrientation(orientation)
+     * @post	The orientation of this new ship is equal to the given orientation.
+	 *       	| new.getOrientation() == orientation
+	 */
 	public void setOrientation(double orientation){
 		assert isValidOrientation(orientation);
 		this.orientation = orientation;
 	}
 	
+	/**
+	 * Check whether the given orientation is a valid orientation for
+	 * any ship.
+	 * 
+	 * @param	orientation
+	 * 			The orientation to check.
+	 * @return	True if and only if the orientation is a real number between 0 and 2*PI.
+	 * 			| result == (orientation>=0 && orientation<=2*Math.PI && !Double.isNaN(orientation))
+	 */
 	public boolean isValidOrientation(double orientation){
 		return (orientation>=0 && orientation<=2*Math.PI && !Double.isNaN(orientation));
 	}
 	
+	/**
+	 * Return the total speed of the ship given the velocity 
+	 * in the x direction and in the y direction.
+	 * 
+	 * @param 	velocity
+	 * 			The velocity of this ship.
+	 * @return	The square root of the sum of the velocity in 
+	 * 			the x direction squared with the velocity in the y direction squared.
+	 * 			| result == Math.sqrt(Math.pow(velocity[0], 2) + Math.pow(velocity[1], 2))
+	 */
 	public double getSpeed(double[] velocity){
-		if (Double.isNaN(velocity[0]) || Double.isNaN(velocity[1])){
-			setVelocity(new double[] {0,0});
-		}
-		double speed = Math.sqrt(Math.pow(this.getVelocity()[0], 2) + Math.pow(this.getVelocity()[1], 2));
+		double speed = Math.sqrt(Math.pow(velocity[0], 2) + Math.pow(velocity[1], 2));
 		return speed;
 	}
 	
+	/**
+	 * Check whether the given radius is a valid radius for
+	 * any ship.
+	 * 
+	 * @param 	radius
+	 * 			The radius to check.
+	 * @return	True if and only if the radius is a 
+	 * 			real number greater than the minimum radius.
+	 * 			| result == ! ((radius < MIN_RADIUS) || (Double.isInfinite(radius)) || (Double.isNaN(radius)))
+	 */
 	public static boolean isValidRadius(double radius){
 		if ((radius < MIN_RADIUS) || (Double.isInfinite(radius)) || (Double.isNaN(radius))) {
 			return false;
@@ -254,6 +374,11 @@ public class Ship {
 		}
 	}
 	
+	/**
+	 * 
+	 * @param duration
+	 * @throws IllegalArgumentException
+	 */
 	public void move(double duration)
 		throws IllegalArgumentException{
 		if (! isValidDuration(duration)) throw new IllegalArgumentException("The given duration isn't a valid one");
