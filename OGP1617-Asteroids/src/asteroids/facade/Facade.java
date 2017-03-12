@@ -16,11 +16,7 @@ public class Facade implements IFacade {
 	public Ship createShip(double x, double y, double xVelocity,
 			double yVelocity, double radius, double orientation)
 			throws ModelException {
-		try {	
 			return new Ship(x,y,xVelocity,yVelocity,radius,orientation);
-		} catch(IllegalArgumentException exc){
-			throw new ModelException(exc.getMessage());
-		}
 	}
 
 	@Override

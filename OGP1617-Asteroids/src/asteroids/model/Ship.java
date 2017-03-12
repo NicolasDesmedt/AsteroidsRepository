@@ -2,7 +2,6 @@ package asteroids.model;
 
 import java.lang.Math;
 
-import asteroids.util.ModelException;
 
 /**
  * A class for flying a ship in space involving the position, radius, velocity
@@ -506,6 +505,7 @@ public class Ship {
 	 * @throws 	IllegalArgumentException
 	 */
 	public boolean overlap(Ship ship2) throws IllegalArgumentException{
+		if ((this == null) || (ship2 == null)) throw new IllegalArgumentException("A ship may not be nulls");
 		if (this.getDistanceBetween(ship2) <= 0){
 			return true;
 		}else{
