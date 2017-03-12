@@ -220,11 +220,13 @@ public class Ship {
 	 */
 	
 	public void setVelocity(double[] velocity){
-		if (Double.isNaN(velocity[0])) {
-			setVelocity(new double[] {0,velocity[1]});
-		}
 		if (Double.isNaN(velocity[1])) {
 			setVelocity(new double[] {velocity[0],0});
+			return;
+		}
+		if (Double.isNaN(velocity[0])) {
+			setVelocity(new double[] {0,velocity[1]});
+			return;
 		}
 		double speed = getSpeed(velocity);
 		if (Double.isInfinite(velocity[0]) && (Double.isInfinite(velocity[1]))){

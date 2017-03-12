@@ -148,7 +148,7 @@ public class ShipTest {
 	public void setVelocity_YNaN() {
 		mutableShip1.setVelocity(new double[] {10,Double.NaN});
 		double[] velocity = mutableShip1.getVelocity();
-		assertEquals(0, velocity[0], EPSILON);
+		assertEquals(10, velocity[0], EPSILON);
 		assertEquals(0, velocity[1], EPSILON);
 	}
 	
