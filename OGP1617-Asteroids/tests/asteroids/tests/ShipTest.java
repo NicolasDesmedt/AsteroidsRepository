@@ -23,7 +23,7 @@ public class ShipTest {
 	/**
 	 * Variables referencing ships with position [0,0], 
 	 * velocity[0,0], radius 10 and orientation facing right (0),
-	 * rescpectively with position [0,0], 
+	 * respectively with position [0,0], 
 	 * velocity[0,0], radius 10 and orientation facing right (0).
 	 */
 	private static Ship mutableShip1, mutableShip2;
@@ -31,7 +31,7 @@ public class ShipTest {
 	/**
 	 * Variables referencing ships with position [0,0], 
 	 * velocity[0,0], radius 10 and orientation facing right (0),
-	 * rescpectively with position [0,0], 
+	 * respectively with position [0,0], 
 	 * velocity[0,0], radius 10 and orientation facing right (0).
 	 */
 	private static Ship immutableShip1, immutableShip2, immutableShip3;
@@ -286,37 +286,37 @@ public class ShipTest {
 	}
 	
 	@Test
-	public void GetTimeToCollision_LegalCase() throws IllegalArgumentException{
+	public void GetTimeToCollision_LegalCase() throws IllegalStateException{
 		double timeToCollision = immutableShip1.getTimeToCollision(immutableShip3);
 		assertEquals(4.5, timeToCollision, EPSILON);
 	}
 	
 	@Test
-	public void GetTimeToCollision_NoCollision() throws IllegalArgumentException{
+	public void GetTimeToCollision_NoCollision() throws IllegalStateException{
 		double timeToCollision = immutableShip1.getTimeToCollision(immutableShip2);
 		assertEquals(Double.POSITIVE_INFINITY, timeToCollision, EPSILON);
 	}
 	
-	@Test(expected = IllegalArgumentException.class)
-	public void GetTimeToCollision_OverlappingShips() throws IllegalArgumentException{
+	@Test(expected = IllegalStateException.class)
+	public void GetTimeToCollision_OverlappingShips() throws IllegalStateException{
 		immutableShip2.getTimeToCollision(immutableShip3);
 	}
 	
 	@Test
-	public void getCollisionPosition_LegalCase() throws IllegalArgumentException{
+	public void getCollisionPosition_LegalCase() throws IllegalStateException{
 		double[] CollisionPosition = immutableShip1.getCollisionPosition(immutableShip3);
 		assertEquals(10, CollisionPosition[0], EPSILON);
 		assertEquals(-70, CollisionPosition[1], EPSILON);
 	}
 
 	@Test
-	public void getCollisionPosition_NoCollision() throws IllegalArgumentException{
+	public void getCollisionPosition_NoCollision() throws IllegalStateException{
 		double[] CollisionPosition = immutableShip1.getCollisionPosition(immutableShip2);
 		assertEquals(null, CollisionPosition);
 	}
 
-	@Test(expected = IllegalArgumentException.class)
-	public void getCollisionPosition_OverlappingShips() throws IllegalArgumentException{
+	@Test(expected = IllegalStateException.class)
+	public void getCollisionPosition_OverlappingShips() throws IllegalStateException{
 		immutableShip2.getCollisionPosition(immutableShip3);
 	}
 	

@@ -41,19 +41,16 @@ public class Facade implements IFacade {
 
 	@Override
 	public void move(Ship ship, double dt) throws ModelException {
-		// TODO Auto-generated method stub
 		ship.move(dt);
 	}
 
 	@Override
 	public void thrust(Ship ship, double amount) throws ModelException {
-		// TODO Auto-generated method stub
 		ship.thrust(amount);
 	}
 
 	@Override
 	public void turn(Ship ship, double angle) throws ModelException {
-		// TODO Auto-generated method stub
 		ship.turn(angle);
 	}
 

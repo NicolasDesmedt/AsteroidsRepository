@@ -2,6 +2,9 @@ package asteroids.model;
 
 import java.lang.Math;
 
+import be.kuleuven.cs.som.annotate.*;
+//import be.kuleuven.cs.som.taglet.*;
+
 /**
  * A class for flying a ship in space involving the position, radius, velocity
  * and orientation of the ship. With facilities to move the ship by accelerating
@@ -24,38 +27,6 @@ import java.lang.Math;
  * Code Repository: https://github.com/NicolasDesmedt/RepositoryLucasNicolas
  */
 public class Ship {
-	
-	/**
-	 * Constant reflecting the maximum speed, being the speed of light, that applies to all ships.
-	 */
-	public static final double MAX_SPEED = 300000;
-	
-	/**
-	 * Constant reflecting the minimum radius that applies to all ships.
-	 */
-	public static final double MIN_RADIUS = 10;
-	
-	/**
-	 * Variable registering the position of this ship.
-	 */
-
-	private double[] position = new double[2];
-	
-	/**
-	 * Variable registering the velocity of this ship.
-	 */
-	private double[] velocity = new double[2];
-	
-	/**
-	 * Variable registering the orientation of this ship.
-	 */
-	private double orientation;
-	
-	/**
-	 * Variable registering the radius of this ship.
-	 */
-	private double radius;
-	
 	
 	/**
 	 * Initialize this new ship with given position, given velocity, given radius and given orientation.
@@ -82,7 +53,7 @@ public class Ship {
 	 * 			| new.getOrientation == orientation
 	 * @throws 	IllegalArgumentException
 	 * 			The given argument is not a valid argument for a ship.
-	 * 			| (! isValidPosition(position)) ||  (! isValidRadius(radius)) 
+	 * 			| (! isValidPosition(position)) ||  (! isValidRadius(radius))
 	 */
 	public Ship(double x, double y, double xVelocity, double yVelocity, double radius, double orientation)
 		throws IllegalArgumentException{
@@ -92,7 +63,6 @@ public class Ship {
 		this.setOrientation(orientation);
 	}
 	
-
 	/**
 	 * Initialize this new ship in the origin of the axes with zero velocity, with a radius 
 	 * set to its lowest possible value and with an orientation facing up at an angle of PI/2.
@@ -111,8 +81,29 @@ public class Ship {
 	 * Return the position of this ship.
 	 * 	The position of a ship locates the ship in an unbounded two-dimensional space.
 	 */
+	@Basic @Raw
 	public double[] getPosition(){
 		return this.position;
+	}
+	
+	/**
+	 * Check whether the given position is a valid position for
+	 * any ship.
+	 *  
+	 * @param  position
+	 *         The position to check.
+	 * @return True if and only if the position consists of a double containing two real numbers who are not infinite.
+	 *         | result == ( (!Double.isNaN(position[0])) && (!Double.isNaN(position[1])) &&
+	 *         |			 (!Double.isInfinite(position[0])) && (!Double.isInfinite(position[0])) && (position.length == 2) )
+	 */
+	public static boolean isValidPosition(double[] position){
+		if ( (!Double.isNaN(position[0])) && (!Double.isNaN(position[1])) && 
+				(!Double.isInfinite(position[0])) && (!Double.isInfinite(position[0])) && (position.length == 2) ) {
+			return true;
+		}
+		else{
+			return false;
+		}
 	}
 	
 	/**
@@ -126,6 +117,7 @@ public class Ship {
 	 *  		The given position is not a valid position for any ship.
 	 *       	| ! isValidPosition(position)
 	 */
+	@Raw
 	public void setPosition(double[] position)
 		throws IllegalArgumentException{
 		if (!isValidPosition(position)) throw new IllegalArgumentException("The given position isn't a valid one");
@@ -133,23 +125,9 @@ public class Ship {
 	}
 	
 	/**
-	 * Check whether the given position is a valid position for
-	 * any ship.
-	 *  
-	 * @param  position
-	 *         The position to check.
-	 * @return True if and only if the position consists of a double containing two real numbers who are not infinite.
-	 *         | result == ! ((Double.isNaN(position[0]) || Double.isNaN(position[1]) 
-	 *         				|| Double.isInfinite(position[0]) || Double.isInfinite(position[0]) || (position.length != 2))
+	 * Variable registering the position of this ship.
 	 */
-	public static boolean isValidPosition(double[] position){
-		if (Double.isNaN(position[0]) || Double.isNaN(position[1]) || Double.isInfinite(position[0]) || Double.isInfinite(position[0]) || (position.length != 2)) {
-			return false;
-		}
-		else{
-			return true;
-		}
-	}
+	private double[] position = new double[2];
 	
 	/**
 	 * Return the velocity of this ship.
@@ -157,8 +135,27 @@ public class Ship {
 	 *  and a component in the y direction who determine the vessel’s movement 
 	 *  per time unit in the x and y direction respectively.
 	 */
+	@Basic @Raw
 	public double[] getVelocity(){
 		return this.velocity;
+	}
+	
+	/**
+	 * Check whether the given velocity is a valid velocity for
+	 * any ship.
+	 *  
+	 * @param  velocity
+	 *         The velocity to check.
+	 * @return True if and only if the velocity consists of a double containing two real numbers.
+	 *         | result == ( (!Double.isNaN(velocity[0])) && (!Double.isNaN(velocity[1])) && (velocity.length == 2) )
+	 */
+	public static boolean isValidVelocity(double[] velocity){
+		if ( (!Double.isNaN(velocity[0])) && (!Double.isNaN(velocity[1])) && (velocity.length == 2) ){
+			return true;
+		}
+		else{
+			return false;
+		}
 	}
 	
 	/**
@@ -219,7 +216,7 @@ public class Ship {
 	 *			| if (Double.isNaN(velocity[1])) {
 	 *			|	then new.getVelocity() == setVelocity({velocity[0],0})
 	 */
-	
+	@Raw
 	public void setVelocity(double[] velocity){
 		if (Double.isNaN(velocity[1])) {
 			setVelocity(new double[] {velocity[0],0});
@@ -265,87 +262,15 @@ public class Ship {
 	}
 	
 	/**
-	 * Check whether the given velocity is a valid velocity for
-	 * any ship.
-	 *  
-	 * @param  velocity
-	 *         The velocity to check.
-	 * @return True if and only if the velocity consists of a double containing two real numbers.
-	 *         | result == ! ((Double.isNaN(velocity[0]) || Double.isNaN(velocity[1]) || (velocity.length != 2))
+	 * Variable registering the velocity of this ship.
 	 */
-	public static boolean isValidVelocity(double[] velocity){
-		if (Double.isNaN(velocity[0]) || Double.isNaN(velocity[1]) || (velocity.length != 2)) {
-			return false;
-		}
-		else{
-			return true;
-		}
-	}
+	private double[] velocity = new double[2];
 	
 	/**
-	 * Return the radius of this ship.
-	 * 	The radius of a ship is the distance between the
-	 *  center of the ship and the outer edge of the ship.
+	 * Constant reflecting the maximum speed, being the speed of light, that applies to all ships.
 	 */
-	public double getRadius(){
-		return this.radius;
-	}
+	public static final double MAX_SPEED = 300000;
 	
-	/**
-	 * Set the radius of this ship to the given radius.
-	 * 
-	 * @param 	radius
-	 * 			The new radius for this ship.
-	 * @post	The radius of this ship is equal to the given radius.
-	 *       	| new.getRadius() == radius
-	 * @throws 	IllegalArgumentException
-	 * 			The given radius is not a valid radius for any ship.
-	 * 			| ! isValidRadius(radius)
-	 */
-	public void setRadius(double radius)
-			throws IllegalArgumentException{
-		if (!isValidRadius(radius)) throw new IllegalArgumentException("The given radius isn't a valid one");
-		this.radius = radius;
-		return;
-	}
-	
-	/**
-	 * Return the orientation of this ship.
-	 * 	The orientation is the direction in which the ship is faced
-	 * 	expressed as an angle in radians. For example, the orientation
-	 *  of a ship facing right is 0, a ship facing up is at angle PI/2.
-	 */
-	public double getOrientation(){
-		return this.orientation;
-	}
-	
-	/**
-	 * Set the orientation of this ship to the given orientation.
-	 * 
-	 * @param 	orientation
-	 * 			The new orientation for this ship.
-	 * @pre	  	The given orientation must be a valid orientation for a ship.
-     *        	| isValidOrientation(orientation)
-     * @post	The orientation of this ship is equal to the given orientation.
-	 *       	| new.getOrientation() == orientation
-	 */
-	public void setOrientation(double orientation){
-		assert isValidOrientation(orientation);
-		this.orientation = orientation;
-	}
-	
-	/**
-	 * Check whether the given orientation is a valid orientation for
-	 * any ship.
-	 * 
-	 * @param	orientation
-	 * 			The orientation to check.
-	 * @return	True if and only if the orientation is a real number between 0 and 2*PI.
-	 * 			| result == (orientation>=0 && orientation<=2*Math.PI && !Double.isNaN(orientation))
-	 */
-	public boolean isValidOrientation(double orientation){
-		return (orientation>=0 && orientation<=2*Math.PI && !Double.isNaN(orientation));
-	}
 	
 	/**
 	 * Return the total speed of the ship given the velocity 
@@ -363,23 +288,107 @@ public class Ship {
 	}
 	
 	/**
+	 * Return the radius of this ship.
+	 * 	The radius of a ship is the distance between the
+	 *  center of the ship and the outer edge of the ship.
+	 */
+	@Basic @Raw
+	public double getRadius(){
+		return this.radius;
+	}
+	
+	/**
 	 * Check whether the given radius is a valid radius for
 	 * any ship.
 	 * 
 	 * @param 	radius
 	 * 			The radius to check.
 	 * @return	True if and only if the radius is a 
-	 * 			real number greater than the minimum radius.
-	 * 			| result == ! ((radius < MIN_RADIUS) || (Double.isInfinite(radius)) || (Double.isNaN(radius)))
+	 * 			real number greater than or equal to the minimum radius.
+	 * 			| result == ( (radius >= MIN_RADIUS) && (!Double.isInfinite(radius)) && (!Double.isNaN(radius)) )
 	 */
 	public static boolean isValidRadius(double radius){
-		if ((radius < MIN_RADIUS) || (Double.isInfinite(radius)) || (Double.isNaN(radius))) {
-			return false;
-		}
-		else{
+		if ( (radius >= MIN_RADIUS) && (!Double.isInfinite(radius)) && (!Double.isNaN(radius)) ) {
 			return true;
 		}
+		else{
+			return false;
+		}
 	}
+	
+	/**
+	 * Set the radius of this ship to the given radius.
+	 * 
+	 * @param 	radius
+	 * 			The new radius for this ship.
+	 * @post	The radius of this ship is equal to the given radius.
+	 *       	| new.getRadius() == radius
+	 * @throws 	IllegalArgumentException
+	 * 			The given radius is not a valid radius for any ship.
+	 * 			| ! isValidRadius(radius)
+	 */
+	@Raw
+	public void setRadius(double radius)
+			throws IllegalArgumentException{
+		if (!isValidRadius(radius)) throw new IllegalArgumentException("The given radius isn't a valid one");
+		this.radius = radius;
+		return;
+	}
+	
+	/**
+	 * Variable registering the radius of this ship.
+	 */
+	private double radius;
+	
+	/**
+	 * Constant reflecting the minimum radius that applies to all ships.
+	 */
+	public static final double MIN_RADIUS = 10;
+	
+	/**
+	 * Return the orientation of this ship.
+	 * 	The orientation is the direction in which the ship is faced
+	 * 	expressed as an angle in radians. For example, the orientation
+	 *  of a ship facing right is 0, a ship facing up is at angle PI/2.
+	 */
+	@Basic @Raw
+	public double getOrientation(){
+		return this.orientation;
+	}
+	
+	/**
+	 * Check whether the given orientation is a valid orientation for
+	 * any ship.
+	 * 
+	 * @param	orientation
+	 * 			The orientation to check.
+	 * @return	True if and only if the orientation is a real number between 0 and 2*PI.
+	 * 			| result == ( (orientation>=0) && (orientation<=2*Math.PI) && (!Double.isNaN(orientation)))
+	 */
+	public boolean isValidOrientation(double orientation){
+		return ( (orientation>=0) && (orientation<=2*Math.PI) && (!Double.isNaN(orientation)));
+	}
+	
+	/**
+	 * Set the orientation of this ship to the given orientation.
+	 * 
+	 * @param 	orientation
+	 * 			The new orientation for this ship.
+	 * @pre	  	The given orientation must be a valid orientation for a ship.
+     *        	| isValidOrientation(orientation)
+     * @post	The orientation of this ship is equal to the given orientation.
+	 *       	| new.getOrientation() == orientation
+	 */
+	@Raw
+	public void setOrientation(double orientation){
+		assert isValidOrientation(orientation);
+		this.orientation = orientation;
+	}
+	
+	/**
+	 * Variable registering the orientation of this ship.
+	 */
+	private double orientation;
 	
 	/**
 	 * Move this ship for a given duration based on its current
@@ -413,14 +422,14 @@ public class Ship {
 	 * 			The duration to check.
 	 * @return	True if and only if the duration is a real number,
 	 * 			greater than zero and not infinite.
-	 * 			| result == ! (Double.isNaN(duration) || Double.isInfinite(duration) || (duration < 0))
+	 * 			| result == ( (!Double.isNaN(duration)) && (!Double.isInfinite(duration)) && (duration >= 0) )
 	 */
 	public static boolean isValidDuration(double duration){
-		if (Double.isNaN(duration) || Double.isInfinite(duration) || (duration < 0)) {
-			return false;
+		if ( (!Double.isNaN(duration)) && (!Double.isInfinite(duration)) && (duration >= 0) ) {
+			return true;
 		}
 		else{
-			return true;
+			return false;
 		}
 	}
 	
@@ -473,9 +482,9 @@ public class Ship {
 	}
 	
 	/**
-	 * Return the distance in between this spacecraft and a given spacecraft.
+	 * Return the distance in between this ship and a given ship.
 	 * 
-	 * @param 	ship2
+	 * @param 	other
 	 * 			The given ship.
 	 * @return	Zero for the distance between a ship and itself.
 	 * 			| if (this == ship2)
@@ -487,28 +496,34 @@ public class Ship {
 	 * 			| 	then result == (Math.sqrt(Math.pow((ship2.getPosition()[0] - 
 	 * 			|					this.getPosition()[0]), 2) + Math.pow((ship2.getPosition()[1] - 
 	 * 			|					this.getPosition()[1]), 2)) - this.getRadius() - ship2.getRadius())
+	 * @throws 	NullPointerException
+	 * 			The other ship is not effective
+	 * 			| other == null
 	 */
-	public double getDistanceBetween(Ship ship2){
-		if (this == ship2){
+	public double getDistanceBetween(Ship other) throws NullPointerException{
+		if (other == null) throw new NullPointerException("The other ship is not effective");
+		if (this == other){
 			return 0;
 		}
-		double distance = (Math.sqrt(Math.pow((ship2.getPosition()[0] - this.getPosition()[0]), 2) + Math.pow((ship2.getPosition()[1] - this.getPosition()[1]), 2)) - this.getRadius() - ship2.getRadius());
+		double distance = (Math.sqrt(Math.pow((other.getPosition()[0] - this.getPosition()[0]), 2) + Math.pow((other.getPosition()[1] - this.getPosition()[1]), 2)) - this.getRadius() - other.getRadius());
 		return distance;
 	}
 	
 	/**
 	 * Check whether this ship overlaps with a given ship.
 	 * 
-	 * @param 	ship2
+	 * @param 	other
 	 * 			The given ship.
 	 * @return	True if and only if the distance between this ship and
 	 * 			the given ship is smaller than or equal to zero.
 	 * 			| result == (this.getDistanceBetween(ship2) <= 0)
-	 * @throws 	IllegalArgumentException
+	 * @throws 	NullPointerException
+	 * 			The other ship is not effective
+	 * 			| other == null
 	 */
-	public boolean overlap(Ship ship2) throws IllegalArgumentException{
-		if ((this == null) || (ship2 == null)) throw new IllegalArgumentException("A ship may not be nulls");
-		if (this.getDistanceBetween(ship2) <= 0){
+	public boolean overlap(Ship other) throws NullPointerException{
+		if (other == null) throw new NullPointerException("The other ship is not effective");
+		if (this.getDistanceBetween(other) <= 0){
 			return true;
 		}else{
 			return false;
@@ -521,28 +536,33 @@ public class Ship {
 	 * ships that overlap. If this ship and the given ship never collide,
 	 * return positive infinity.
 	 * 
-	 * @param 	ship2
+	 * @param 	other
 	 * 			The given ship.
 	 * @return	Positive infinity if this ship never collides with
 	 * 			the given ship.
-	 * 			| if ...
+	 * 			| if ((diffVX*diffX + diffVY*diffY) >= 0 || varD <= 0)
 	 * 			|	then result == Double.POSITIVE_INFINITY
 	 * 			Otherwise, the time it takes for this ship and the
 	 * 			given ship to collide.
-	 * 			| else if ...
-	 * 			| 	then result == ...
-	 * @throws 	IllegalArgumentException
+	 * 			| else if (((diffVX*diffX + diffVY*diffY) < 0) && (varD > 0)) 
+	 * 			| 	then result == -(((diffVX*diffX + diffVY*diffY) + Math.sqrt(varD))
+	 * 			|					/(Math.pow(diffVX,2) + Math.pow(diffVY,2)))
+	 * @throws 	IllegalStateException
 	 * 			The ships overlap.
 	 * 			| this.overlap(ship2)
+	 * @throws 	NullPointerException
+	 * 			The other ship is not effective
+	 * 			| other == null
 	 */
-	public double getTimeToCollision(Ship ship2)
-			throws IllegalArgumentException{
-		if (this.overlap(ship2)) throw new IllegalArgumentException("This method does not apply to ships that overlap");
-		double diffX = ship2.getPosition()[0] - this.getPosition()[0];
-		double diffY = ship2.getPosition()[1] - this.getPosition()[1];
-		double diffVX = ship2.getVelocity()[0] - this.getVelocity()[0];
-		double diffVY = ship2.getVelocity()[1] - this.getVelocity()[1];
-		double distanceCentersSquared = Math.pow((this.getRadius() + ship2.getRadius()), 2);
+	public double getTimeToCollision(Ship other)
+			throws IllegalArgumentException, NullPointerException{
+		if (other == null) throw new NullPointerException("The other ship is not effective");
+		if (this.overlap(other)) throw new IllegalStateException("This method does not apply to ships that overlap");
+		double diffX = other.getPosition()[0] - this.getPosition()[0];
+		double diffY = other.getPosition()[1] - this.getPosition()[1];
+		double diffVX = other.getVelocity()[0] - this.getVelocity()[0];
+		double diffVY = other.getVelocity()[1] - this.getVelocity()[1];
+		double distanceCentersSquared = Math.pow((this.getRadius() + other.getRadius()), 2);
 		double varD = (Math.pow((diffX*diffVX + diffY*diffVY), 2) - (Math.pow(diffVX,2) + Math.pow(diffVY,2))*((Math.pow(diffX,2) + Math.pow(diffY,2)) - distanceCentersSquared));
 		if ((diffVX*diffX + diffVY*diffY) >= 0 || varD <= 0){
 			return Double.POSITIVE_INFINITY;
@@ -557,7 +577,7 @@ public class Ship {
 	 * The method shall return null if the ships never collide. 
 	 * This method does not apply to ships that overlap.
 	 * 
-	 * @param 	ship2
+	 * @param 	other
 	 * 			The given ship.
 	 * @return	Null if this ship never collides with
 	 * 			the given ship.
@@ -566,22 +586,27 @@ public class Ship {
 	 * 			Otherwise, the position of the collision between 
 	 * 			this ship and the given ship.
 	 * 			| else
-	 * 			|	
-	 * @throws	IllegalArgumentException
+	 * 			|	result == {collisionX2 + ship2.getRadius()*Math.cos(angleCenters), 
+	 * 			|			   collisionY2 + ship2.getRadius()*Math.sin(angleCenters)}
+	 * @throws	IllegalStateException
 	 * 			The ships overlap.
 	 * 			| this.overlap(ship2)
+	 * @throws 	NullPointerException
+	 * 			The other ship is not effective
+	 * 			| other == null
 	 */
-	public double[] getCollisionPosition(Ship ship2){
-		if (this.overlap(ship2)) throw new IllegalArgumentException("This method does not apply to ships that overlap");
+	public double[] getCollisionPosition(Ship other) throws NullPointerException,IllegalArgumentException{
+		if (other == null) throw new NullPointerException("The other ship is not effective");
+		if (this.overlap(other)) throw new IllegalStateException("This method does not apply to ships that overlap");
 		
-		if (getTimeToCollision(ship2) == Double.POSITIVE_INFINITY){
+		if (getTimeToCollision(other) == Double.POSITIVE_INFINITY){
 			return null;
 		}else{
-			double duration = this.getTimeToCollision(ship2);
+			double duration = this.getTimeToCollision(other);
 			double collisionX1 = (this.getPosition()[0] + duration*this.getVelocity()[0]);
 			double collisionY1 = (this.getPosition()[1] + duration*this.getVelocity()[1]);
-			double collisionX2 = (ship2.getPosition()[0] + duration*ship2.getVelocity()[0]);
-			double collisionY2 = (ship2.getPosition()[1] + duration*ship2.getVelocity()[1]);
+			double collisionX2 = (other.getPosition()[0] + duration*other.getVelocity()[0]);
+			double collisionY2 = (other.getPosition()[1] + duration*other.getVelocity()[1]);
 			double diffX = collisionX2 - collisionX1;
 			double diffY = collisionY2 - collisionY1;
 			double angleCenters = 0;
@@ -605,10 +630,8 @@ public class Ship {
 				}
 			}
 			
-			double[] collisionPoint = {collisionX2 + ship2.getRadius()*Math.cos(angleCenters), collisionY2 + ship2.getRadius()*Math.sin(angleCenters)};
+			double[] collisionPoint = {collisionX2 + other.getRadius()*Math.cos(angleCenters), collisionY2 + other.getRadius()*Math.sin(angleCenters)};
 			return collisionPoint;
-			
 		}
 	}
-	
 }
