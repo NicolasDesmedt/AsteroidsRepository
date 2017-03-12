@@ -538,15 +538,12 @@ public class Ship {
 	 * 
 	 * @param 	other
 	 * 			The given ship.
-	 * @return	Positive infinity if this ship never collides with
-	 * 			the given ship.
-	 * 			| if ((diffVX*diffX + diffVY*diffY) >= 0 || varD <= 0)
-	 * 			|	then result == Double.POSITIVE_INFINITY
-	 * 			Otherwise, the time it takes for this ship and the
-	 * 			given ship to collide.
-	 * 			| else if (((diffVX*diffX + diffVY*diffY) < 0) && (varD > 0)) 
-	 * 			| 	then result == -(((diffVX*diffX + diffVY*diffY) + Math.sqrt(varD))
-	 * 			|					/(Math.pow(diffVX,2) + Math.pow(diffVY,2)))
+	 * @return 	The resulting time to collision is a double greater than zero.
+	 * 			| result > 0
+	 * @return	No smaller double that specifies the time to collision between
+	 * 			this ship and the given ship exists.
+	 * 			| for each double < result:
+	 * 			| 	this.getDistanceBetween(other) > 0
 	 * @throws 	IllegalStateException
 	 * 			The ships overlap.
 	 * 			| this.overlap(ship2)
