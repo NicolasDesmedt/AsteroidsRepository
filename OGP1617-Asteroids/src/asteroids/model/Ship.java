@@ -555,7 +555,7 @@ public class Ship {
 	 * 			| other == null
 	 */
 	public double getTimeToCollision(Ship other)
-			throws IllegalArgumentException, NullPointerException{
+			throws IllegalStateException, NullPointerException{
 		if (other == null) throw new NullPointerException("The other ship is not effective");
 		if (this.overlap(other)) throw new IllegalStateException("This method does not apply to ships that overlap");
 		double diffX = other.getPosition()[0] - this.getPosition()[0];
@@ -595,7 +595,7 @@ public class Ship {
 	 * 			The other ship is not effective
 	 * 			| other == null
 	 */
-	public double[] getCollisionPosition(Ship other) throws NullPointerException,IllegalArgumentException{
+	public double[] getCollisionPosition(Ship other) throws NullPointerException, IllegalStateException{
 		if (other == null) throw new NullPointerException("The other ship is not effective");
 		if (this.overlap(other)) throw new IllegalStateException("This method does not apply to ships that overlap");
 		
