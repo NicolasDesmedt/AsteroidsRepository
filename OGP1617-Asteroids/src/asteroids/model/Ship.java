@@ -2,8 +2,6 @@ package asteroids.model;
 
 import java.lang.Math;
 
-import asteroids.util.ModelException;
-
 /**
  * A class for flying a ship in space involving the position, radius, velocity
  * and orientation of the ship. With facilities to move the ship by accelerating
@@ -21,6 +19,9 @@ import asteroids.util.ModelException;
  * 
  * @version	1.0
  * @author 	Lucas Desard and Nicolas Desmedt
+ * 			
+ * Course studies: 2nd Bachelor Engineering: Computer science/Electrical Engineering
+ * Code Repository: https://github.com/NicolasDesmedt/RepositoryLucasNicolas
  */
 public class Ship {
 	

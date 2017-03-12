@@ -3,9 +3,7 @@ package asteroids.tests;
 import static org.junit.Assert.*;
 import org.junit.*;
 
-import asteroids.facade.Facade;
 import asteroids.model.Ship;
-import asteroids.util.ModelException;
 
 /**
  * A class collecting tests for all the public methods of the ship class.
