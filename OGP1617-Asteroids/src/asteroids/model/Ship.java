@@ -74,7 +74,7 @@ public class Ship {
 	 */
 
 	public Ship(){
-		this(0,0,0,0,MIN_RADIUS,(Math.PI/2));
+		this(0,0,0,0,minRadius,(Math.PI/2));
 	}
 	
 	/**
@@ -229,32 +229,32 @@ public class Ship {
 		double speed = getSpeed(velocity);
 		if (Double.isInfinite(velocity[0]) && (Double.isInfinite(velocity[1]))){
 			if (velocity[0] > 0){
-				this.velocity[0] = MAX_SPEED/Math.sqrt(2);
+				this.velocity[0] = maxSpeed/Math.sqrt(2);
 			} else{
-				this.velocity[0] = -MAX_SPEED/Math.sqrt(2);
+				this.velocity[0] = -maxSpeed/Math.sqrt(2);
 			}
 			if (velocity[1] > 0){
-				this.velocity[1] = MAX_SPEED/Math.sqrt(2);
+				this.velocity[1] = maxSpeed/Math.sqrt(2);
 			} else{
-				this.velocity[1] = -MAX_SPEED/Math.sqrt(2);
+				this.velocity[1] = -maxSpeed/Math.sqrt(2);
 			}
 		} else if (Double.isInfinite(velocity[0])){
 			if (velocity[0] > 0){
-				this.velocity[0] = MAX_SPEED;
+				this.velocity[0] = maxSpeed;
 			} else{
-				this.velocity[0] = -MAX_SPEED;
+				this.velocity[0] = -maxSpeed;
 			}
 			this.velocity[1] = 0;
 		} else if (Double.isInfinite(velocity[1])){
 			if (velocity[1] > 0){
-				this.velocity[1] = MAX_SPEED;
+				this.velocity[1] = maxSpeed;
 			} else{
-				this.velocity[1] = -MAX_SPEED;
+				this.velocity[1] = -maxSpeed;
 			}
 			this.velocity[0] = 0;
-		} else if (speed > MAX_SPEED){
-			this.velocity[0] = (velocity[0]*MAX_SPEED)/speed;
-			this.velocity[1] = (velocity[1]*MAX_SPEED)/speed;
+		} else if (speed > maxSpeed){
+			this.velocity[0] = (velocity[0]*maxSpeed)/speed;
+			this.velocity[1] = (velocity[1]*maxSpeed)/speed;
 		} 
 		else{
 			this.velocity = velocity;
@@ -267,10 +267,21 @@ public class Ship {
 	private double[] velocity = new double[2];
 	
 	/**
-	 * Constant reflecting the maximum speed, being the speed of light, that applies to all ships.
+	 * Return the maximum speed for each ship.
 	 */
-	public static final double MAX_SPEED = 300000;
+	public static double getMaxSpeed() {
+		return Ship.maxSpeed;
+	}
 	
+	/**
+	 * Constant reflecting the speed of light.
+	 */
+	public static final double SPEED_OF_LIGHT = 300000;
+	
+	/**
+	 * Constant reflecting the maximum speed that applies to all ships.
+	 */
+	public static final double maxSpeed = SPEED_OF_LIGHT;
 	
 	/**
 	 * Return the total speed of the ship given the velocity 
@@ -308,7 +319,7 @@ public class Ship {
 	 * 			| result == ( (radius >= MIN_RADIUS) && (!Double.isInfinite(radius)) && (!Double.isNaN(radius)) )
 	 */
 	public static boolean isValidRadius(double radius){
-		if ( (radius >= MIN_RADIUS) && (!Double.isInfinite(radius)) && (!Double.isNaN(radius)) ) {
+		if ( (radius >= minRadius) && (!Double.isInfinite(radius)) && (!Double.isNaN(radius)) ) {
 			return true;
 		}
 		else{
@@ -341,9 +352,15 @@ public class Ship {
 	private double radius;
 	
 	/**
+	 * Return the minimum radius for each ship.
+	 */
+	public static double getMinRadius() {
+		return Ship.minRadius;
+	}
+	/**
 	 * Constant reflecting the minimum radius that applies to all ships.
 	 */
-	public static final double MIN_RADIUS = 10;
+	private static final double minRadius = 10;
 	
 	/**
 	 * Return the orientation of this ship.

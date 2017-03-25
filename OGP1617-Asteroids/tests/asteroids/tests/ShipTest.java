@@ -130,7 +130,7 @@ public class ShipTest {
 	public void setVelocity_XVelocityInfinite() {
 		mutableShip1.setVelocity(new double[] {Double.POSITIVE_INFINITY,-10});
 		double[] velocity = mutableShip1.getVelocity();
-		assertEquals(Ship.MAX_SPEED, velocity[0], EPSILON);
+		assertEquals(Ship.getMaxSpeed(), velocity[0], EPSILON);
 		assertEquals(0, velocity[1], EPSILON);
 	}
 	
@@ -138,8 +138,8 @@ public class ShipTest {
 	public void setVelocity_XAndYVelocityInfinite() {
 		mutableShip1.setVelocity(new double[] {Double.POSITIVE_INFINITY,Double.NEGATIVE_INFINITY});
 		double[] velocity = mutableShip1.getVelocity();
-		assertEquals((Ship.MAX_SPEED/Math.sqrt(2)), velocity[0], EPSILON);
-		assertEquals((-Ship.MAX_SPEED/Math.sqrt(2)), velocity[1], EPSILON);
+		assertEquals((Ship.getMaxSpeed()/Math.sqrt(2)), velocity[0], EPSILON);
+		assertEquals((-Ship.getMaxSpeed()/Math.sqrt(2)), velocity[1], EPSILON);
 	}
 	
 	@Test
@@ -165,7 +165,7 @@ public class ShipTest {
 	
 	@Test(expected = IllegalArgumentException.class)
 	public void setRadius_UnderMinimumRadius() throws IllegalArgumentException {
-		mutableShip1.setRadius((Ship.MIN_RADIUS-1));
+		mutableShip1.setRadius((Ship.getMinRadius()-1));
 	}
 	
 	@Test(expected = IllegalArgumentException.class)
