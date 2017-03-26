@@ -269,6 +269,7 @@ public class Ship {
 	/**
 	 * Return the maximum speed for each ship.
 	 */
+	@Basic @Immutable
 	public static double getMaxSpeed() {
 		return Ship.maxSpeed;
 	}
@@ -354,6 +355,7 @@ public class Ship {
 	/**
 	 * Return the minimum radius for each ship.
 	 */
+	@Basic @Immutable
 	public static double getMinRadius() {
 		return Ship.minRadius;
 	}
