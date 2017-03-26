@@ -53,16 +53,18 @@ public class Ship {
 	 * @post	The new orientation of this new ship is equal to the given orientation.
 	 * 			| new.getOrientation == orientation
 	 * @throws 	IllegalArgumentException
-	 * 			The given argument is not a valid argument for a ship.
-	 * 			| (! isValidPosition(position)) ||  (! isValidRadius(radius))
+	 * 			The given position is not a valid position for a ship.
+	 * 			| (! isValidPosition(position))
+	 * @throws 	IllegalArgumentException
+	 * 			The given radius is not a valid radius for any ship.
+	 * 			| (! isValidRadius(radius))
 	 */
 	public Ship(double x, double y, double xVelocity, double yVelocity, double radius, double orientation)
 		throws IllegalArgumentException{
 		this.setPosition(new double[] {x,y});
 		this.setVelocity(new double[] {xVelocity,yVelocity});
 		this.setOrientation(orientation);
-		if (! isValidRadius(radius))
-			radius = minRadius;
+		if (!isValidRadius(radius)) throw new IllegalArgumentException("The given radius isn't a valid one");
 		this.radius = radius;
 	}
 	
@@ -341,7 +343,7 @@ public class Ship {
 	 */
 	@Basic @Immutable
 	public static double getMinRadius() {
-		return Ship.minRadius;
+		return minRadius;
 	}
 	/**
 	 * Constant reflecting the minimum radius that applies to all ships.
