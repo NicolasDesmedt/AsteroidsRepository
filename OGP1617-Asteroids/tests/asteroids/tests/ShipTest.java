@@ -156,27 +156,27 @@ public class ShipTest {
 		assertEquals(10, radius, EPSILON);
 	}
 	
-	@Test
-	public void setRadius_LegalCase() throws IllegalArgumentException {
-		mutableShip1.setRadius(50);
-		double radius = mutableShip1.getRadius();
-		assertEquals(50, radius, EPSILON);
-	}
-	
-	@Test(expected = IllegalArgumentException.class)
-	public void setRadius_UnderMinimumRadius() throws IllegalArgumentException {
-		mutableShip1.setRadius((Ship.getMinRadius()-1));
-	}
-	
-	@Test(expected = IllegalArgumentException.class)
-	public void setRadius_NaN() throws IllegalArgumentException {
-		mutableShip1.setRadius(Double.NaN);
-	}
-	
-	@Test(expected = IllegalArgumentException.class)
-	public void setRadius_Infinite() throws IllegalArgumentException {
-		mutableShip1.setRadius(Double.POSITIVE_INFINITY);
-	}
+//	@Test
+//	public void setRadius_LegalCase() throws IllegalArgumentException {
+//		mutableShip1.setRadius(50);
+//		double radius = mutableShip1.getRadius();
+//		assertEquals(50, radius, EPSILON);
+//	}
+//	
+//	@Test(expected = IllegalArgumentException.class)
+//	public void setRadius_UnderMinimumRadius() throws IllegalArgumentException {
+//		mutableShip1.setRadius((Ship.getMinRadius()-1));
+//	}
+//	
+//	@Test(expected = IllegalArgumentException.class)
+//	public void setRadius_NaN() throws IllegalArgumentException {
+//		mutableShip1.setRadius(Double.NaN);
+//	}
+//	
+//	@Test(expected = IllegalArgumentException.class)
+//	public void setRadius_Infinite() throws IllegalArgumentException {
+//		mutableShip1.setRadius(Double.POSITIVE_INFINITY);
+//	}
 	
 	@Test
 	public void getOrientation_LegalCase(){
