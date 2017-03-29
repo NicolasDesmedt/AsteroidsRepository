@@ -82,7 +82,7 @@ public class ShipTest {
 	
 	@Test
 	public void setPosition_LegalCase() throws IllegalArgumentException {
-		mutableShip1.setPosition(new double[] {100,200});
+		mutableShip1.setPosition(100,200);
 		double[] position = mutableShip1.getPosition();
 		assertEquals(100, position[0], EPSILON);
 		assertEquals(200, position[1], EPSILON);
@@ -90,17 +90,12 @@ public class ShipTest {
 	
 	@Test(expected = IllegalArgumentException.class)
 	public void setPosition_NaN() throws IllegalArgumentException {
-		mutableShip1.setPosition(new double[] {Double.NaN,200});
+		mutableShip1.setPosition(Double.NaN,200);
 	}
 	
 	@Test(expected = IllegalArgumentException.class)
 	public void setPosition_Infinite() throws IllegalArgumentException {
-		mutableShip1.setPosition(new double[] {Double.NEGATIVE_INFINITY,200});
-	}
-	
-	@Test(expected = IllegalArgumentException.class)
-	public void setPosition_InvalidLength() throws IllegalArgumentException {
-		mutableShip1.setPosition(new double[] {10,20,30});
+		mutableShip1.setPosition(Double.NEGATIVE_INFINITY,200);
 	}
 	
 	@Test
@@ -112,7 +107,7 @@ public class ShipTest {
 	
 	@Test
 	public void setVelocity_LegalCase() {
-		mutableShip1.setVelocity(new double[] {10,-10});
+		mutableShip1.setVelocity(10,-10);
 		double[] velocity = mutableShip1.getVelocity();
 		assertEquals(10, velocity[0], EPSILON);
 		assertEquals(-10, velocity[1], EPSILON);
@@ -120,7 +115,7 @@ public class ShipTest {
 
 	@Test
 	public void setVelocity_ExceedingSpeedOfLight() {
-		mutableShip1.setVelocity(new double[] {400000,200000});
+		mutableShip1.setVelocity(400000,200000);
 		double[] velocity = mutableShip1.getVelocity();
 		assertEquals(268328.1573, velocity[0], EPSILON);
 		assertEquals(134164.0787, velocity[1], EPSILON);
@@ -128,7 +123,7 @@ public class ShipTest {
 
 	@Test
 	public void setVelocity_XVelocityInfinite() {
-		mutableShip1.setVelocity(new double[] {Double.POSITIVE_INFINITY,-10});
+		mutableShip1.setVelocity(Double.POSITIVE_INFINITY,-10);
 		double[] velocity = mutableShip1.getVelocity();
 		assertEquals(Ship.getMaxSpeed(), velocity[0], EPSILON);
 		assertEquals(0, velocity[1], EPSILON);
@@ -136,7 +131,7 @@ public class ShipTest {
 	
 	@Test
 	public void setVelocity_XAndYVelocityInfinite() {
-		mutableShip1.setVelocity(new double[] {Double.POSITIVE_INFINITY,Double.NEGATIVE_INFINITY});
+		mutableShip1.setVelocity(Double.POSITIVE_INFINITY,Double.NEGATIVE_INFINITY);
 		double[] velocity = mutableShip1.getVelocity();
 		assertEquals((Ship.getMaxSpeed()/Math.sqrt(2)), velocity[0], EPSILON);
 		assertEquals((-Ship.getMaxSpeed()/Math.sqrt(2)), velocity[1], EPSILON);
@@ -144,7 +139,7 @@ public class ShipTest {
 	
 	@Test
 	public void setVelocity_YNaN() {
-		mutableShip1.setVelocity(new double[] {10,Double.NaN});
+		mutableShip1.setVelocity(10,Double.NaN);
 		double[] velocity = mutableShip1.getVelocity();
 		assertEquals(10, velocity[0], EPSILON);
 		assertEquals(0, velocity[1], EPSILON);
@@ -156,27 +151,26 @@ public class ShipTest {
 		assertEquals(10, radius, EPSILON);
 	}
 	
-//	@Test
-//	public void setRadius_LegalCase() throws IllegalArgumentException {
-//		mutableShip1.setRadius(50);
-//		double radius = mutableShip1.getRadius();
-//		assertEquals(50, radius, EPSILON);
-//	}
-//	
-//	@Test(expected = IllegalArgumentException.class)
-//	public void setRadius_UnderMinimumRadius() throws IllegalArgumentException {
-//		mutableShip1.setRadius((Ship.getMinRadius()-1));
-//	}
-//	
-//	@Test(expected = IllegalArgumentException.class)
-//	public void setRadius_NaN() throws IllegalArgumentException {
-//		mutableShip1.setRadius(Double.NaN);
-//	}
-//	
-//	@Test(expected = IllegalArgumentException.class)
-//	public void setRadius_Infinite() throws IllegalArgumentException {
-//		mutableShip1.setRadius(Double.POSITIVE_INFINITY);
-//	}
+	@Test
+	public void setRadius_LegalCase() throws IllegalArgumentException {
+		double radius = mutableShip1.getRadius();
+		assertEquals(10, radius, EPSILON);
+	}
+	
+	@Test(expected = IllegalArgumentException.class)
+	public void setRadius_UnderMinimumRadius() throws IllegalArgumentException {
+		new Ship(0,0,20,20,(Ship.getMinRadius()-1),0);
+	}
+	
+	@Test(expected = IllegalArgumentException.class)
+	public void setRadius_NaN() throws IllegalArgumentException {
+		new Ship(0,0,20,20,Double.NaN,0);
+	}
+	
+	@Test(expected = IllegalArgumentException.class)
+	public void setRadius_Infinite() throws IllegalArgumentException {
+		new Ship(0,0,20,20,Double.POSITIVE_INFINITY,0);
+	}
 	
 	@Test
 	public void getOrientation_LegalCase(){
