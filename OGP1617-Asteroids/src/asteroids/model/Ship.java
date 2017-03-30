@@ -83,7 +83,7 @@ public class Ship extends Entity{
 		}
 	}
 	
-	private final double MIN_MASS = (4*Math.PI*Math.pow(MIN_RADIUS, 3)*MIN_DENSITY)/4;
+	private final double MIN_MASS = (4*Math.PI*Math.pow(MIN_RADIUS_SHIP, 3)*MIN_DENSITY)/4;
 	
 	public boolean isValidMass(double mass){
 		if ((this.getDensity() > MIN_DENSITY) && (mass < Double.MAX_VALUE) && (!Double.isNaN(mass))){
@@ -128,7 +128,7 @@ public class Ship extends Entity{
 	 */
 
 	public Ship(){
-		this(0,0,0,0,MIN_RADIUS,(Math.PI/2), 0);
+		this(0,0,0,0,MIN_RADIUS_SHIP,(Math.PI/2), 0);
 	}
 
 	/**
@@ -139,10 +139,10 @@ public class Ship extends Entity{
 	 * 			The radius to check.
 	 * @return	True if and only if the radius is a 
 	 * 			real number greater than or equal to the minimum radius.
-	 * 			| result == ( (radius >= MIN_RADIUS) && (!Double.isInfinite(radius)) && (!Double.isNaN(radius)) )
+	 * 			| result == ( (radius >= MIN_RADIUS_SHIP) && (!Double.isInfinite(radius)) && (!Double.isNaN(radius)) )
 	 */
 	public boolean isValidRadius(double radius){
-		if ( (radius >= MIN_RADIUS) && (!Double.isInfinite(radius)) && (!Double.isNaN(radius)) ) {
+		if ( (radius >= MIN_RADIUS_SHIP) && (!Double.isInfinite(radius)) && (!Double.isNaN(radius)) ) {
 			return true;
 		}
 		else{
@@ -155,12 +155,12 @@ public class Ship extends Entity{
 	 */
 	@Basic @Immutable
 	public static double getMinRadius() {
-		return MIN_RADIUS;
+		return MIN_RADIUS_SHIP;
 	}
 	/**
 	 * Constant reflecting the minimum radius that applies to all ships.
 	 */
-	private static final double MIN_RADIUS = 10;
+	private static final double MIN_RADIUS_SHIP = 10;
 	
 	/**
 	 * Return the orientation of this ship.
