@@ -1,6 +1,7 @@
 package asteroids.model;
 
-import java.lang.Math;
+import java.util.HashSet;
+import java.util.Set;
 
 import be.kuleuven.cs.som.annotate.*;
 //import be.kuleuven.cs.som.taglet.*;
@@ -70,7 +71,8 @@ public class Ship extends Entity{
 		super(x, y, xVelocity, yVelocity, radius, mass, maxSpeed);
 		this.setOrientation(orientation);
 		this.setMass(mass);
-		this.thrusterForce = THRUSTER_FORCE;
+		this.thrusterForce = defaultThrusterForce;
+		this.loadBullets(15);
 		
 	}
 	
@@ -83,7 +85,7 @@ public class Ship extends Entity{
 		}
 	}
 	
-	private final double MIN_MASS = (4*Math.PI*Math.pow(MIN_RADIUS, 3)*MIN_DENSITY)/4;
+	private final double MIN_MASS = (4*Math.PI*Math.pow(MIN_RADIUS_SHIP, 3)*MIN_DENSITY)/4;
 	
 	public boolean isValidMass(double mass){
 		if ((this.getDensity() > MIN_DENSITY) && (mass < Double.MAX_VALUE) && (!Double.isNaN(mass))){
@@ -96,15 +98,6 @@ public class Ship extends Entity{
 	/**
 	 * Return the minimum radius for each ship.
 	 */
-	@Basic @Immutable
-	public double getMass() {
-		return this.mass;
-	}
-	
-	/**
-	 * Variable registering the mass of this ship.
-	 */
-	private double mass;
 	
 	public static final double MIN_DENSITY = 1.42E12;
 	
@@ -128,7 +121,7 @@ public class Ship extends Entity{
 	 */
 
 	public Ship(){
-		this(0,0,0,0,MIN_RADIUS,(Math.PI/2), 0);
+		this(0,0,0,0,MIN_RADIUS_SHIP,(Math.PI/2), 0);
 	}
 
 	/**
@@ -139,10 +132,10 @@ public class Ship extends Entity{
 	 * 			The radius to check.
 	 * @return	True if and only if the radius is a 
 	 * 			real number greater than or equal to the minimum radius.
-	 * 			| result == ( (radius >= MIN_RADIUS) && (!Double.isInfinite(radius)) && (!Double.isNaN(radius)) )
+	 * 			| result == ( (radius >= MIN_RADIUS_SHIP) && (!Double.isInfinite(radius)) && (!Double.isNaN(radius)) )
 	 */
 	public boolean isValidRadius(double radius){
-		if ( (radius >= MIN_RADIUS) && (!Double.isInfinite(radius)) && (!Double.isNaN(radius)) ) {
+		if ( (radius >= MIN_RADIUS_SHIP) && (!Double.isInfinite(radius)) && (!Double.isNaN(radius)) ) {
 			return true;
 		}
 		else{
@@ -155,12 +148,12 @@ public class Ship extends Entity{
 	 */
 	@Basic @Immutable
 	public static double getMinRadius() {
-		return MIN_RADIUS;
+		return MIN_RADIUS_SHIP;
 	}
 	/**
 	 * Constant reflecting the minimum radius that applies to all ships.
 	 */
-	private static final double MIN_RADIUS = 10;
+	private static final double MIN_RADIUS_SHIP = 10;
 	
 	/**
 	 * Return the orientation of this ship.
@@ -258,7 +251,7 @@ public class Ship extends Entity{
 		}
 	}
 	
-	public boolean isThrusterOn(){
+	public boolean isShipThrusterActive(){
 		return isTrusterOn;
 	}
 	
@@ -272,13 +265,13 @@ public class Ship extends Entity{
 		isTrusterOn = false;
 	}
 	
-	public final double THRUSTER_FORCE = 1.1E21;
+	public final double defaultThrusterForce = 1.1E21;
 	
 	public void setThrusterForce(double force){
 		if ( (force>=0) && (!Double.isInfinite(force)) && (!Double.isNaN(force))){
 			this.thrusterForce = force;
 		}else{
-			this.thrusterForce = THRUSTER_FORCE;
+			this.thrusterForce = defaultThrusterForce;
 		}
 	}
 
@@ -293,4 +286,52 @@ public class Ship extends Entity{
 		return acceleration;
 	}
 	
+	public void loadBullet(){
+		loadBullets(1);
+	}
+	
+	public void loadBullets(double amount){
+		for(int i=0; i<amount; i++){
+			this.bullets.add(newValidBullet());
+		}
+	}
+	public void loadBulletOnShip(Bullet bullet){
+		this.bullets.add(bullet);
+		this.setMass(this.getMass() + bullet.getMass());
+	}
+
+	public void loadBulletOnShip(Set<Bullet> bullets){
+		for(Bullet bullet: bullets){
+			this.loadBulletOnShip(bullet);
+		}
+	}
+	
+	public Bullet newValidBullet(){
+		double xPosition = this.getPosition()[0];
+		double yPosition = this.getPosition()[1];
+		double radius = 0.11*this.getRadius();
+		Bullet newValidBullet = new Bullet(xPosition, yPosition, 0, 0, radius);
+		newValidBullet.setShip(this);
+		return newValidBullet;
+	}
+	
+	public Set<Bullet> bullets = new HashSet<>();
+	
+	public Set<Bullet> getBulletsOnShip(){
+		return this.bullets;
+	}
+	
+	public int getNbBulletsOnShip(){
+		return this.bullets.size();
+	}
+	
+	public void removeBulletFromShip(){
+		
+	}
+	
+	public void fireBullet(){
+		
+	}
+	
+
 }
