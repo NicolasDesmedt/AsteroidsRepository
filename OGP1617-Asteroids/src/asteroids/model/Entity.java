@@ -35,6 +35,20 @@ public abstract class Entity {
 	}
 	
 	/**
+	 * Return the xcoordinate.
+	 */
+	public double getPositionX() {
+		return position[0];
+	}
+	
+	/**
+	 * Return the ycoordinate.
+	 */
+	public double getPositionY() {
+		return position[1];
+	}
+	
+	/**
 	 * Check whether the given position is a valid position for
 	 * any ship.
 	 *  
