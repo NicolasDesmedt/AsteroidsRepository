@@ -457,4 +457,19 @@ public abstract class Entity {
 				return collisionPoint;
 			}
 		}
+		@Basic @Immutable
+		public double getMass() {
+			return this.mass;
+		}
+		
+		public World getWorld() {
+			return this.world;
+		}
+		
+		public World world;
+		
+		/**
+		 * Variable registering the mass of this ship.
+		 */
+		public double mass;
 	}	
