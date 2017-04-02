@@ -1,5 +1,7 @@
 package asteroids.model;
 
+import be.kuleuven.cs.som.annotate.*;
+
 public class Bullet extends Entity{
 	
 	public Bullet(double x, double y, double xVelocity, double yVelocity, double radius) 
@@ -22,6 +24,33 @@ public class Bullet extends Entity{
 		this(0, 0, 0, 0, minBulletRadius, calculateMassBullet(minBulletRadius), SPEED_OF_LIGHT);
 
 	}
+	
+	/**
+	 * Terminate this bullet.
+	 *
+	 * @post   This bullet  is terminated.
+	 *       | new.isTerminated()
+	 * @post   ...
+	 *       | ...
+	 */
+	 public void terminate() {
+		 this.isTerminated = true;
+	 }
+	 
+	 /**
+	  * Return a boolean indicating whether or not this bullet
+	  * is terminated.
+	  */
+	 @Basic @Raw
+	 public boolean isTerminated() {
+		 return this.isTerminated;
+	 }
+	 
+	 /**
+	  * Variable registering whether this bullet is terminated.
+	  */
+	 private boolean isTerminated = false;
+	 
 	
 	public final static double minBulletRadius = 1;
 	
@@ -81,5 +110,34 @@ public class Bullet extends Entity{
 	
 	public World world;
 	
+	public int getCounterBoundaryCollisions() {
+		return this.counterBoundaryCollisions;
+	}
+	
+	public void setCounterBoundaryCollisions(int counter) {
+		this.counterBoundaryCollisions = counter;
+	}
+	
+	public int getMaxBoundaryCollisions() {
+		return maxBoundaryCollisions;
+	}
+	
+	private final int maxBoundaryCollisions = 3;
+	
+	private int counterBoundaryCollisions = 0;
+	
+	public void collidesWithBoundary(World world) {
+		this.setCounterBoundaryCollisions(getCounterBoundaryCollisions() + 1);
+		if (getCounterBoundaryCollisions() == getMaxBoundaryCollisions()) {
+				this.removeFromWorld(world);
+				world.removeEntity(this);
+				return;
+		}
+		if (world.getDistanceToNearestHorizontalBoundary(this) <
+				world.getDistanceToNearestVerticalBoundary(this) )
+			this.setVelocity(getVelocityX(), -getVelocityY());
+		else
+			this.setVelocity(-getVelocityX(), getVelocityY());
+	}
 	
 }

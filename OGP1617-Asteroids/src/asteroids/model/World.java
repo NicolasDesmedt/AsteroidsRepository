@@ -91,14 +91,36 @@ public class World{
 	/**
 	 * 
 	 */
-	public double getDistanceToBoundaries(Entity entity) throws IllegalArgumentException {
+	public double getDistanceToNearestHorizontalBoundary(Entity entity) throws IllegalArgumentException {
 		if (! withinBoundaries(entity)) throw new IllegalArgumentException("The entity is not located in the world.");
-		double distance = Math.abs(width - entity.getPositionX());
-		if (Math.abs(height - entity.getPositionY()) < distance)
-			distance = Math.abs(height - entity.getPositionY());
+		double distance = Double.POSITIVE_INFINITY;
+		double distanceUp = height - entity.getPositionY();
+		double distanceDown = entity.getPositionY();
+		if (distanceUp < distanceDown)
+			distance = distanceUp;
+		else
+			distance = distanceDown;
 		return distance;
 	}
 	
+	public double getDistanceToNearestVerticalBoundary(Entity entity) {
+		double distance = Double.POSITIVE_INFINITY;
+		double distanceLeft = width - entity.getPositionX();
+		double distanceRight = entity.getPositionX();
+		if (distanceLeft < distanceRight)
+			distance = distanceLeft;
+		else
+			distance = distanceRight;
+		return distance;
+	}
+	
+	public double getDistanceToBoundaries(Entity entity) {
+		if (getDistanceToNearestVerticalBoundary(entity) <
+				getDistanceToNearestHorizontalBoundary(entity))
+			return getDistanceToNearestVerticalBoundary(entity);
+		else
+			return getDistanceToNearestHorizontalBoundary(entity);
+	}
 	/**
 	 * Returns true if and only if the entity fits in the world, is not a duplicate, does not overlap.
 	 * @param entity
@@ -272,7 +294,10 @@ public class World{
 			Entity entity = iterator.next();
 			Entity other = getCollidingEntities().get(entity);
 			if (other == null)
-				entity.collidesWithBoundary();
+				if (entity instanceof Ship)
+					((Ship)entity).collidesWithBoundary(this);
+				else
+					((Bullet)entity).collidesWithBoundary(this);
 			else if ( (entity instanceof Ship) && (other instanceof Ship) )
 					entity.collidesWithShip(other);
 			else if ( (entity instanceof Ship) && (other instanceof Bullet) )

@@ -333,5 +333,15 @@ public class Ship extends Entity{
 		
 	}
 	
+	public void collidesWithBoundary(World world) {
+		if (world.getDistanceToNearestHorizontalBoundary(this) <
+				world.getDistanceToNearestVerticalBoundary(this) )
+			this.setVelocity(getVelocityX(), -getVelocityY());
+		else
+			this.setVelocity(-getVelocityX(), getVelocityY());
+	}
+	
+	
+	
 
 }

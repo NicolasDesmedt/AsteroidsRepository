@@ -493,6 +493,14 @@ public abstract class Entity {
 			else return false;
 		}
 		
+//		public void collidesWithBoundary(World world) {
+//			if (world.getDistanceToNearestHorizontalBoundary(this) <
+//					world.getDistanceToNearestVerticalBoundary(this) )
+//				this.setVelocity(getVelocityX(), -getVelocityY());
+//			else
+//				this.setVelocity(-getVelocityX(), getVelocityY());
+//		}
+		
 		@Basic @Immutable
 		public double getMass() {
 			return this.mass;
@@ -503,6 +511,10 @@ public abstract class Entity {
 		}
 		
 		public World world;
+		
+		public void removeFromWorld(World world) {
+			this.world = null;		//aanpassen
+		}
 		
 		/**
 		 * Variable registering the mass of this ship.
