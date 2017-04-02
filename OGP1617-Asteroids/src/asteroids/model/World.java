@@ -2,6 +2,7 @@ package asteroids.model;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Hashtable;
 
 import be.kuleuven.cs.som.annotate.*;
 
@@ -191,14 +192,99 @@ public class World{
 	 */
 	private HashMap<double[], Entity> posEntities = new HashMap<>();
 	
-	public void getFirstCollision
+	public double getTimeToCollisionEntityWithBoundary(Entity entity) {
+		double time = Double.POSITIVE_INFINITY;
+		double distanceX = Double.POSITIVE_INFINITY;
+		double distanceY = Double.POSITIVE_INFINITY;
+		
+		if (entity.getVelocityX() < 0)
+			distanceX = entity.getPositionX() - entity.getRadius();
+		else 
+			distanceX = width - entity.getPositionX() - entity.getRadius();
+		time = Math.abs(distanceX/entity.getVelocityX());
+		
+		if (entity.getVelocityY() < 0)
+			distanceY = entity.getPositionY() - entity.getRadius();
+		else 
+			distanceY = height - entity.getPositionY() - entity.getRadius();
+		if (Math.abs(distanceY/entity.getVelocityY()) < time)
+			time = Math.abs(distanceY/entity.getVelocityY());
+		return time;	
+	}
 	
+	public double getTimeToFirstCollisionEntity(Entity entity) {
+		double time = getTimeToCollisionEntityWithBoundary(entity);
+		HashSet<Entity> allEntities = getAllEntities();
+		for (Entity other : allEntities) {
+			if (entity.getTimeToCollision(other) < time)
+				time = entity.getTimeToCollision(other);
+		}
+		return time;	
+	}
+	
+	public double[] getPositionEntityUponCollision(Entity entity) {
+		double xPos = Double.POSITIVE_INFINITY;
+		double yPos = Double.POSITIVE_INFINITY;
+		double time = getTimeToFirstCollisionEntity(entity);
+		if (time < Double.POSITIVE_INFINITY) { 
+			xPos = xPos + entity.getVelocityX()*time;
+			yPos = yPos + entity.getVelocityY()*time;
+		}
+		double[] position = {xPos, yPos};
+		return position;
+	}
+	
+	public double getTimeToFirstCollision() {
+		double time = Double.POSITIVE_INFINITY;
+		HashSet<Entity> allEntities = getAllEntities();
+		for (Entity entity : allEntities) {
+			if (getTimeToFirstCollisionEntity(entity) < time)
+				time = getTimeToFirstCollisionEntity(entity);
+		}
+		return time;
+	}
+	
+	public Hashtable<Entity, Entity> getCollidingEntities() {
+		HashSet<Entity> allEntities = getAllEntities();
+		HashSet<Entity> otherEntities = getAllEntities();
+		for (Entity entity : allEntities) {
+			otherEntities.remove(entity);
+			for (Entity other : otherEntities) {
+				if (entity.apparentlyCollide(other))
+					collidingEntities.put(entity, other);
+					allEntities.remove(other);
+			if (overlapBoundaries(entity))
+				collidingEntities.put(entity, null);
+			}
+		}
+		return collidingEntities;
+	}
+	
+		
+	private Hashtable<Entity, Entity> collidingEntities = new Hashtable< Entity, Entity>();
 	/**
 	 * no specification, defensive
 	 * @param dt
 	 */
 	public void evolve(double dt) {
-		getFirstCollision
-		
+		HashSet<Entity> allEntities = getAllEntities();
+		double time = getTimeToFirstCollision();
+		if (time < dt) {
+			for (Entity entity : allEntities) {
+				entity.move(time);
+				//if entity.ApparentlyCollide(other)
+			}
+			//RESOLVE
+			
+			//NEXT
+			double newTime = dt - time;
+			evolve(newTime);
+		}
+		else
+			for (Entity entity : allEntities) {
+				entity.move(dt);
+			}
 	}
+	
+	//public void resolveCollision
 }

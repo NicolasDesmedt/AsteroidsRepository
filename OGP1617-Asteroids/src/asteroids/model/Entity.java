@@ -98,6 +98,14 @@ public abstract class Entity {
 		return velocity.clone();
 	}
 	
+	public double getVelocityX() {
+		return velocity[0];
+	}
+	
+	public double getVelocityY() {
+		return velocity[1];
+	}
+	
 	/**
 	 * Check whether the given velocity is a valid velocity for
 	 * any ship.
@@ -478,7 +486,7 @@ public abstract class Entity {
 			return distance;
 		}
 		
-		public boolean entitiesApparentlyCollide(Entity other) {
+		public boolean apparentlyCollide(Entity other) {
 			if ( (this.getDistanceBetweenRadii(other) > 0.99*(this.getRadius() + other.getRadius()))
 					&& (this.getDistanceBetweenRadii(other) < 1.01*(this.getRadius() + other.getRadius())) )
 				return true;
