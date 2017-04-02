@@ -1,8 +1,11 @@
 package asteroids.model;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.Set;
 
 import be.kuleuven.cs.som.annotate.*;
 
@@ -260,8 +263,28 @@ public class World{
 		return collidingEntities;
 	}
 	
-		
-	private Hashtable<Entity, Entity> collidingEntities = new Hashtable< Entity, Entity>();
+	private Hashtable<Entity, Entity> collidingEntities = new Hashtable<Entity, Entity>();
+	
+	public double resolveCollisions() {
+		Set<Entity> keys = getCollidingEntities().keySet();
+		Iterator<Entity> iterator = keys.iterator();
+		while (iterator.hasNext()) {
+			Entity entity = iterator.next();
+			Entity other = getCollidingEntities().get(entity);
+			if (other == null)
+				entity.collidesWithBoundary();
+			else if ( (entity instanceof Ship) && (other instanceof Ship) )
+					entity.collidesWithShip(other);
+			else if ( (entity instanceof Ship) && (other instanceof Bullet) )
+					entity.getsHitBy(other);
+			else if ( (entity instanceof Bullet) && (other instanceof Ship) )
+					other.getsHitBy(entity);
+			else
+				entity.cancelsOut(other);
+		}
+	}
+	
+	
 	/**
 	 * no specification, defensive
 	 * @param dt
@@ -272,10 +295,9 @@ public class World{
 		if (time < dt) {
 			for (Entity entity : allEntities) {
 				entity.move(time);
-				//if entity.ApparentlyCollide(other)
 			}
 			//RESOLVE
-			
+			resolveCollisions();
 			//NEXT
 			double newTime = dt - time;
 			evolve(newTime);
@@ -286,5 +308,4 @@ public class World{
 			}
 	}
 	
-	//public void resolveCollision
 }
