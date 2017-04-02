@@ -345,7 +345,7 @@ public abstract class Entity {
 			if (this == other){
 				return 0;
 			}
-			double distance = (Math.sqrt(Math.pow((other.getPosition()[0] - this.getPosition()[0]), 2) + Math.pow((other.getPosition()[1] - this.getPosition()[1]), 2)) - this.getRadius() - other.getRadius());
+			double distance = (Math.sqrt(Math.pow((other.getPositionX() - this.getPositionX()), 2) + Math.pow((other.getPositionY() - this.getPositionY()), 2)) - this.getRadius() - other.getRadius());
 			return distance;
 		}
 		
@@ -471,6 +471,20 @@ public abstract class Entity {
 				return collisionPoint;
 			}
 		}
+		
+		public double getDistanceBetweenRadii(Entity other) {
+			double distance = (Math.sqrt(Math.pow((other.getPositionX() - this.getPositionX()), 2) 
+								+ Math.pow((other.getPositionY() - this.getPositionY()), 2)) );
+			return distance;
+		}
+		
+		public boolean entitiesApparentlyCollide(Entity other) {
+			if ( (this.getDistanceBetweenRadii(other) > 0.99*(this.getRadius() + other.getRadius()))
+					&& (this.getDistanceBetweenRadii(other) < 1.01*(this.getRadius() + other.getRadius())) )
+				return true;
+			else return false;
+		}
+		
 		@Basic @Immutable
 		public double getMass() {
 			return this.mass;
