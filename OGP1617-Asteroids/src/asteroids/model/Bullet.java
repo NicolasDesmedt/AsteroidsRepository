@@ -133,7 +133,7 @@ public class Bullet extends Entity{
 				world.removeEntity(this);
 				return;
 		}
-		if (world.getDistanceToNearestHorizontalBoundary(this) <
+		else if (world.getDistanceToNearestHorizontalBoundary(this) <
 				world.getDistanceToNearestVerticalBoundary(this) )
 			this.setVelocity(getVelocityX(), -getVelocityY());
 		else
