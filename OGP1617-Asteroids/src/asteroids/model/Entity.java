@@ -17,6 +17,7 @@ public abstract class Entity {
 		this.setVelocity(xVelocity, yVelocity);
 		if (!isValidRadius(radius)) throw new IllegalArgumentException("The given radius isn't a valid one");
 		this.radius = radius;
+		this.setMass(mass);
 		this.setMaxSpeed(maxSpeed);
 	}
 	
@@ -299,7 +300,7 @@ public abstract class Entity {
 	 *         | result == ((!Double.isNaN(maxSpeed)) && (0 < maxSpeed) && (maxSpeed< SPEED_OF_LIGHT))
 	 */
 	public static boolean isValidMaxSpeed(double maxSpeed){
-		if ((!Double.isNaN(maxSpeed)) && (0 < maxSpeed) && (maxSpeed< SPEED_OF_LIGHT)){
+		if ((!Double.isNaN(maxSpeed)) && (0 < maxSpeed) && (maxSpeed<= SPEED_OF_LIGHT)){
 			return true;
 		}
 		else{
@@ -506,18 +507,52 @@ public abstract class Entity {
 			return this.mass;
 		}
 		
+		@Raw
+		public void setMass(double mass){
+			if (!isValidMass(mass)){
+				this.mass = this.calculateMinimalMass();
+			}else{
+				this.mass = mass;
+			}
+		}
+		
+		@Basic
+		public double getDensity() {
+			double density = ((this.getMass()*3)/(4*(Math.PI)*Math.pow(this.getRadius(),3)));
+			return density;
+		}
+		
+		abstract double calculateMinimalMass();
+		
+		abstract boolean isValidMass(double mass);
+
+		
 		public World getWorld() {
 			return this.world;
 		}
 		
 		public World world;
 		
-		public void removeFromWorld(World world) {
-			this.world = null;		//aanpassen
-		}
-		
 		/**
 		 * Variable registering the mass of this ship.
 		 */
 		public double mass;
+		
+		public void removeFromWorld(World world) {
+			this.world = null;		//aanpassen
+		}
+		
+		public void terminate(){
+			if (!(this.getWorld() == null)){
+				this.removeFromWorld(this.getWorld());
+			}
+			this.isTerminated = true;
+		}
+		
+		public boolean isTerminated(){
+			return this.isTerminated;
+		}
+		
+		private boolean isTerminated = false;
+		
 	}	

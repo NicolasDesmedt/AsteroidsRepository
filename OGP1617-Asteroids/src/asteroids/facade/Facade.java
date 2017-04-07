@@ -7,23 +7,10 @@ import java.util.Set;
 import asteroids.model.Bullet;
 import asteroids.model.Ship;
 import asteroids.model.World;
-import asteroids.part1.facade.IFacade;
 import asteroids.part2.CollisionListener;
 import asteroids.util.ModelException;
 
 public class Facade implements asteroids.part2.facade.IFacade {
-
-	@Override
-	public Ship createShip() throws ModelException {
-		return new Ship();
-	}
-
-	@Override
-	public Ship createShip(double x, double y, double xVelocity,
-			double yVelocity, double radius, double orientation)
-			throws ModelException {
-			return new Ship(x,y,xVelocity,yVelocity,radius,orientation);
-	}
 
 	@Override
 	public double[] getShipPosition(Ship ship) throws ModelException {
@@ -43,16 +30,6 @@ public class Facade implements asteroids.part2.facade.IFacade {
 	@Override
 	public double getShipOrientation(Ship ship) throws ModelException {
 		return ship.getOrientation();
-	}
-
-	@Override
-	public void move(Ship ship, double dt) throws ModelException {
-		ship.move(dt);
-	}
-
-	@Override
-	public void thrust(Ship ship, double amount) throws ModelException {
-		ship.thrust(amount);
 	}
 
 	@Override
@@ -83,111 +60,97 @@ public class Facade implements asteroids.part2.facade.IFacade {
 	@Override
 	public Ship createShip(double x, double y, double xVelocity, double yVelocity, double radius, double direction,
 			double mass) throws ModelException {
-		// TODO Auto-generated method stub
-		return null;
+		return new Ship(x, y, xVelocity, yVelocity, radius, direction, mass);
 	}
 
 	@Override
 	public void terminateShip(Ship ship) throws ModelException {
-		// TODO Auto-generated method stub
-		
+		ship.terminate();
+		return;
 	}
 
 	@Override
 	public boolean isTerminatedShip(Ship ship) throws ModelException {
-		// TODO Auto-generated method stub
-		return false;
+		return ship.isTerminated();
 	}
 
 	@Override
 	public double getShipMass(Ship ship) throws ModelException {
-		// TODO Auto-generated method stub
-		return 0;
+		return ship.getMass();
 	}
 
 	@Override
 	public World getShipWorld(Ship ship) throws ModelException {
-		// TODO Auto-generated method stub
-		return null;
+		return ship.getWorld();
 	}
 
 	@Override
 	public boolean isShipThrusterActive(Ship ship) throws ModelException {
-		// TODO Auto-generated method stub
-		return false;
+		return ship.isShipThrusterActive();
 	}
 
 	@Override
 	public void setThrusterActive(Ship ship, boolean active) throws ModelException {
-		// TODO Auto-generated method stub
-		
+		ship.thrustOn();
+		return;
 	}
 
 	@Override
 	public double getShipAcceleration(Ship ship) throws ModelException {
-		// TODO Auto-generated method stub
-		return 0;
+		return ship.getAcceleration();
 	}
 
 	@Override
 	public Bullet createBullet(double x, double y, double xVelocity, double yVelocity, double radius)
 			throws ModelException {
-		// TODO Auto-generated method stub
-		return null;
+		return new Bullet(x, y, xVelocity, yVelocity, radius);
+
 	}
 
 	@Override
 	public void terminateBullet(Bullet bullet) throws ModelException {
-		// TODO Auto-generated method stub
-		
+		bullet.terminate();
+		return;
 	}
 
 	@Override
 	public boolean isTerminatedBullet(Bullet bullet) throws ModelException {
-		// TODO Auto-generated method stub
-		return false;
+		return bullet.isTerminated();
 	}
 
 	@Override
 	public double[] getBulletPosition(Bullet bullet) throws ModelException {
-		// TODO Auto-generated method stub
-		return null;
+		return bullet.getPosition();
 	}
 
 	@Override
 	public double[] getBulletVelocity(Bullet bullet) throws ModelException {
-		// TODO Auto-generated method stub
-		return null;
+		return bullet.getVelocity();
 	}
 
 	@Override
 	public double getBulletRadius(Bullet bullet) throws ModelException {
-		// TODO Auto-generated method stub
-		return 0;
+		return bullet.getRadius();
 	}
 
 	@Override
 	public double getBulletMass(Bullet bullet) throws ModelException {
-		// TODO Auto-generated method stub
-		return 0;
+		return bullet.getMass();
 	}
 
 	@Override
 	public World getBulletWorld(Bullet bullet) throws ModelException {
-		// TODO Auto-generated method stub
-		return null;
+		return bullet.getWorld();
 	}
 
 	@Override
 	public Ship getBulletShip(Bullet bullet) throws ModelException {
-		// TODO Auto-generated method stub
-		return null;
+		return bullet.getShip();
 	}
 
 	@Override
 	public Ship getBulletSource(Bullet bullet) throws ModelException {
-		// TODO Auto-generated method stub
-		return null;
+		return bullet.getSource();
 	}
 
 	@Override
@@ -252,38 +215,37 @@ public class Facade implements asteroids.part2.facade.IFacade {
 
 	@Override
 	public Set<? extends Bullet> getBulletsOnShip(Ship ship) throws ModelException {
-		// TODO Auto-generated method stub
-		return null;
+		return ship.getBulletsOnShip();
 	}
 
 	@Override
 	public int getNbBulletsOnShip(Ship ship) throws ModelException {
-		// TODO Auto-generated method stub
-		return 0;
+		return ship.getNbBulletsOnShip();
 	}
 
 	@Override
 	public void loadBulletOnShip(Ship ship, Bullet bullet) throws ModelException {
-		// TODO Auto-generated method stub
+		ship.loadBulletOnShip(bullet);
+		return;
 		
 	}
 
 	@Override
 	public void loadBulletsOnShip(Ship ship, Collection<Bullet> bullets) throws ModelException {
-		// TODO Auto-generated method stub
-		
+		ship.loadBulletsOnShip(bullets.toArray(new Bullet[bullets.size()]));
+		return;
 	}
 
 	@Override
 	public void removeBulletFromShip(Ship ship, Bullet bullet) throws ModelException {
-		// TODO Auto-generated method stub
-		
+		ship.removeBulletFromShip(bullet);
+		return;
 	}
 
 	@Override
 	public void fireBullet(Ship ship) throws ModelException {
-		// TODO Auto-generated method stub
-		
+		ship.fireBullet();
+		return;
 	}
 
 	@Override

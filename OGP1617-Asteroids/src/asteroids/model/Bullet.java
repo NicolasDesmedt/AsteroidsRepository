@@ -33,24 +33,25 @@ public class Bullet extends Entity{
 	 * @post   ...
 	 *       | ...
 	 */
+	@Raw
 	 public void terminate() {
-		 this.isTerminated = true;
+		 if (this.hasShip()){
+			 this.ship = null;
+		 }
+		 super.terminate();
 	 }
+	
+	public double calculateMinimalMass(){
+		return ((4*Math.PI*Math.pow(this.getRadius(), 3)*bulletDensity)/3);
+	}
 	 
-	 /**
-	  * Return a boolean indicating whether or not this bullet
-	  * is terminated.
-	  */
-	 @Basic @Raw
-	 public boolean isTerminated() {
-		 return this.isTerminated;
-	 }
-	 
-	 /**
-	  * Variable registering whether this bullet is terminated.
-	  */
-	 private boolean isTerminated = false;
-	 
+	public boolean isValidMass(double mass){
+		if ((this.getDensity() >= bulletDensity) && (mass < Double.MAX_VALUE) && (!Double.isNaN(mass))){
+			return true;
+		}else{
+			return false;
+		}
+	}
 	
 	public final static double minBulletRadius = 1;
 	
@@ -140,4 +141,13 @@ public class Bullet extends Entity{
 			this.setVelocity(-getVelocityX(), getVelocityY());
 	}
 	
+	public void setSource(Ship ship){
+		this.source = ship;
+	}
+	
+	public Ship getSource(){
+		return this.source;
+	}
+		
+	public Ship source = null;
 }
