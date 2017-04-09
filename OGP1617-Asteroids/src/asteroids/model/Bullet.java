@@ -150,4 +150,18 @@ public class Bullet extends Entity{
 	}
 		
 	public Ship source = null;
+	
+	public void cancelsOut(Bullet other) {
+		this.terminate();
+		other.terminate();
+	}
+	
+//	public void getsHitBy(Ship other) {
+//		if (this.getSource() == other)
+//			other.loadBulletOnShip(this);
+//		else {
+//			this.terminate();
+//			other.terminate();
+//		}
+//	}
 }

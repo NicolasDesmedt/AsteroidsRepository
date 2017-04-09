@@ -360,6 +360,33 @@ public class Ship extends Entity{
 			this.setVelocity(-getVelocityX(), getVelocityY());
 	}
 	
+	public void collidesWithShip(Ship other) {
+		double diffX = other.getPositionX() - this.getPositionX();
+		double diffY = other.getPositionY() - this.getPositionY();
+		double diffVX = other.getVelocityX() - this.getVelocityX();
+		double diffVY = other.getVelocityY() - this.getVelocityY();
+		double thisMass = this.getMass();
+		double otherMass = other.getMass();
+		double J = (2*thisMass*otherMass*(diffVX*diffX + diffVY*diffY))/(getRadius()*(thisMass+otherMass));
+		double Jx = (J*diffX)/getRadius();
+		double Jy = (J*diffY)/getRadius();
+		double xVelocityThis = this.getVelocityX() + Jx/thisMass;
+		double yVelocityThis = this.getVelocityY() + Jy/thisMass;
+		double xVelocityOther = other.getVelocityX() - Jx/otherMass;
+		double yVelocityOther = other.getVelocityY() - Jy/otherMass;
+		this.setVelocity(xVelocityThis, yVelocityThis);
+		other.setVelocity(xVelocityOther, yVelocityOther);
+	}
+	
+	public void getsHitBy(Bullet other) {
+		if (other.getSource() == this)
+			this.loadBulletOnShip(other);
+		else {
+			this.terminate();
+			other.terminate();
+		}
+	}
+	
 	public double bulletSpeed = 250;
 	
 

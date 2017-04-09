@@ -287,7 +287,7 @@ public class World{
 	
 	private Hashtable<Entity, Entity> collidingEntities = new Hashtable<Entity, Entity>();
 	
-	public double resolveCollisions() {
+	public void resolveCollisions() {
 		Set<Entity> keys = getCollidingEntities().keySet();
 		Iterator<Entity> iterator = keys.iterator();
 		while (iterator.hasNext()) {
@@ -299,13 +299,13 @@ public class World{
 				else
 					((Bullet)entity).collidesWithBoundary(this);
 			else if ( (entity instanceof Ship) && (other instanceof Ship) )
-					entity.collidesWithShip(other);
+					((Ship)entity).collidesWithShip((Ship)other);
 			else if ( (entity instanceof Ship) && (other instanceof Bullet) )
-					entity.getsHitBy(other);
+					((Ship)entity).getsHitBy((Bullet)other);
 			else if ( (entity instanceof Bullet) && (other instanceof Ship) )
-					other.getsHitBy(entity);
+					((Ship)other).getsHitBy((Bullet)entity);
 			else
-				entity.cancelsOut(other);
+				((Bullet)entity).cancelsOut((Bullet)other);
 		}
 	}
 	
