@@ -62,16 +62,11 @@ public class Bullet extends Entity{
 	}
 	
 	public boolean isValidRadius(double radius){
-		if (Double.isInfinite(radius) || Double.isNaN(radius)) {
+		if ( (radius >= minBulletRadius) && (!Double.isInfinite(radius)) && (!Double.isNaN(radius)) ) {
+			return true;
+		}
+		else{
 			return false;
-		}else{
-			if (hasShip() && radius>=minBulletRadius && radius>=0.1*this.getShip().getRadius()){
-				return true;
-			}else if (!hasShip() && radius>=minBulletRadius){
-				return true;
-			}else{
-				return false;
-			}
 		}
 	}
 	

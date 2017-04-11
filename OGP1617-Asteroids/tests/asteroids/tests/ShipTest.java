@@ -2,14 +2,9 @@ package asteroids.tests;
 
 import static org.junit.Assert.*;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import org.junit.*;
 
-import asteroids.model.Ship;
-import asteroids.model.Bullet;
-
+import asteroids.model.*;
 
 /**
  * A class collecting tests for all the public methods of the ship class.
@@ -40,7 +35,7 @@ public class ShipTest {
 	 * respectively with position [0,0], 
 	 * velocity[0,0], radius 10 and orientation facing right (0).
 	 */
-	private static Ship immutableShip1, immutableShip2, immutableShip3, immutableMinimalShip;
+	private static Ship immutableShip1, immutableMinimalShip;
 	
 	private static Bullet mutableMinimalBullet, mutableBullet1;
 	
@@ -69,42 +64,29 @@ public class ShipTest {
 	 * @post The variable immutableShip1 references a new ship with position [0,0], 
 	 * velocity[0,0], radius 10 and orientation facing right (0).
 	 * 
-	 * @post The variable immutableShip2 references a new ship with position [0,0], 
+	 * @post The variable immutableShip1 references a new ship with position [0,0], 
 	 * velocity[0,0], radius 10 and orientation facing up (PI/2).
 	 * 
-	 * @post The variable immutableShip2 references a new ship with position [0,0], 
+	 * @post The variable immutableShip1 references a new ship with position [0,0], 
 	 * velocity[0,0], radius 10 and orientation facing right (0).
 	 */
 	
 	@BeforeClass
 	public static void setUpImmutableFixture() {
-		immutableShip1 = new Ship(100,-100,-20,0,10,0);
-		immutableShip2 = new Ship(0,0,0,0,10,(Math.PI/2));
-		immutableShip3 = new Ship(10,10,0,-20,10,0);
-		immutableMinimalShip = new Ship(0,0,0,0,Ship.MIN_RADIUS_SHIP,0);
+		immutableShip1 = new Ship(0,0,0,0,10,(Math.PI/2));
+		immutableMinimalShip = new Ship(0,0,0,0,Ship.minRadiusShip,0);
 		
 	}
 	
 	@Test
-	public void setMass_LegalCase() {
-		mutableShip1.setMass(7E15);
-		double mass = mutableShip1.getMass();
-		assertEquals(7E15, mass, EPSILON);
-	}
-	
-	@Test
-	public void setMass_UnderMinDensity() {
-		mutableShip1.setMass(0);
-		double mass = mutableShip1.getMass();
-		assertEquals(5.5E20, mass, EPSILON);
-	}
-
-	@Test
-	public void setMass_MaxValue() {
-		mutableShip1.setMass(Double.MAX_VALUE);
-		double mass = mutableShip1.getMass();
-		assertEquals(5.5E20, mass, EPSILON);
-	}
+    public void terminate_LegalCase(){
+		mutableShip2.loadBulletOnShip(mutableMinimalBullet);
+		mutableShip2.loadBulletOnShip(mutableBullet1);
+		mutableShip2.terminate();
+        assertTrue(mutableShip2.isTerminated());
+        assertTrue(mutableMinimalBullet.isTerminated());
+        assertTrue(mutableBullet1.isTerminated());
+    }
 	
 	/*
 	 * Test number 1 tests a legal case.
@@ -132,9 +114,9 @@ public class ShipTest {
 	 */
 	@Test
 	public void isValidRadius_Tests() {
-		assertTrue(immutableMinimalShip.isValidRadius(Ship.MIN_RADIUS_SHIP+10));
-		assertTrue(immutableMinimalShip.isValidRadius(Ship.MIN_RADIUS_SHIP));
-		assertFalse(immutableMinimalShip.isValidRadius(Ship.MIN_RADIUS_SHIP-1));
+		assertTrue(immutableMinimalShip.isValidRadius(Ship.minRadiusShip+10));
+		assertTrue(immutableMinimalShip.isValidRadius(Ship.minRadiusShip));
+		assertFalse(immutableMinimalShip.isValidRadius(Ship.minRadiusShip-1));
 		assertFalse(immutableMinimalShip.isValidRadius(Double.POSITIVE_INFINITY));
 		assertFalse(immutableMinimalShip.isValidRadius(Double.NaN));
 		
@@ -142,7 +124,7 @@ public class ShipTest {
 	
 	@Test
 	public void getOrientation_LegalCase(){
-		double radius = immutableShip2.getOrientation();
+		double radius = immutableShip1.getOrientation();
 		assertEquals((Math.PI/2), radius, EPSILON);
 	}
 	
@@ -187,53 +169,6 @@ public class ShipTest {
 		mutableShip2.turn(Math.PI);
 		double orientation = mutableShip2.getOrientation();
 		assertEquals(((Math.PI*3)/2), orientation, EPSILON);
-	}
-	
-	@Test
-	public void getVelocity_LegalCase() {
-		double[] velocity = immutableShip1.getVelocity();
-		assertEquals(-20, velocity[0], EPSILON);
-		assertEquals(0, velocity[1], EPSILON);
-	}
-	
-	@Test
-	public void setVelocity_LegalCase() {
-		mutableShip1.setVelocity(10,-10);
-		double[] velocity = mutableShip1.getVelocity();
-		assertEquals(10, velocity[0], EPSILON);
-		assertEquals(-10, velocity[1], EPSILON);
-	}
-
-	@Test
-	public void setVelocity_ExceedingSpeedOfLight() {
-		mutableShip1.setVelocity(400000,200000);
-		double[] velocity = mutableShip1.getVelocity();
-		assertEquals(268328.1573, velocity[0], EPSILON);
-		assertEquals(134164.0787, velocity[1], EPSILON);
-	}
-
-	@Test
-	public void setVelocity_XVelocityInfinite() {
-		mutableShip1.setVelocity(Double.POSITIVE_INFINITY,-10);
-		double[] velocity = mutableShip1.getVelocity();
-		assertEquals(immutableShip1.getMaxSpeed(), velocity[0], EPSILON);
-		assertEquals(0, velocity[1], EPSILON);
-	}
-	
-	@Test
-	public void setVelocity_XAndYVelocityInfinite() {
-		mutableShip1.setVelocity(Double.POSITIVE_INFINITY,Double.NEGATIVE_INFINITY);
-		double[] velocity = mutableShip1.getVelocity();
-		assertEquals((immutableShip1.getMaxSpeed()/Math.sqrt(2)), velocity[0], EPSILON);
-		assertEquals((-immutableShip1.getMaxSpeed()/Math.sqrt(2)), velocity[1], EPSILON);
-	}
-	
-	@Test
-	public void setVelocity_YNaN() {
-		mutableShip1.setVelocity(10,Double.NaN);
-		double[] velocity = mutableShip1.getVelocity();
-		assertEquals(10, velocity[0], EPSILON);
-		assertEquals(0, velocity[1], EPSILON);
 	}
 
 	@Test
@@ -385,174 +320,4 @@ public class ShipTest {
 		assertEquals(bullet, null);
 	}
 	
-	
-/*
-	@Test
-	public void getPosition_LegalCase() {
-		double[] position = immutableShip1.getPosition();
-		assertEquals(100, position[0], EPSILON);
-		assertEquals(-100, position[1], EPSILON);
-	}
-	
-	@Test
-	public void setPosition_LegalCase() throws IllegalArgumentException {
-		mutableShip1.setPosition(100,200);
-		double[] position = mutableShip1.getPosition();
-		assertEquals(100, position[0], EPSILON);
-		assertEquals(200, position[1], EPSILON);
-	}
-	
-	@Test(expected = IllegalArgumentException.class)
-	public void setPosition_NaN() throws IllegalArgumentException {
-		mutableShip1.setPosition(Double.NaN,200);
-	}
-	
-	@Test(expected = IllegalArgumentException.class)
-	public void setPosition_Infinite() throws IllegalArgumentException {
-		mutableShip1.setPosition(Double.NEGATIVE_INFINITY,200);
-	}
-	
-	@Test
-	public void getRadius_LegalCase(){
-		double radius = immutableShip1.getRadius();
-		assertEquals(10, radius, EPSILON);
-	}
-	
-	@Test
-	public void setRadius_LegalCase() throws IllegalArgumentException {
-		double radius = mutableShip1.getRadius();
-		assertEquals(10, radius, EPSILON);
-	}
-	
-	@Test(expected = IllegalArgumentException.class)
-	public void setRadius_UnderMinimumRadius() throws IllegalArgumentException {
-		new Ship(0,0,20,20,(Ship.getMinRadius()-1),0);
-	}
-	
-	@Test(expected = IllegalArgumentException.class)
-	public void setRadius_NaN() throws IllegalArgumentException {
-		new Ship(0,0,20,20,Double.NaN,0);
-	}
-	
-	@Test(expected = IllegalArgumentException.class)
-	public void setRadius_Infinite() throws IllegalArgumentException {
-		new Ship(0,0,20,20,Double.POSITIVE_INFINITY,0);
-	}
-	
-	@Test
-	public void Move_LegalCase() throws IllegalArgumentException{
-		mutableShip1.move(2);
-		double[] position = mutableShip1.getPosition();
-		assertEquals(40, position[0], EPSILON);
-		assertEquals(40, position[1], EPSILON);
-	}
-	
-	@Test
-	public void Move_DurationIs0() throws IllegalArgumentException{
-		mutableShip1.move(0);
-		double[] position = mutableShip1.getPosition();
-		assertEquals(0, position[0], EPSILON);
-		assertEquals(0, position[1], EPSILON);
-	}
-	
-	@Test
-	public void Move_VelocityIs0() throws IllegalArgumentException{
-		mutableShip2.move(2);
-		double[] position = mutableShip1.getPosition();
-		assertEquals(0, position[0], EPSILON);
-		assertEquals(0, position[1], EPSILON);
-	}
-	
-	@Test(expected = IllegalArgumentException.class)
-	public void Move_DurationIsNaN() throws IllegalArgumentException{
-		mutableShip1.move(Double.NaN);
-	}
-	
-	@Test(expected = IllegalArgumentException.class)
-	public void Move_DurationIsInfinite() throws IllegalArgumentException{
-		mutableShip1.move(Double.POSITIVE_INFINITY);
-	}
-	
-	@Test(expected = IllegalArgumentException.class)
-	public void Move_DurationIsNegative() throws IllegalArgumentException{
-		mutableShip1.move(-1);
-	}
-	
-	@Test
-	public void GetDistanceBetween_LegalCase(){
-		double distance = immutableShip1.getDistanceBetween(immutableShip2);
-		assertEquals((Math.sqrt(20000)-immutableShip1.getRadius()-immutableShip2.getRadius()), distance, EPSILON);
-	}
-	
-	@Test
-	public void GetDistanceBetween_Itselfs(){
-		double distance = immutableShip1.getDistanceBetween(immutableShip1);
-		assertEquals(0, distance, EPSILON);
-	}
-	
-	@Test(expected = NullPointerException.class)
-	public void GetDistanceBetween_NullShip(){
-		immutableShip1.getDistanceBetween(null);
-	}
-	
-	@Test
-	public void Overlap_LegalCase(){
-		assertTrue(immutableShip2.overlap(immutableShip3));
-	}
-	
-	@Test
-	public void Overlap_Itself(){
-		assertTrue(immutableShip1.overlap(immutableShip1));
-	}
-	
-	@Test(expected = NullPointerException.class)
-	public void Overlap_NullShip(){
-		immutableShip1.overlap(null);
-	}
-	
-	@Test
-	public void GetTimeToCollision_LegalCase() throws IllegalStateException{
-		double timeToCollision = immutableShip1.getTimeToCollision(immutableShip3);
-		assertEquals(4.5, timeToCollision, EPSILON);
-	}
-	
-	@Test
-	public void GetTimeToCollision_NoCollision() throws IllegalStateException, NullPointerException{
-		double timeToCollision = immutableShip1.getTimeToCollision(immutableShip2);
-		assertEquals(Double.POSITIVE_INFINITY, timeToCollision, EPSILON);
-	}
-	
-	@Test(expected = IllegalStateException.class)
-	public void GetTimeToCollision_OverlappingShips() throws IllegalStateException, NullPointerException{
-		immutableShip2.getTimeToCollision(immutableShip3);
-	}
-	
-	@Test(expected = NullPointerException.class)
-	public void GetTimeToCollision_NullShip() throws IllegalStateException, NullPointerException{
-		immutableShip2.getTimeToCollision(null);
-	}
-	
-	@Test
-	public void getCollisionPosition_LegalCase() throws NullPointerException, IllegalStateException{
-		double[] CollisionPosition = immutableShip1.getCollisionPosition(immutableShip3);
-		assertEquals(10, CollisionPosition[0], EPSILON);
-		assertEquals(-70, CollisionPosition[1], EPSILON);
-	}
-
-	@Test
-	public void getCollisionPosition_NoCollision() throws NullPointerException, IllegalStateException{
-		double[] CollisionPosition = immutableShip1.getCollisionPosition(immutableShip2);
-		assertEquals(null, CollisionPosition);
-	}
-
-	@Test(expected = IllegalStateException.class)
-	public void getCollisionPosition_OverlappingShips() throws NullPointerException, IllegalStateException{
-		immutableShip2.getCollisionPosition(immutableShip3);
-	}
-	
-	@Test(expected = NullPointerException.class)
-	public void getCollisionPosition_NullShip() throws NullPointerException, IllegalStateException{
-		immutableShip2.getCollisionPosition(null);
-	}
-*/
 }
