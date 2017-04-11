@@ -36,6 +36,7 @@ public class World{
 	 */
 	@Basic @Immutable
 	public double getUpperBound() {
+		
 		return World.upperBound;
 	}
 	
@@ -54,6 +55,19 @@ public class World{
 	 */
 	private final double height;
 	
+	public double getWorldWidth() {
+		return this.width;
+	}
+	
+	public double getWorldHeight() {
+		return this.height;
+	}
+	
+	public double[] getWorldSize() {
+		double[] worldSize = {getWorldWidth(),getWorldHeight()};
+		return worldSize;
+	}
+	
 	/**
 	 * Terminate this world.
 	 *
@@ -63,6 +77,7 @@ public class World{
 	 *       | ...
 	 */
 	 public void terminate() {
+		 posEntities.clear();
 		 this.isTerminated = true;
 	 }
 	 
@@ -162,10 +177,11 @@ public class World{
 	 * Add entity to this world. (Defensive)
 	 */
 	public void addEntity(Entity entity) {
-		if (!overlapBoundaries(entity) && canContain(entity) &&
-			!significantOverlapAllEntities(entity))
-			posEntities.put(entity.getPosition(), entity);
-		else throw new IllegalArgumentException("This world can not contain the given entity.");
+		posEntities.put(entity.getPosition(), entity);
+//		if (!overlapBoundaries(entity) && canContain(entity) &&
+//			!significantOverlapAllEntities(entity))
+//			posEntities.put(entity.getPosition(), entity);
+//		else throw new IllegalArgumentException("This world can not contain the given entity.");
 	}	
 	
 	/**
@@ -217,24 +233,74 @@ public class World{
 	 */
 	private HashMap<double[], Entity> posEntities = new HashMap<>();
 	
-	public double getTimeToCollisionEntityWithBoundary(Entity entity) {
+	
+	public double getTimeToCollisionEntityWithVerticalBoundary(Entity entity) {
 		double time = Double.POSITIVE_INFINITY;
-		double distanceX = Double.POSITIVE_INFINITY;
-		double distanceY = Double.POSITIVE_INFINITY;
-		
-		if (entity.getVelocityX() < 0)
-			distanceX = entity.getPositionX() - entity.getRadius();
-		else 
-			distanceX = width - entity.getPositionX() - entity.getRadius();
-		time = Math.abs(distanceX/entity.getVelocityX());
-		
-		if (entity.getVelocityY() < 0)
-			distanceY = entity.getPositionY() - entity.getRadius();
-		else 
-			distanceY = height - entity.getPositionY() - entity.getRadius();
-		if (Math.abs(distanceY/entity.getVelocityY()) < time)
-			time = Math.abs(distanceY/entity.getVelocityY());
-		return time;	
+		double distance = Double.POSITIVE_INFINITY;
+		if (entity.getVelocityX() == 0)
+			return time;
+		else if (this.overlapBoundaries(entity))
+			return 0;
+		else {
+			if (entity.getVelocityX() < 0)
+				distance = entity.getPositionX() - entity.getRadius();
+			else 
+				distance = width - entity.getPositionX() - entity.getRadius();
+			return time = Math.abs(distance/entity.getVelocityX());
+		}
+	}
+	
+	public double getTimeToCollisionEntityWithHorizontalBoundary(Entity entity) {
+		double time = Double.POSITIVE_INFINITY;
+		double distance = Double.POSITIVE_INFINITY;
+		if (entity.getVelocityY() == 0)
+			return time;
+		else if (this.overlapBoundaries(entity))
+			return 0;
+		else {
+			if (entity.getVelocityY() < 0)
+				distance = entity.getPositionY() - entity.getRadius();
+			else 
+				distance = height - entity.getPositionY() - entity.getRadius();
+			return time = Math.abs(distance/entity.getVelocityY());
+		}
+	}
+	
+	public double getTimeToCollisionEntityWithBoundary(Entity entity) { 
+		double verticalTime = getTimeToCollisionEntityWithVerticalBoundary(entity);
+		double horizontalTime = getTimeToCollisionEntityWithHorizontalBoundary(entity);
+		if (verticalTime < horizontalTime)
+			return verticalTime;	
+		else
+			return horizontalTime;
+	}
+	
+	/**
+	 * iets toevoegen voor al aan het botsen
+	 * @param entity
+	 * @return
+	 */
+	public double[] getPositionCollisionWithBoundary(Entity entity) {
+		double xPos = Double.POSITIVE_INFINITY;
+		double yPos = Double.POSITIVE_INFINITY;
+		double verticalTime = getTimeToCollisionEntityWithVerticalBoundary(entity);
+		double horizontalTime = getTimeToCollisionEntityWithHorizontalBoundary(entity);
+		if (horizontalTime < verticalTime) {
+			if (entity.getVelocityY() < 0)
+				yPos = 0;
+			else
+				yPos = height;
+			xPos = entity.getPositionX() + entity.getVelocityX()*verticalTime;
+		}
+		else {
+			if (entity.getVelocityX() < 0)
+				xPos = 0;
+			else
+				xPos = width;
+			yPos = entity.getPositionY() + entity.getVelocityY()*verticalTime;
+		}
+		double[] position = {xPos, yPos};
+		return position;
 	}
 	
 	public double getTimeToFirstCollisionEntity(Entity entity) {
@@ -267,6 +333,38 @@ public class World{
 				time = getTimeToFirstCollisionEntity(entity);
 		}
 		return time;
+	}
+	
+	public HashSet<Entity> getFirstCollidingEntities() {
+		HashSet<Entity> firstCollidingEntities = new HashSet<>();
+		double timeToCollision = getTimeToFirstCollision();
+		HashSet<Entity> allEntities = getAllEntities();
+		for (Entity entity : allEntities) {
+			if (getTimeToFirstCollisionEntity(entity) == timeToCollision) {
+				firstCollidingEntities.add(entity);								// Na 2 gevonden entities stoppen? (Bij HashTable van meerdere gelijklopende botsingen uitgegaan)
+			}
+		}
+		return firstCollidingEntities;
+	}
+	
+	public double[] getPositionFirstCollision() {
+		HashSet<Entity> firstCollidingEntities = getFirstCollidingEntities();
+		if (firstCollidingEntities.size() > 2)
+			throw new IllegalStateException("Multiple collisions occur at once, there is no single 'position of first collision'");
+		if (firstCollidingEntities.size() == 0)
+			throw new IllegalStateException("There are no colliding entities");
+		Entity entity1 = null;
+		Entity entity2 = null;
+		for (Entity entity : firstCollidingEntities) {
+			if (entity1 == null)
+				entity1 = entity;
+			else 
+				entity2 = entity;
+		}
+		if (entity2 == null)
+			return this.getPositionCollisionWithBoundary(entity2);
+		else
+			return entity1.getCollisionPosition(entity2);
 	}
 	
 	public Hashtable<Entity, Entity> getCollidingEntities() {

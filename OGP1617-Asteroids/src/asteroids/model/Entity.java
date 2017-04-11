@@ -403,7 +403,7 @@ public abstract class Entity {
 		public double getTimeToCollision(Entity other)
 				throws IllegalStateException, NullPointerException{
 			if (other == null) throw new NullPointerException("The other ship is not effective");
-			if (this.overlap(other)) throw new IllegalStateException("This method does not apply to ships that overlap");
+			//if (this.overlap(other)) throw new IllegalStateException("This method does not apply to ships that overlap");
 			double diffX = other.getPosition()[0] - this.getPosition()[0];
 			double diffY = other.getPosition()[1] - this.getPosition()[1];
 			double diffVX = other.getVelocity()[0] - this.getVelocity()[0];
