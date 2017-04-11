@@ -46,7 +46,7 @@ public class Bullet extends Entity{
 	}
 	 
 	public boolean isValidMass(double mass){
-		if ((this.getDensity() >= bulletDensity) && (mass < Double.MAX_VALUE) && (!Double.isNaN(mass))){
+		if ((getDensity(mass) >= bulletDensity) && (mass < Double.MAX_VALUE) && (!Double.isNaN(mass))){
 			return true;
 		}else{
 			return false;
@@ -84,11 +84,7 @@ public class Bullet extends Entity{
 	}
 	
 	public void setShip(Ship ship){
-		if (!hasShip() && !hasWorld() && this.getRadius() >= 0.1*ship.getRadius()){
-			this.ship = ship;
-		}else{
-			//throw new exception
-		}
+		this.ship = ship;    //deze fu nog opnieuw bekijken want mag niet aan world en ship teglijk behoren
 	}
 	
 	public Ship ship;

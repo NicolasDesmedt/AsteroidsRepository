@@ -13,12 +13,12 @@ public abstract class Entity {
 	
 	protected Entity(double x, double y, double xVelocity, double yVelocity, double radius, double mass, double maxSpeed)
 		throws IllegalArgumentException{
+		this.setMaxSpeed(maxSpeed);
 		this.setPosition(x,y);
 		this.setVelocity(xVelocity, yVelocity);
 		if (!isValidRadius(radius)) throw new IllegalArgumentException("The given radius isn't a valid one");
 		this.radius = radius;
 		this.setMass(mass);
-		this.setMaxSpeed(maxSpeed);
 	}
 	
 	/**
@@ -96,7 +96,7 @@ public abstract class Entity {
 	 */
 	@Basic @Raw
 	public double[] getVelocity(){
-		return velocity.clone();
+		return velocity;
 	}
 	
 	public double getVelocityX() {
@@ -185,48 +185,48 @@ public abstract class Entity {
 	 */
 	@Raw
 	public void setVelocity(double xVelocity, double yVelocity){
-		double[] velocity = new double[] {xVelocity,yVelocity};
-		if (Double.isNaN(velocity[1])) {
-			setVelocity(velocity[0],0);
+		if (Double.isNaN(yVelocity)) {
+			setVelocity(xVelocity,0);
 			return;
 		}
-		if (Double.isNaN(velocity[0])) {
-			setVelocity(0,velocity[1]);
+		if (Double.isNaN(xVelocity)) {
+			setVelocity(0,yVelocity);
 			return;
 		}
-		double speed = getSpeed(velocity);
-		if (Double.isInfinite(velocity[0]) && (Double.isInfinite(velocity[1]))){
-			if (velocity[0] > 0){
+		double speed = getSpeed(xVelocity, yVelocity);
+		if (Double.isInfinite(xVelocity) && (Double.isInfinite(yVelocity))){
+			if (xVelocity > 0){
 				this.velocity[0] = maxSpeed/Math.sqrt(2);
 			} else{
 				this.velocity[0] = -maxSpeed/Math.sqrt(2);
 			}
-			if (velocity[1] > 0){
+			if (yVelocity > 0){
 				this.velocity[1] = maxSpeed/Math.sqrt(2);
 			} else{
 				this.velocity[1] = -maxSpeed/Math.sqrt(2);
 			}
-		} else if (Double.isInfinite(velocity[0])){
-			if (velocity[0] > 0){
+		} else if (Double.isInfinite(xVelocity)){
+			if (xVelocity > 0){
 				this.velocity[0] = maxSpeed;
 			} else{
 				this.velocity[0] = -maxSpeed;
 			}
 			this.velocity[1] = 0;
-		} else if (Double.isInfinite(velocity[1])){
-			if (velocity[1] > 0){
+		} else if (Double.isInfinite(yVelocity)){
+			if (yVelocity > 0){
 				this.velocity[1] = maxSpeed;
 			} else{
 				this.velocity[1] = -maxSpeed;
 			}
 			this.velocity[0] = 0;
-		} else if (speed > maxSpeed){
-			this.velocity[0] = (velocity[0]*maxSpeed)/speed;
-			this.velocity[1] = (velocity[1]*maxSpeed)/speed;
+		}else if (speed > maxSpeed){
+			this.velocity[0] = (xVelocity*maxSpeed)/speed;
+			this.velocity[1] = (yVelocity*maxSpeed)/speed;
 		} 
 		else{
-			this.velocity = velocity;
-		} 
+			this.velocity[0] = xVelocity;
+			this.velocity[1] = yVelocity;
+		}
 	}
 	
 	/**
@@ -249,8 +249,8 @@ public abstract class Entity {
 	 * 			the x direction squared with the velocity in the y direction squared.
 	 * 			| result == Math.sqrt(Math.pow(velocity[0], 2) + Math.pow(velocity[1], 2))
 	 */
-	public double getSpeed(double[] velocity){
-		double speed = Math.sqrt(Math.pow(velocity[0], 2) + Math.pow(velocity[1], 2));
+	public double getSpeed(double xVelocity, double yVelocity){
+		double speed = Math.sqrt(Math.pow(xVelocity, 2) + Math.pow(yVelocity, 2));
 		return speed;
 	}
 	
@@ -510,15 +510,19 @@ public abstract class Entity {
 		@Raw
 		public void setMass(double mass){
 			if (!isValidMass(mass)){
+				if (isValidMass(this.getMass())){
+					return;
+				}else{
 				this.mass = this.calculateMinimalMass();
+				}
 			}else{
 				this.mass = mass;
 			}
 		}
 		
 		@Basic
-		public double getDensity() {
-			double density = ((this.getMass()*3)/(4*(Math.PI)*Math.pow(this.getRadius(),3)));
+		public double getDensity(double mass) {
+			double density = ((mass*3)/(4*(Math.PI)*Math.pow(this.getRadius(),3)));
 			return density;
 		}
 		

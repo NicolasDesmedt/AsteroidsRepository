@@ -94,7 +94,7 @@ public class Ship extends Entity{
 	}
 		
 	public boolean isValidMass(double mass){
-		if ((this.getDensity() >= MIN_DENSITY) && (mass < Double.MAX_VALUE) && (!Double.isNaN(mass))){
+		if ((getDensity(mass) >= MIN_DENSITY) && (mass < Double.MAX_VALUE) && (!Double.isNaN(mass))){
 			return true;
 		}else{
 			return false;
@@ -154,7 +154,7 @@ public class Ship extends Entity{
 	/**
 	 * Constant reflecting the minimum radius that applies to all ships.
 	 */
-	private static final double MIN_RADIUS_SHIP = 10;
+	public static final double MIN_RADIUS_SHIP = 10;
 	
 	/**
 	 * Return the orientation of this ship.
@@ -242,12 +242,12 @@ public class Ship extends Entity{
 	 * 			| setVelocity( {(getVelocity()[0] + amount*Math.cos(this.getOrientation())),
 	 * 							(getVelocity()[1] + amount*Math.sin(this.getOrientation()))} )
 	 */
-	public void thrust(double acceleration){
-		if (acceleration < 0 || Double.isNaN(acceleration)){
+	public void thrust(double time){
+		if (time < 0 || Double.isNaN(time)){
 			return;
 		}else{
-		double newXVelocity = (this.getVelocity()[0] + acceleration*Math.cos(this.getOrientation()));
-		double newYVelocity = (this.getVelocity()[1] + acceleration*Math.sin(this.getOrientation()));
+		double newXVelocity = (this.getVelocity()[0] + time*Math.cos(this.getOrientation())*this.getAcceleration());
+		double newYVelocity = (this.getVelocity()[1] + time*Math.sin(this.getOrientation())*this.getAcceleration());
 		this.setVelocity(newXVelocity, newYVelocity);
 		}
 	}
@@ -266,11 +266,11 @@ public class Ship extends Entity{
 		isTrusterOn = false;
 	}
 	
-	public final double defaultThrusterForce = 1.1E21;
+	public final static double defaultThrusterForce = 1.1E21;
 	
-	public void setThrusterForce(double force){
-		if ( (force>=0) && (!Double.isInfinite(force)) && (!Double.isNaN(force))){
-			this.thrusterForce = force;
+	public void setThrusterForce(double newThrusterforce){
+		if ( (newThrusterforce>=0) && (!Double.isInfinite(newThrusterforce)) && (!Double.isNaN(newThrusterforce))){
+			this.thrusterForce = newThrusterforce;
 		}else{
 			this.thrusterForce = defaultThrusterForce;
 		}
@@ -287,8 +287,7 @@ public class Ship extends Entity{
 		return acceleration;
 	}
 	
-	public void loadBulletOnShip(Bullet bullet) throws IllegalArgumentException{
-		if (!bullet.isValidRadius(bullet.getRadius())) throw new IllegalArgumentException("The bullet has an invalid radius");
+	public void loadBulletOnShip(Bullet bullet){
 		this.bullets.add(bullet);
 		this.setMass(this.getMass() + bullet.getMass());
 		bullet.setShip(this);
@@ -328,10 +327,10 @@ public class Ship extends Entity{
     }
 	
 	public void fireBullet(){
-		if ((this.getNbBulletsOnShip() == 0) || this.getWorld() == null){
+		if ((this.getNbBulletsOnShip() == 0)){   // || this.getWorld() == null)
 			return;
 		}
-		Bullet bullet = this.getLoadedBullet();
+		Bullet bullet = this.selectLoadedBullet();
 		this.putInFiringPosition(bullet);
 		bullet.setVelocity(bulletSpeed*Math.cos(getOrientation()), bulletSpeed*Math.sin(getOrientation()));
 		this.removeBulletFromShip(bullet);
@@ -342,10 +341,10 @@ public class Ship extends Entity{
 	public void putInFiringPosition(Bullet bullet){
 		double newXPosition = bullet.getPositionX() + (this.getRadius() + bullet.getRadius())*Math.cos(getOrientation());
 		double newYPosition = bullet.getPositionY() + (this.getRadius() + bullet.getRadius())*Math.sin(getOrientation());
-		this.setPosition(newXPosition, newYPosition);
+		bullet.setPosition(newXPosition, newYPosition);
 	}
 	
-	public Bullet getLoadedBullet(){
+	public Bullet selectLoadedBullet(){
 		for(Bullet bullet: this.getBulletsOnShip()){
 			return bullet;
 		}
@@ -387,7 +386,7 @@ public class Ship extends Entity{
 		}
 	}
 	
-	public double bulletSpeed = 250;
+	public static double bulletSpeed = 250;
 	
 
 }
