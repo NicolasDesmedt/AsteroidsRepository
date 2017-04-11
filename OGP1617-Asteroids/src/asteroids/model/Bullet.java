@@ -130,7 +130,7 @@ public class Bullet extends Entity{
 	public void collidesWithBoundary(World world) {
 		this.setCounterBoundaryCollisions(getCounterBoundaryCollisions() + 1);
 		if (getCounterBoundaryCollisions() == getMaxBoundaryCollisions()) {
-				this.removeFromWorld(world);
+				this.removeFromWorld();
 				world.removeEntity(this);
 				return;
 		}

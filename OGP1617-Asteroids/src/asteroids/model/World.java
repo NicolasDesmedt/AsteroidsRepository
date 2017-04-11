@@ -1,12 +1,12 @@
 package asteroids.model;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Set;
 
+import asteroids.part2.CollisionListener;
 import be.kuleuven.cs.som.annotate.*;
 
 /**
@@ -36,7 +36,6 @@ public class World{
 	 */
 	@Basic @Immutable
 	public double getUpperBound() {
-		
 		return World.upperBound;
 	}
 	
@@ -176,12 +175,14 @@ public class World{
 	/**
 	 * Add entity to this world. (Defensive)
 	 */
-	public void addEntity(Entity entity) {
-		posEntities.put(entity.getPosition(), entity);
-//		if (!overlapBoundaries(entity) && canContain(entity) &&
-//			!significantOverlapAllEntities(entity))
-//			posEntities.put(entity.getPosition(), entity);
-//		else throw new IllegalArgumentException("This world can not contain the given entity.");
+	public void addEntity(Entity entity) throws IllegalArgumentException {
+		//posEntities.put(entity.getPosition(), entity);
+		if (!overlapBoundaries(entity) && canContain(entity) &&
+			!significantOverlapAllEntities(entity)) {
+			posEntities.put(entity.getPosition(), entity);
+			entity.setWorld(this);
+		}
+		else throw new IllegalArgumentException("This world can not contain the given entity.");
 	}	
 	
 	/**
@@ -407,12 +408,33 @@ public class World{
 		}
 	}
 	
+	public void updateCollisionListener(CollisionListener collisionListener) throws IllegalStateException {
+		double xPos = getPositionFirstCollision()[0];
+		double yPos = getPositionFirstCollision()[1];
+		HashSet<Entity> firstCollidingEntities = getFirstCollidingEntities();
+		if (firstCollidingEntities.size() > 2)
+			throw new IllegalStateException("Multiple collisions occur at once, there is no single 'position of first collision'");
+		if (firstCollidingEntities.size() == 0)
+			throw new IllegalStateException("There are no colliding entities");
+		Entity entity1 = null;
+		Entity entity2 = null;
+		for (Entity entity : firstCollidingEntities) {
+			if (entity1 == null)
+				entity1 = entity;
+			else 
+				entity2 = entity;
+		}
+		if (entity2 == null)
+			collisionListener.boundaryCollision(entity1, xPos, yPos);
+		else
+			collisionListener.objectCollision(entity1, entity2, xPos, yPos);
+	}
 	
 	/**
 	 * no specification, defensive
 	 * @param dt
 	 */
-	public void evolve(double dt) {
+	public void evolve(double dt, CollisionListener collisionListener) {
 		HashSet<Entity> allEntities = getAllEntities();
 		double time = getTimeToFirstCollision();
 		if (time < dt) {
@@ -420,10 +442,12 @@ public class World{
 				entity.move(time);
 			}
 			//RESOLVE
+			if (collisionListener != null)
+				updateCollisionListener(collisionListener);
 			resolveCollisions();
 			//NEXT
 			double newTime = dt - time;
-			evolve(newTime);
+			evolve(newTime, collisionListener);
 		}
 		else
 			for (Entity entity : allEntities) {
