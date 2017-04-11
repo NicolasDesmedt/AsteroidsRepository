@@ -530,6 +530,22 @@ public abstract class Entity {
 		
 		abstract boolean isValidMass(double mass);
 
+		/**
+		 * Set the world of this space object to the given world.
+		 * 
+		 * @param	world
+		 * 			...
+		 * @post	...
+		 * 			new.getWorld() == world
+		 * @throws	IllegalArgumentException
+		 * 			( world == null || !world.getAllSpaceObjects().contains(this) )
+		 */
+		@Raw
+		protected void setWorld(@Raw World world) throws IllegalArgumentException {
+			if ((!world.getAllEntities().contains(this)) || (world == null))
+				throw new IllegalArgumentException ("Not a valid world for this entity");
+			this.world = world;
+		}
 		
 		public World getWorld() {
 			return this.world;
@@ -542,13 +558,14 @@ public abstract class Entity {
 		 */
 		public double mass;
 		
-		public void removeFromWorld(World world) {
-			this.world = null;		//aanpassen
+		@Raw
+		protected void removeFromWorld() throws IllegalArgumentException {
+	    	this.world = null;
 		}
 		
 		public void terminate(){
-			if (!(this.getWorld() == null)){
-				this.removeFromWorld(this.getWorld());
+			if (this.getWorld() != null){
+				this.removeFromWorld();
 			}
 			this.isTerminated = true;
 		}
