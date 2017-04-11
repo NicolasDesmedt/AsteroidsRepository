@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Set;
 
 import asteroids.model.Bullet;
+import asteroids.model.Entity;
 import asteroids.model.Ship;
 import asteroids.model.World;
 import asteroids.part2.CollisionListener;
@@ -155,62 +156,57 @@ public class Facade implements asteroids.part2.facade.IFacade {
 
 	@Override
 	public World createWorld(double width, double height) throws ModelException {
-		// TODO Auto-generated method stub
-		return null;
+		return new World(width,height);
 	}
 
 	@Override
 	public void terminateWorld(World world) throws ModelException {
-		// TODO Auto-generated method stub
-		
+		world.terminate();
+		return;
 	}
 
 	@Override
 	public boolean isTerminatedWorld(World world) throws ModelException {
-		// TODO Auto-generated method stub
-		return false;
+		return world.isTerminated();
 	}
 
 	@Override
 	public double[] getWorldSize(World world) throws ModelException {
-		// TODO Auto-generated method stub
-		return null;
+		return world.getWorldSize();
 	}
 
 	@Override
 	public Set<? extends Ship> getWorldShips(World world) throws ModelException {
-		// TODO Auto-generated method stub
-		return null;
+		return world.getAllShips();
 	}
 
 	@Override
 	public Set<? extends Bullet> getWorldBullets(World world) throws ModelException {
-		// TODO Auto-generated method stub
-		return null;
+		return world.getAllBullets();
 	}
 
 	@Override
 	public void addShipToWorld(World world, Ship ship) throws ModelException {
-		// TODO Auto-generated method stub
-		
+		world.addEntity(ship);
+		return;
 	}
 
 	@Override
 	public void removeShipFromWorld(World world, Ship ship) throws ModelException {
-		// TODO Auto-generated method stub
-		
+		world.removeEntity(ship);
+		return;
 	}
 
 	@Override
 	public void addBulletToWorld(World world, Bullet bullet) throws ModelException {
-		// TODO Auto-generated method stub
-		
+		world.addEntity(bullet);
+		return;
 	}
 
 	@Override
 	public void removeBulletFromWorld(World world, Bullet bullet) throws ModelException {
-		// TODO Auto-generated method stub
-		
+		world.removeEntity(bullet);
+		return;
 	}
 
 	@Override
@@ -250,56 +246,64 @@ public class Facade implements asteroids.part2.facade.IFacade {
 
 	@Override
 	public double getTimeCollisionBoundary(Object object) throws ModelException {
-		// TODO Auto-generated method stub
-		return 0;
+		if (object instanceof Entity) { 
+			World world = ((Entity)object).getWorld();
+			return world.getTimeToCollisionEntityWithBoundary((Entity)object);
+		}
+		else
+			throw new IllegalArgumentException("Argument must be of type Entity");
 	}
 
 	@Override
 	public double[] getPositionCollisionBoundary(Object object) throws ModelException {
-		// TODO Auto-generated method stub
-		return null;
+		if (object instanceof Entity) {
+			World world = ((Entity)object).getWorld();
+			return world.getPositionEntityUponCollision((Entity)object);
+		}
+		else
+			throw new IllegalArgumentException("Argument must be of type Entity");
 	}
 
 	@Override
 	public double getTimeCollisionEntity(Object entity1, Object entity2) throws ModelException {
-		// TODO Auto-generated method stub
-		return 0;
+		if ((entity1 instanceof Entity) && (entity2 instanceof Entity))
+			return ((Entity)entity1).getTimeToCollision((Entity)entity2);
+		else
+			throw new IllegalArgumentException("The arguments must be of type Entity");
 	}
 
 	@Override
 	public double[] getPositionCollisionEntity(Object entity1, Object entity2) throws ModelException {
-		// TODO Auto-generated method stub
-		return null;
+		if ((entity1 instanceof Entity) && (entity2 instanceof Entity))
+			return ((Entity)entity1).getCollisionPosition((Entity)entity2);
+		else
+			throw new IllegalArgumentException("The arguments must be of type Entity");
 	}
 
 	@Override
 	public double getTimeNextCollision(World world) throws ModelException {
-		// TODO Auto-generated method stub
-		return 0;
+		return world.getTimeToFirstCollision();
 	}
 
 	@Override
 	public double[] getPositionNextCollision(World world) throws ModelException {
-		// TODO Auto-generated method stub
-		return null;
+		return world.getPositionFirstCollision();
 	}
 
 	@Override
 	public void evolve(World world, double dt, CollisionListener collisionListener) throws ModelException {
-		// TODO Auto-generated method stub
-		
+		world.evolve(dt);
+		return;
 	}
 
 	@Override
 	public Object getEntityAt(World world, double x, double y) throws ModelException {
-		// TODO Auto-generated method stub
-		return null;
+		return world.getEntityAt(x, y);
 	}
 
 	@Override
 	public Set<? extends Object> getEntities(World world) throws ModelException {
-		// TODO Auto-generated method stub
-		return null;
+		return world.getAllEntities();
 	}
 
 }
