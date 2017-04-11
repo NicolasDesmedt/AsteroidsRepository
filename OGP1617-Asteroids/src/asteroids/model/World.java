@@ -176,14 +176,7 @@ public class World{
 	/**
 	 * Add entity to this world. (Defensive)
 	 */
-<<<<<<< HEAD
-	public void addEntity(Entity entity) {
-		posEntities.put(entity.getPosition(), entity);
-//		if (!overlapBoundaries(entity) && canContain(entity) &&
-//			!significantOverlapAllEntities(entity))
-//			posEntities.put(entity.getPosition(), entity);
-//		else throw new IllegalArgumentException("This world can not contain the given entity.");
-=======
+
 	public void addEntity(Entity entity) throws IllegalArgumentException {
 		//posEntities.put(entity.getPosition(), entity);
 		if (!overlapBoundaries(entity) && canContain(entity) &&
@@ -192,7 +185,7 @@ public class World{
 			entity.setWorld(this);
 		}
 		else throw new IllegalArgumentException("This world can not contain the given entity.");
->>>>>>> e7081353517214aaba1e14f1dc6bae10decabde8
+
 	}	
 	
 	/**

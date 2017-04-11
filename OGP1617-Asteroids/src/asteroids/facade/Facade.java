@@ -292,11 +292,7 @@ public class Facade implements asteroids.part2.facade.IFacade {
 
 	@Override
 	public void evolve(World world, double dt, CollisionListener collisionListener) throws ModelException {
-<<<<<<< HEAD
-		world.evolve(dt);
-=======
 		world.evolve(dt, collisionListener);
->>>>>>> e7081353517214aaba1e14f1dc6bae10decabde8
 		return;
 	}
 
