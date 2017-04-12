@@ -79,26 +79,40 @@ public class WorldTest {
 	public void createLegalWorld(){
 		World world=new World(20, 10);
 		System.out.println("test" + world.getWorldSize());
-		double size[] = {20,10};
-		//assertEquals(world.getWorldSize(),size);
-		assertEquals(world.getWorldHeight(),10, EPSILON);
+		double[] size = world.getWorldSize();
+		assertEquals(size[0], 20, EPSILON);
+		assertEquals(size[1], 10, EPSILON);
 	}
 	
 	@Test 
-	public void addEntityLegalCase(){
+	public void withinBoundaries_LegalCase(){
+		mutableShip1.setPosition(100, 100);
+		assertTrue(world1000x1000.withinBoundaries(mutableShip1));
+	}
+	
+	@Test 
+	public void withinBoundaries_IllegalCase(){
+		mutableShip1.setPosition(9.89, 10);
+		assertFalse(world1000x1000.withinBoundaries(mutableShip1));
+	}
+	
+	@Test 
+	public void addEntity_LegalCase(){
 		world1000x1000.addEntity(immutableShip1);
 		assertTrue(world1000x1000.getAllEntities().contains(immutableShip1));
 	}
 	
-	@Test (expected=IllegalArgumentException.class)
-	public void addEntityIllegalCase() {
-		world1000x1000.addEntity(immutableMinimalShip);
-		assertFalse(world1000x1000.getAllEntities().contains(immutableMinimalShip));
+/*
+	@Test (expected = IllegalArgumentException.class)
+	public void addOverlapping_Entities() {
+		world1000x1000.addEntity(immutableOverlappingShip);
+		assertFalse(world1000x1000.getAllEntities().contains(immutableOverlappingShip));
 	}
 	
-	@Test (expected = IllegalArgumentException.class)
-	public void addOverlappingEntities() {
-		//world1000x1000.addEntity(immutableOverlappingShip);
-		//assertFalse(world1000x1000.getAllEntities().contains(immutableOverlappingShip));
+	@Test 
+	public void addEntity_LegalCase(){
+		world1000x1000.addEntity(immutableShip1);
+		assertTrue(world1000x1000.getAllEntities().contains(immutableShip1));
 	}
+	*/
 }

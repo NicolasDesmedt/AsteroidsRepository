@@ -102,6 +102,4 @@ public class BulletTest {
 		assertFalse(mutableBullet1.isValidMass(Double.NaN));
 	}
 	
-	
-	
 }

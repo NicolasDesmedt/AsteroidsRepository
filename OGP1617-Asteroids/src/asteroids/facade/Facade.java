@@ -40,28 +40,52 @@ public class Facade implements asteroids.part2.facade.IFacade {
 
 	@Override
 	public double getDistanceBetween(Ship ship1, Ship ship2) throws ModelException {
-		return ship1.getDistanceBetween(ship2);
+		try{
+			return ship1.getDistanceBetween(ship2);
+		}catch( IllegalArgumentException e){
+			throw new ModelException(e.getMessage());
+		}
 	}
 
 	@Override
 	public boolean overlap(Ship ship1, Ship ship2) throws ModelException {
-		return ship1.overlap(ship2);
+		try{
+			return ship1.overlap(ship2);
+		}catch( NullPointerException e){
+			throw new ModelException(e.getMessage());
+		}
 	}
 
 	@Override
 	public double getTimeToCollision(Ship ship1, Ship ship2) throws ModelException {
-		return ship1.getTimeToCollision(ship2);
+		try{
+			return ship1.getTimeToCollision(ship2);
+		}catch( IllegalArgumentException e){
+			throw new ModelException(e.getMessage());
+		}catch( NullPointerException e){
+			throw new ModelException(e.getMessage());
+		}
 	}
 
 	@Override
 	public double[] getCollisionPosition(Ship ship1, Ship ship2) throws ModelException {
-		return ship1.getCollisionPosition(ship2);
+		try{
+			return ship1.getCollisionPosition(ship2);
+		}catch( IllegalArgumentException e){
+			throw new ModelException(e.getMessage());
+		}catch( NullPointerException e){
+			throw new ModelException(e.getMessage());
+		}
 	}
 
 	@Override
 	public Ship createShip(double x, double y, double xVelocity, double yVelocity, double radius, double direction,
 			double mass) throws ModelException {
-		return new Ship(x, y, xVelocity, yVelocity, radius, direction, mass);
+		try{
+			return new Ship(x, y, xVelocity, yVelocity, radius, direction, mass);
+		}catch( IllegalArgumentException e){
+			throw new ModelException(e.getMessage());
+		}
 	}
 
 	@Override
@@ -104,8 +128,11 @@ public class Facade implements asteroids.part2.facade.IFacade {
 	@Override
 	public Bullet createBullet(double x, double y, double xVelocity, double yVelocity, double radius)
 			throws ModelException {
-		return new Bullet(x, y, xVelocity, yVelocity, radius);
-
+		try{
+			return new Bullet(x, y, xVelocity, yVelocity, radius);
+		}catch( IllegalArgumentException e){
+			throw new ModelException(e.getMessage());
+		}
 	}
 
 	@Override
@@ -187,26 +214,42 @@ public class Facade implements asteroids.part2.facade.IFacade {
 
 	@Override
 	public void addShipToWorld(World world, Ship ship) throws ModelException {
-		world.addEntity(ship);
-		return;
+		try{
+			world.addEntity(ship);
+			return;		
+		}catch( IllegalArgumentException e){
+			throw new ModelException(e.getMessage());
+		}
 	}
 
 	@Override
 	public void removeShipFromWorld(World world, Ship ship) throws ModelException {
-		world.removeEntity(ship);
-		return;
+		try{
+			world.removeEntity(ship);
+			return;		
+		}catch( IllegalArgumentException e){
+			throw new ModelException(e.getMessage());
+		}
 	}
 
 	@Override
 	public void addBulletToWorld(World world, Bullet bullet) throws ModelException {
-		world.addEntity(bullet);
-		return;
+		try{
+			world.addEntity(bullet);
+			return;		
+		}catch( IllegalArgumentException e){
+			throw new ModelException(e.getMessage());
+		}
 	}
 
 	@Override
 	public void removeBulletFromWorld(World world, Bullet bullet) throws ModelException {
-		world.removeEntity(bullet);
-		return;
+		try{
+			world.removeEntity(bullet);
+			return;		
+		}catch( IllegalArgumentException e){
+			throw new ModelException(e.getMessage());
+		}
 	}
 
 	@Override

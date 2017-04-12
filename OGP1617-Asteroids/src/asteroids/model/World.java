@@ -21,13 +21,21 @@ public class World{
 	 * @param width
 	 * @param height
 	 */
-	public World(double width, double height) {
-		if (! ((width >= 0) && (width <= upperBound)) )
-			width = upperBound;
-		if (! ((height >= 0) && (height <= upperBound)) )
-			height = upperBound;
+	public World(double width, double height){
+		if (((width < 0) || (width > upperBound)) && ((height < 0) || (height > upperBound))){
+			this.width = upperBound;
+			this.height = upperBound;
+		}else if((width < 0) || (width > upperBound)){
+			this.width = upperBound;
+			this.height = height;
+		}else if((width < 0) || (width > upperBound)){
+			this.width = width;
+			this.height = upperBound;
+		}else{
 		this.width = width;
 		this.height = height;
+		}
+		
 	}
 	
 	/**
@@ -79,7 +87,7 @@ public class World{
 		 HashSet<Entity> allEntities = this.getAllEntities();
 		 for (Entity entity : allEntities)
 			 entity.removeFromWorld();
-		 posEntities.clear();
+		 positionsAndEntities.clear();
 		 this.isTerminated = true;
 	 }
 	 
@@ -101,8 +109,10 @@ public class World{
 	 * 
 	 */
 	public boolean withinBoundaries(Entity entity) {
-		return entity.getPositionX() <= width && entity.getPositionX() >= 0 &&
-				entity.getPositionY() <= height && entity.getPositionY() >= 0;
+		double xPos = entity.getPositionX();
+		double yPos = entity.getPositionY();
+		double significantEntityRadius = 0.99*entity.getRadius();
+		return ((xPos+significantEntityRadius) <= width && (xPos-significantEntityRadius) >= 0 && (yPos+significantEntityRadius) <= height && (yPos-significantEntityRadius) >= 0);
 	}
 	
 	/**
@@ -143,21 +153,6 @@ public class World{
 	 * @param entity
 	 * @return
 	 */
-	public boolean canContain(Entity entity) {
-		if (this.overlapBoundaries(entity) || this.significantOverlapAllEntities(entity)) 
-			return false;
-		else
-			return true;
-	}
-	
-	public boolean significantOverlap(Entity entity, Entity other) {
-		double radiusEntity = entity.getRadius();
-		double radiusOther = other.getRadius();
-		if (entity.getDistanceBetween(other) <= 0.99*(radiusEntity + radiusOther))
-			return true;
-		else
-			return false;
-	}
 	
 	public boolean overlapBoundaries(Entity entity) {
 		double radius = entity.getRadius();
@@ -167,13 +162,19 @@ public class World{
 			return false;
 	}
 	
-	public boolean significantOverlapAllEntities(Entity entity) {
-		for (Entity other : posEntities.values()) {
-			if (significantOverlap(entity, other))
-				return true;
+	public boolean overlapsWithOtherEntities(Entity entity) {
+		for (Entity other : positionsAndEntities.values()) {
+			if (entity.overlap(other)){
+				if ((entity instanceof Ship) && (other instanceof Bullet) && (((Bullet)other).getShip() == entity)){
+					
+				}else if ((entity instanceof Bullet) && (other instanceof Ship) && (((Bullet)entity).getShip() == other)){
+					
+				}else{
+					return true;
+				}
+			}
 		}
 		return false;
-			
 	}
 	
 	/**
@@ -181,18 +182,17 @@ public class World{
 	 */
 
 	public void addEntity(Entity entity) throws IllegalArgumentException {
+		if (positionsAndEntities.values().contains(entity))throw new IllegalArgumentException
+		("The given entity already belongs to this world.");
 		if (entity.getWorld() != null) throw new IllegalArgumentException
 			("The given entity already belongs to a world.");
-//		if (!this.canContain(entity)) throw new IllegalArgumentException
-//			("This world can not contain the given entity.");
-		if (this.overlapBoundaries(entity)) throw new IllegalArgumentException
-			("BoundariesOverlap");
-		if (this.significantOverlapAllEntities(entity)) throw new IllegalArgumentException
-			("entitiesOverlap");
-		else {
-			posEntities.put(entity.getPosition(), entity);
-			entity.setWorld(this);
-		}
+		if (!this.withinBoundaries(entity)) throw new IllegalArgumentException
+			("This entity doesn't lie fully within the bounds of that world.");
+		if (this.overlapsWithOtherEntities(entity)) throw new IllegalArgumentException
+			("The entity overlaps with other entities that is shouldn't overlap with");
+		
+		positionsAndEntities.put(entity.getPosition(), entity);
+		entity.setWorld(this);
 	}	
 	
 	/**
@@ -200,8 +200,8 @@ public class World{
 	 * @param entity
 	 */
 	public void removeEntity(Entity entity) {
-		if (posEntities.containsValue(entity)) {
-			posEntities.remove(entity.getPosition());
+		if (positionsAndEntities.containsValue(entity)) {
+			positionsAndEntities.remove(entity.getPosition());
 			entity.removeFromWorld();
 		}
 		else throw new IllegalArgumentException("This world does not contain the given entity.");
@@ -215,12 +215,15 @@ public class World{
 	 */
 	public Entity getEntityAt(double x, double y) {
 		double[] position = {x,y};
-		//if (posEntities.containsKey(position)) want returnt null als positie niets inhoudt
-		return posEntities.get(position);
+		if (positionsAndEntities.containsKey(position)){
+		return positionsAndEntities.get(position);
+		}else{
+			return null;
+		}
 	}
 	
 	public HashSet<Entity> getAllEntities() {
-		return new HashSet<Entity>(posEntities.values());
+		return new HashSet<Entity>(positionsAndEntities.values());
 	}
 	
 	public HashSet<Ship> getAllShips() {
@@ -244,7 +247,7 @@ public class World{
 	/**
 	 * A hashmap containing all the entities in the world with their position.
 	 */
-	private HashMap<double[], Entity> posEntities = new HashMap<>();
+	private HashMap<double[], Entity> positionsAndEntities = new HashMap<>();
 	
 	
 	public double getTimeToCollisionEntityWithVerticalBoundary(Entity entity) {

@@ -354,7 +354,7 @@ public abstract class Entity {
 			if (this == other){
 				return 0;
 			}
-			double distance = (Math.sqrt(Math.pow((other.getPositionX() - this.getPositionX()), 2) + Math.pow((other.getPositionY() - this.getPositionY()), 2)) - this.getRadius() - other.getRadius());
+			double distance = (Math.sqrt(Math.pow((other.getPositionX() - this.getPositionX()), 2) + Math.pow((other.getPositionY() - this.getPositionY()), 2)));
 			return distance;
 		}
 		
@@ -372,7 +372,7 @@ public abstract class Entity {
 		 */
 		public boolean overlap(Entity other) throws NullPointerException{
 			if (other == null) throw new NullPointerException("The other ship is not effective");
-			if (this.getDistanceBetween(other) <= 0){
+			if (this.getDistanceBetween(other) <= 0.99*(this.getRadius()+other.getRadius())){
 				return true;
 			}else{
 				return false;
@@ -403,7 +403,7 @@ public abstract class Entity {
 		public double getTimeToCollision(Entity other)
 				throws IllegalStateException, NullPointerException{
 			if (other == null) throw new NullPointerException("The other ship is not effective");
-			if (this.overlap(other)) throw new IllegalStateException("This method does not apply to ships that overlap");
+			//if (this.overlap(other)) throw new IllegalStateException("This method does not apply to ships that overlap");
 			double diffX = other.getPosition()[0] - this.getPosition()[0];
 			double diffY = other.getPosition()[1] - this.getPosition()[1];
 			double diffVX = other.getVelocity()[0] - this.getVelocity()[0];
@@ -445,7 +445,7 @@ public abstract class Entity {
 			if (other == null) throw new NullPointerException("The other ship is not effective");
 			if (this.overlap(other)) throw new IllegalStateException("This method does not apply to ships that overlap");
 			
-			if (getTimeToCollision(other) == Double.POSITIVE_INFINITY){
+			if (this.getTimeToCollision(other) == Double.POSITIVE_INFINITY){
 				return null;
 			}else{
 				double duration = this.getTimeToCollision(other);
@@ -541,8 +541,8 @@ public abstract class Entity {
 		 * 			( world == null || !world.getAllSpaceObjects().contains(this) )
 		 */
 		@Raw
-		protected void setWorld(@Raw World world) throws IllegalArgumentException {
-			if ((!world.getAllEntities().contains(this)) || (world == null))
+		protected void setWorld(World world) throws IllegalArgumentException {
+			if (world == null)
 				throw new IllegalArgumentException ("Not a valid world for this entity");
 			this.world = world;
 		}

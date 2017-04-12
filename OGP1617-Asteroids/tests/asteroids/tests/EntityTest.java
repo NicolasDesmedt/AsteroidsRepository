@@ -268,7 +268,7 @@ public class EntityTest {
 	@Test
 	public void GetDistanceBetween_LegalCase(){
 		double distance = immutableShip1.getDistanceBetween(immutableShip2);
-		assertEquals((Math.sqrt(20000)-immutableShip1.getRadius()-immutableShip2.getRadius()), distance, EPSILON);
+		assertEquals(Math.sqrt(20000), distance, EPSILON);
 	}
 	
 	@Test
