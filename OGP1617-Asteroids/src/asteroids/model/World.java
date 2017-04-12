@@ -36,7 +36,6 @@ public class World{
 	 */
 	@Basic @Immutable
 	public double getUpperBound() {
-		
 		return World.upperBound;
 	}
 	
@@ -64,7 +63,7 @@ public class World{
 	}
 	
 	public double[] getWorldSize() {
-		double[] worldSize = {getWorldWidth(),getWorldHeight()};
+		double[] worldSize = {this.getWorldWidth(),this.getWorldHeight()};
 		return worldSize;
 	}
 	
@@ -77,6 +76,9 @@ public class World{
 	 *       | ...
 	 */
 	 public void terminate() {
+		 HashSet<Entity> allEntities = this.getAllEntities();
+		 for (Entity entity : allEntities)
+			 entity.removeFromWorld();
 		 posEntities.clear();
 		 this.isTerminated = true;
 	 }
@@ -142,7 +144,8 @@ public class World{
 	 * @return
 	 */
 	public boolean canContain(Entity entity) {
-		if (entity.getWorld() != null) throw new IllegalArgumentException();
+		if (this.overlapBoundaries(entity) || this.significantOverlapAllEntities(entity)) 
+			return false;
 		else
 			return true;
 	}
@@ -178,14 +181,18 @@ public class World{
 	 */
 
 	public void addEntity(Entity entity) throws IllegalArgumentException {
-		//posEntities.put(entity.getPosition(), entity);
-		if (!overlapBoundaries(entity) && canContain(entity) &&
-			!significantOverlapAllEntities(entity)) {
+		if (entity.getWorld() != null) throw new IllegalArgumentException
+			("The given entity already belongs to a world.");
+//		if (!this.canContain(entity)) throw new IllegalArgumentException
+//			("This world can not contain the given entity.");
+		if (this.overlapBoundaries(entity)) throw new IllegalArgumentException
+			("BoundariesOverlap");
+		if (this.significantOverlapAllEntities(entity)) throw new IllegalArgumentException
+			("entitiesOverlap");
+		else {
 			posEntities.put(entity.getPosition(), entity);
 			entity.setWorld(this);
 		}
-		else throw new IllegalArgumentException("This world can not contain the given entity.");
-
 	}	
 	
 	/**
@@ -193,8 +200,10 @@ public class World{
 	 * @param entity
 	 */
 	public void removeEntity(Entity entity) {
-		if (posEntities.containsValue(entity))
+		if (posEntities.containsValue(entity)) {
 			posEntities.remove(entity.getPosition());
+			entity.removeFromWorld();
+		}
 		else throw new IllegalArgumentException("This world does not contain the given entity.");
 	}
 	
