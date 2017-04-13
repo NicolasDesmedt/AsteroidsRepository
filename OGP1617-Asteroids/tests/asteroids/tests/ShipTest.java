@@ -175,7 +175,7 @@ public class ShipTest {
 	public void Thrust_LegalCase(){
 		mutableShip1.thrust(10);
 		double[] velocity = mutableShip1.getVelocity();
-		assertEquals(40, velocity[0], EPSILON);
+		assertEquals(40, velocity[0], 0.01);
 		assertEquals(20, velocity[1], EPSILON);
 	}
 	
@@ -316,7 +316,7 @@ public class ShipTest {
 	
 	@Test
 	public void selectLoadedBullet_ContainsNoBullet(){
-		Bullet bullet = mutableShip2.selectLoadedBullet();
+		Bullet bullet = mutableShip1.selectLoadedBullet();
 		assertEquals(bullet, null);
 	}
 	

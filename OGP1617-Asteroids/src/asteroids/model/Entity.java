@@ -324,7 +324,7 @@ public abstract class Entity {
 	
 	public void move(double duration)
 			throws IllegalArgumentException{
-			if (! isValidDuration(duration)) throw new IllegalArgumentException("The given duration isn't a valid one");
+			if (!isValidDuration(duration)) throw new IllegalArgumentException("The given duration " + duration + " isn't a valid one");
 			double newX = (getPosition()[0] + duration*getVelocity()[0]);
 			double newY = (getPosition()[1] + duration*getVelocity()[1]);
 			setPosition(newX, newY);
@@ -349,12 +349,21 @@ public abstract class Entity {
 			}
 		}
 		
-		public double getDistanceBetween(Entity other) throws NullPointerException{
+		public double getDistanceBetweenCenters(Entity other) throws NullPointerException{
 			if (other == null) throw new NullPointerException("The other ship is not effective");
 			if (this == other){
 				return 0;
 			}
 			double distance = (Math.sqrt(Math.pow((other.getPositionX() - this.getPositionX()), 2) + Math.pow((other.getPositionY() - this.getPositionY()), 2)));
+			return distance;
+		}
+		
+		public double getDistanceBetween(Entity other) throws NullPointerException{
+			if (other == null) throw new NullPointerException("The other ship is not effective");
+			if (this == other){
+				return 0;
+			}
+			double distance = (Math.sqrt(Math.pow((other.getPositionX() - this.getPositionX()), 2) + Math.pow((other.getPositionY() - this.getPositionY()), 2)) - this.getRadius() - other.getRadius());
 			return distance;
 		}
 		
@@ -372,7 +381,7 @@ public abstract class Entity {
 		 */
 		public boolean overlap(Entity other) throws NullPointerException{
 			if (other == null) throw new NullPointerException("The other ship is not effective");
-			if (this.getDistanceBetween(other) <= 0.99*(this.getRadius()+other.getRadius())){
+			if (this.getDistanceBetweenCenters(other) <= 0.99*(this.getRadius()+other.getRadius())){
 				return true;
 			}else{
 				return false;
@@ -403,7 +412,7 @@ public abstract class Entity {
 		public double getTimeToCollision(Entity other)
 				throws IllegalStateException, NullPointerException{
 			if (other == null) throw new NullPointerException("The other ship is not effective");
-			//if (this.overlap(other)) throw new IllegalStateException("This method does not apply to ships that overlap");
+			if (this.overlap(other)) throw new IllegalStateException("This method does not apply to ships that overlap");
 			double diffX = other.getPosition()[0] - this.getPosition()[0];
 			double diffY = other.getPosition()[1] - this.getPosition()[1];
 			double diffVX = other.getVelocity()[0] - this.getVelocity()[0];
@@ -413,7 +422,10 @@ public abstract class Entity {
 			if ((diffVX*diffX + diffVY*diffY) >= 0 || varD <= 0){
 				return Double.POSITIVE_INFINITY;
 			}else{
-				double timeToCollision = -(((diffVX*diffX + diffVY*diffY) + Math.sqrt(varD))/(Math.pow(diffVX,2) + Math.pow(diffVY,2)));
+				double timeToCollision = -(diffVX*diffX + diffVY*diffY + Math.sqrt(varD))/((Math.pow(diffVX,2) + Math.pow(diffVY,2)));
+				if (timeToCollision<0){
+					System.out.println(timeToCollision);
+				}
 				return timeToCollision;
 			}
 		}
@@ -494,14 +506,6 @@ public abstract class Entity {
 			else return false;
 		}
 		
-//		public void collidesWithBoundary(World world) {
-//			if (world.getDistanceToNearestHorizontalBoundary(this) <
-//					world.getDistanceToNearestVerticalBoundary(this) )
-//				this.setVelocity(getVelocityX(), -getVelocityY());
-//			else
-//				this.setVelocity(-getVelocityX(), getVelocityY());
-//		}
-		
 		@Basic @Immutable
 		public double getMass() {
 			return this.mass;
@@ -529,6 +533,8 @@ public abstract class Entity {
 		abstract double calculateMinimalMass();
 		
 		abstract boolean isValidMass(double mass);
+		
+		abstract void collidesWithBoundary(World world);
 
 		/**
 		 * Set the world of this space object to the given world.

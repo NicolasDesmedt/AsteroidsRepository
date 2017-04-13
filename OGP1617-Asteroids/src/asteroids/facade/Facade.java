@@ -116,7 +116,7 @@ public class Facade implements asteroids.part2.facade.IFacade {
 
 	@Override
 	public void setThrusterActive(Ship ship, boolean active) throws ModelException {
-		ship.thrustOn();
+		ship.setThrust(active);
 		return;
 	}
 
@@ -291,7 +291,7 @@ public class Facade implements asteroids.part2.facade.IFacade {
 	public double getTimeCollisionBoundary(Object object) throws ModelException {
 		if (object instanceof Entity) { 
 			World world = ((Entity)object).getWorld();
-			return world.getTimeToCollisionEntityWithBoundary((Entity)object);
+			return world.getTimeCollisionToBoundary((Entity)object);
 		}
 		else
 			throw new IllegalArgumentException("Argument must be of type Entity");
@@ -304,7 +304,7 @@ public class Facade implements asteroids.part2.facade.IFacade {
 			return world.getPositionEntityUponCollision((Entity)object);
 		}
 		else
-			throw new IllegalArgumentException("Argument must be of type Entity");
+			throw new ModelException("Argument must be of type Entity");
 	}
 
 	@Override
@@ -312,7 +312,7 @@ public class Facade implements asteroids.part2.facade.IFacade {
 		if ((entity1 instanceof Entity) && (entity2 instanceof Entity))
 			return ((Entity)entity1).getTimeToCollision((Entity)entity2);
 		else
-			throw new IllegalArgumentException("The arguments must be of type Entity");
+			throw new ModelException("The arguments must be of type Entity");
 	}
 
 	@Override
@@ -325,12 +325,12 @@ public class Facade implements asteroids.part2.facade.IFacade {
 
 	@Override
 	public double getTimeNextCollision(World world) throws ModelException {
-		return world.getTimeToFirstCollision();
+		return world.getTimeToNextCollision();
 	}
 
 	@Override
 	public double[] getPositionNextCollision(World world) throws ModelException {
-		return world.getPositionFirstCollision();
+		return world.getPositionNextCollision();
 	}
 
 	@Override
@@ -341,7 +341,7 @@ public class Facade implements asteroids.part2.facade.IFacade {
 
 	@Override
 	public Object getEntityAt(World world, double x, double y) throws ModelException {
-		return world.getEntityAt(x, y);
+		return world.getEntityAt(x,y);
 	}
 
 	@Override

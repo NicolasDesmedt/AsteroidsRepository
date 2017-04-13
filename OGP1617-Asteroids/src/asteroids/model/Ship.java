@@ -78,6 +78,8 @@ public class Ship extends Entity{
 		super(x, y, xVelocity, yVelocity, radius, mass, maxSpeed);
 		this.setOrientation(orientation);
 		this.thrusterForce = defaultThrusterForce;
+		Bullet newBullet = new Bullet(0,0,0,0,10,0);
+		this.loadBulletOnShip(newBullet);
 		
 	}
 	
@@ -258,15 +260,16 @@ public class Ship extends Entity{
 	
 	private boolean isTrusterOn;
 	
-	public void thrustOn(){
-		isTrusterOn = true;
+	public void setThrust(boolean active){
+		if(active){
+			isTrusterOn = true;
+		}else{
+			isTrusterOn = false;
+
+		}
 	}
-	
-	public void thrustOff(){
-		isTrusterOn = false;
-	}
-	
-	public final static double defaultThrusterForce = 1.1E21;
+
+	public final static double defaultThrusterForce = 1.1E22;
 	
 	public void setThrusterForce(double newThrusterforce){
 		if ( (newThrusterforce>=0) && (!Double.isInfinite(newThrusterforce)) && (!Double.isNaN(newThrusterforce))){
@@ -289,6 +292,7 @@ public class Ship extends Entity{
 	
 	public void loadBulletOnShip(Bullet bullet){
 		this.bullets.add(bullet);
+		bullet.setVelocity(0, 0);
 		this.setMass(this.getMass() + bullet.getMass());
 		bullet.setShip(this);
 		bullet.setPosition(this.getPositionX(), this.getPositionY());
@@ -321,8 +325,11 @@ public class Ship extends Entity{
 	@Override
     public void move(double duration){
         super.move(duration);
+        if(this.isShipThrusterActive()){
+			this.thrust(duration);
+		}
         for (Bullet bullet: this.bullets) {
-            bullet.move(duration);
+            bullet.setPosition(this.getPositionX(), this.getPositionY());
         }
     }
 	
@@ -331,9 +338,11 @@ public class Ship extends Entity{
 			return;
 		}
 		Bullet bullet = this.selectLoadedBullet();
-		this.putInFiringPosition(bullet);
-		bullet.setVelocity(bulletSpeed*Math.cos(getOrientation()), bulletSpeed*Math.sin(getOrientation()));
 		this.removeBulletFromShip(bullet);
+		System.out.println("fire " + bullet.getPositionX());
+		this.putInFiringPosition(bullet);
+		System.out.println( bullet.getPositionX()  + "   " + bullet.getPositionY());
+		bullet.setVelocity(bulletSpeed*Math.cos(getOrientation()), bulletSpeed*Math.sin(getOrientation()));
 		bullet.setSource(this);
 		
 	}
@@ -364,25 +373,29 @@ public class Ship extends Entity{
 		double diffY = other.getPositionY() - this.getPositionY();
 		double diffVX = other.getVelocityX() - this.getVelocityX();
 		double diffVY = other.getVelocityY() - this.getVelocityY();
-		double thisMass = this.getMass();
-		double otherMass = other.getMass();
-		double J = (2*thisMass*otherMass*(diffVX*diffX + diffVY*diffY))/(getRadius()*(thisMass+otherMass));
-		double Jx = (J*diffX)/getRadius();
-		double Jy = (J*diffY)/getRadius();
-		double xVelocityThis = this.getVelocityX() + Jx/thisMass;
-		double yVelocityThis = this.getVelocityY() + Jy/thisMass;
-		double xVelocityOther = other.getVelocityX() - Jx/otherMass;
-		double yVelocityOther = other.getVelocityY() - Jy/otherMass;
-		this.setVelocity(xVelocityThis, yVelocityThis);
-		other.setVelocity(xVelocityOther, yVelocityOther);
+		double sumRadii = this.getRadius() + other.getRadius();
+		double massThis = this.getMass();
+		double massOther = other.getMass();
+		double J = (2*massThis*massOther*(diffVX*diffX + diffVY*diffY))/(sumRadii*(massThis+massOther));
+		double Jx = (J*diffX)/sumRadii;
+		double Jy = (J*diffY)/sumRadii;
+		double newXVelocityThis = this.getVelocityX() + Jx/massThis;
+		double newYVelocityThis = this.getVelocityY() + Jy/massThis;
+		double newXVelocityOther = other.getVelocityX() - Jx/massOther;
+		double newYVelocityOther = other.getVelocityY() - Jy/massOther;
+		this.setVelocity(newXVelocityThis, newYVelocityThis);
+		other.setVelocity(newXVelocityOther, newYVelocityOther);
 	}
 	
-	public void getsHitBy(Bullet other) {
-		if (other.getSource() == this)
+	public void getsHitBy(Bullet other, World world) {
+		if (other.getSource() == this){
+			System.out.println("damn");
 			this.loadBulletOnShip(other);
-		else {
+		}else{
 			this.terminate();
 			other.terminate();
+			world.removeEntity(this);
+			world.removeEntity(other);
 		}
 	}
 	
