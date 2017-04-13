@@ -557,7 +557,7 @@ public abstract class Entity {
 			return this.world;
 		}
 		
-		public World world;
+		private World world = null;
 		
 		/**
 		 * Variable registering the mass of this ship.
@@ -569,11 +569,12 @@ public abstract class Entity {
 	    	this.world = null;
 		}
 		
-		public void terminate(){
-			if (this.getWorld() != null){
-				this.removeFromWorld();
+		protected void terminate() {
+			if (!this.isTerminated) {
+				if (getWorld() != null)
+					getWorld().removeEntity(this);
+				this.isTerminated = true;
 			}
-			this.isTerminated = true;
 		}
 		
 		public boolean isTerminated(){

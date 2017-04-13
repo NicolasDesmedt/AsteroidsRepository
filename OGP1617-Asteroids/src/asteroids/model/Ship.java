@@ -384,8 +384,6 @@ public class Ship extends Entity{
 			System.out.println("damn");
 			this.loadBulletOnShip(other);
 		}else{
-			world.removeEntity(this);
-			world.removeEntity(other);
 			this.terminate();
 			other.terminate();
 		}

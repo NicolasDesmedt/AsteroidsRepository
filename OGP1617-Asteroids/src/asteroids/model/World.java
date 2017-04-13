@@ -3,7 +3,7 @@ package asteroids.model;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
-
+import java.util.Set;
 
 import asteroids.part2.CollisionListener;
 import asteroids.util.Util;
@@ -122,7 +122,6 @@ public class World{
 	 *       |	(new entity).getWorld() == null
 	 */
 	 public void terminate() {
-		 HashSet<Entity> allEntities = this.getAllEntities();
 		 for (Entity entity : allEntities)
 			 entity.removeFromWorld();
 		 positionsAndEntities.clear();
@@ -229,7 +228,6 @@ public class World{
 
 	
 	public boolean overlapsWithOtherEntities(Entity entity) {
-		HashSet<Entity> allEntities = getAllEntities();
 		for (Entity other : allEntities) {
 			if (entity.overlap(other)){
 				if ((entity instanceof Ship) && (other instanceof Bullet) && (((Bullet)other).getShip() == entity)){
@@ -251,7 +249,7 @@ public class World{
 	 */
 
 	public void addEntity(Entity entity) throws IllegalArgumentException {
-		if (positionsAndEntities.values().contains(entity))throw new IllegalArgumentException
+		if (allEntities.contains(entity))throw new IllegalArgumentException
 		("The given entity already belongs to this world.");
 		if (entity.getWorld() != null) throw new IllegalArgumentException
 			("The given entity already belongs to a world.");
@@ -260,7 +258,7 @@ public class World{
 		if (this.overlapsWithOtherEntities(entity)) throw new IllegalArgumentException
 			("The entity overlaps with other entities that is shouldn't overlap with");
 		
-		positionsAndEntities.put(entity.getPosition(), entity);
+		allEntities.add(entity);
 		entity.setWorld(this);
 	}	
 	
@@ -269,8 +267,8 @@ public class World{
 	 * @param entity
 	 */
 	public void removeEntity(Entity entity) {
-		if (positionsAndEntities.containsValue(entity)) {
-			positionsAndEntities.remove(entity.getPosition());
+		if (allEntities.contains(entity)) {
+			this.allEntities.remove(entity);
 			entity.removeFromWorld();
 		}
 		else throw new IllegalArgumentException("This world does not contain the given entity.");
@@ -284,29 +282,27 @@ public class World{
 	 */
 	public Entity getEntityAt(double x, double y) {
 		double[] position = {x,y};
-		if (positionsAndEntities.containsKey(position)){
-		return positionsAndEntities.get(position);
-		}else{
-			return null;
+		for (Entity entity : allEntities) {
+			if (entity.getPosition() == position)
+				return entity;
 		}
+		return null;
 	}
 	
-	public HashSet<Entity> getAllEntities() {
-		return new HashSet<Entity>(positionsAndEntities.values());
+	public Set<Entity> getAllEntities() {
+		return new HashSet<Entity>(allEntities);
 	}
 	
-	public HashSet<Ship> getAllShips() {
-		HashSet<Entity> allEntities = getAllEntities();
-		HashSet<Ship> allShips = new HashSet<Ship>();
+	public Set<Ship> getAllShips() {
+		Set<Ship> allShips = new HashSet<Ship>();
 		for (Entity entity : allEntities)
 			if (entity instanceof Ship)
 				allShips.add((Ship)entity);
 		return allShips;
 	}
 	
-	public HashSet<Bullet> getAllBullets() {
-		HashSet<Entity> allEntities = getAllEntities();
-		HashSet<Bullet> allBullets = new HashSet<Bullet>();
+	public Set<Bullet> getAllBullets() {
+		Set<Bullet> allBullets = new HashSet<Bullet>();
 		for (Entity entity : allEntities)
 			if (entity instanceof Bullet)
 				allBullets.add((Bullet)entity);
@@ -318,6 +314,7 @@ public class World{
 	 */
 	private HashMap<double[], Entity> positionsAndEntities = new HashMap<>();
 	
+	private final Set<Entity> allEntities = new HashSet<Entity>();
 	
 	public double getTimeCollisionVerticalBoundary(Entity entity) {
 		double time = Double.POSITIVE_INFINITY;
@@ -393,7 +390,6 @@ public class World{
 	
 	public double getTimeToNextCollisionEntity(Entity entity) {
 		double time = getTimeCollisionToBoundary(entity);
-		HashSet<Entity> allEntities = getAllEntities();
 		for (Entity other : allEntities) {
 			if (entity == other){
 				
@@ -426,7 +422,6 @@ public class World{
 	
 	public double getTimeToNextCollision() {
 		double time = Double.POSITIVE_INFINITY;
-		HashSet<Entity> allEntities = getAllEntities();
 		for (Entity entity : allEntities) {
 			if (getTimeToNextCollisionEntity(entity) < time)
 				time = getTimeToNextCollisionEntity(entity);
@@ -437,7 +432,6 @@ public class World{
 	public Entity[] getFirstCollidingEntities() {
 		Entity[] firstCollidingEntities = new Entity[]{null,null};
 		double timeToNextCollision = getTimeToNextCollision();
-		HashSet<Entity> allEntities = getAllEntities();
 		for (Entity entity : allEntities) {
 			if (getTimeToNextCollisionEntity(entity) == timeToNextCollision) {
 				if (firstCollidingEntities[0] == null){
@@ -471,14 +465,14 @@ public class World{
 	}
 	
 	public Hashtable<Entity, Entity> getCollidingEntities() {
-		HashSet<Entity> allEntities = getAllEntities();
-		HashSet<Entity> otherEntities = getAllEntities();
-		for (Entity entity : allEntities) {
-			otherEntities.remove(entity);
-			for (Entity other : otherEntities) {
+		Set<Entity> allEntitiesCopy = getAllEntities();
+		Set<Entity> otherAllEntitiesCopy = getAllEntities();
+		for (Entity entity : allEntitiesCopy) {
+			otherAllEntitiesCopy.remove(entity);
+			for (Entity other : otherAllEntitiesCopy) {
 				if (entity.apparentlyCollide(other)){
 					collidingEntities.put(entity, other);
-					allEntities.remove(other);
+					allEntitiesCopy.remove(other);
 				}else if (!((entity.getVelocityX()!=0) && (entity.getVelocityY()!=0))){
 					collidingEntities.put(entity, null);
 				}
@@ -494,7 +488,6 @@ public class World{
 	 * @param dt
 	 */
 	public void evolve(double dt, CollisionListener collisionListener) {
-		HashSet<Entity> allEntities = getAllEntities();
 		double timeToNextCollision = getTimeToNextCollision();
 		if (timeToNextCollision < dt) {
 			for (Entity entity : allEntities) {
@@ -527,7 +520,7 @@ public class World{
 				((Ship)entity1).getsHitBy((Bullet)entity2, this);
 			}
 			else if ( (entity1 instanceof Bullet) && (entity2 instanceof Ship) ){
-				System.out.print("no");
+				System.out.println("no");
 				((Ship)entity2).getsHitBy((Bullet)entity1, this);
 			}else{
 				((Bullet)entity1).cancelsOut((Bullet)entity2);
