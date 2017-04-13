@@ -101,15 +101,7 @@ public class Ship extends Entity{
 		}
 	}
 	
-	/**
-	 * Return the minimum radius for each ship.
-	 */
-	
 	public static final double MIN_DENSITY = 1.42E12;
-	
-	/**
-	 * Return the minimum radius for each ship.
-	 */
 	
 	/**
 	 * Initialize this new ship in the origin of the axes with zero velocity, with a radius 
@@ -152,7 +144,7 @@ public class Ship extends Entity{
 		return minRadiusShip;
 	}
 	/**
-	 * Constant reflecting the minimum radius that applies to all ships.
+	 * A constant reflecting the minimum radius that applies to all ships.
 	 */
 	public static final double minRadiusShip = 10;
 	

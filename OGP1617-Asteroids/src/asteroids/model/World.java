@@ -10,16 +10,33 @@ import asteroids.part2.CollisionListener;
 import be.kuleuven.cs.som.annotate.*;
 
 /**
+ * A class of worlds involving a size, facilities for adding and removing entities in this world
+ * and facilities to evolve the state of this world a given time.
  * 
- * @author Nicolas
- *
+ * @invar	...
+ * 			| 
+ * 
+ * @author 	Nicolas Desmedt and Lucas Desard
+ * @version 1.0
+ * 
+ * Course studies: 2nd Bachelor Engineering: Computer science/Electrical Engineering
+ * Code Repository: https://github.com/NicolasDesmedt/RepositoryLucasNicolas
  */
 public class World{
 	
 	/**
+	 * Create a world with given width and height.
 	 * 
-	 * @param width
-	 * @param height
+	 * @param 	width
+	 * 			The width of this new world.
+	 * @param	height
+	 * 			The height of this new world.
+	 * @post	...
+	 * 			| new.getWorldWidth() == width
+	 * @post	...
+	 * 			| new.getWorldHeight() == height
+	 * @post	...
+	 * 			| new.getAllEntities().isEmpty() == true
 	 */
 	public World(double width, double height){
 		if (((width < 0) || (width > upperBound)) && ((height < 0) || (height > upperBound))){
@@ -34,42 +51,62 @@ public class World{
 		}else{
 		this.width = width;
 		this.height = height;
-		}
-		
+		}							// Enkel de variabelen herschrijven indien fout en dan achteraf waardes voor this toekennen is genoeg
+//		if ((width < 0) || (width > upperBound)) 
+//			width = upperBound;
+//		if ((height < 0) || (height > upperBound))
+//			height = upperBound;
+//		this.width = width;
+//		this.height = height;
 	}
 	
 	/**
-	 * 
-	 * @return
+	 * Return the upper bound on the height and the width.
 	 */
 	@Basic @Immutable
-	public double getUpperBound() {
+	public static double getUpperBound() {
 		return World.upperBound;
 	}
 	
 	/**
-	 * 
+	 * Constant reflecting the upper bound on the 
+	 * height and the width that applies to all worlds.
 	 */
 	private static final double upperBound = Double.MAX_VALUE;
 	
 	/**
-	 * 
+	 * Variable registering the width of this world.
 	 */
 	private final double width;
 	
 	/**
-	 * 
+	 * Variable registering the height of this world.
 	 */
 	private final double height;
 	
+	/**
+	 * Return the width of this world.
+	 * 	The width of a world is expressed in km.
+	 */
+	@Basic @Immutable
 	public double getWorldWidth() {
 		return this.width;
 	}
 	
+	/**
+	 * Return the height of this world.
+	 * 	The height of a world is expressed in km.
+	 */
+	@Basic @Immutable
 	public double getWorldHeight() {
 		return this.height;
 	}
 	
+	/**
+	 * Return the seize of this world.
+	 * 	The seize of a world is described by a width and a height expressed in km.
+	 */
+	@Immutable
 	public double[] getWorldSize() {
 		double[] worldSize = {this.getWorldWidth(),this.getWorldHeight()};
 		return worldSize;
@@ -78,10 +115,11 @@ public class World{
 	/**
 	 * Terminate this world.
 	 *
-	 * @post   This world  is terminated.
+	 * @post ...
 	 *       | new.isTerminated()
-	 * @post   ...
-	 *       | ...
+	 * @post ...
+	 *       | for each entity in old.getAllEntities()
+	 *       |	(new entity).getWorld() == null
 	 */
 	 public void terminate() {
 		 HashSet<Entity> allEntities = this.getAllEntities();
@@ -106,17 +144,31 @@ public class World{
 	 private boolean isTerminated = false;
 	 
 	/**
+	 * Return a boolean indicating whether or not the given entity
+	 * if fully within the boundaries of this world.
 	 * 
+	 * @param	entity
+	 * 			The entity to check.
+	 * @return	...
+	 * 			| @see implementation
 	 */
 	public boolean withinBoundaries(Entity entity) {
 		double xPos = entity.getPositionX();
 		double yPos = entity.getPositionY();
 		double significantEntityRadius = 0.99*entity.getRadius();
-		return ((xPos+significantEntityRadius) <= width && (xPos-significantEntityRadius) >= 0 && (yPos+significantEntityRadius) <= height && (yPos-significantEntityRadius) >= 0);
+		return ((xPos+significantEntityRadius) <= width && (xPos-significantEntityRadius) >= 0 
+				&& (yPos+significantEntityRadius) <= height && (yPos-significantEntityRadius) >= 0);
 	}
 	
 	/**
+	 * Return the distance between the center of the given entity
+	 * and the nearest boundary of this world parallel with the x-axis.
 	 * 
+	 * @param	entity
+	 * 			The entity whose distance to the nearest 
+	 * 			horizontal boundary of this world gets returned.
+	 * @return	...
+	 * 			| @see implementation
 	 */
 	public double getDistanceToNearestHorizontalBoundary(Entity entity) throws IllegalArgumentException {
 		if (! withinBoundaries(entity)) throw new IllegalArgumentException("The entity is not located in the world.");
@@ -130,6 +182,16 @@ public class World{
 		return distance;
 	}
 	
+	/**
+	 * Return the distance between the center of the given entity
+	 * and the nearest boundary of this world parallel with the y-axis.
+	 * 
+	 * @param 	entity
+	 * 			The entity whose distance to the nearest
+	 * 			vertical boundary of this world gets returned.
+	 * @return	...
+	 * 			| @see implementation
+	 */
 	public double getDistanceToNearestVerticalBoundary(Entity entity) {
 		double distance = Double.POSITIVE_INFINITY;
 		double distanceLeft = width - entity.getPositionX();
@@ -141,6 +203,16 @@ public class World{
 		return distance;
 	}
 	
+	/**
+	 * Return the distance between the center of the given entity
+	 * and the nearest boundary of this world.
+	 * 
+	 * @param 	entity
+	 * 			The entity whose distance to the nearest 
+	 * 			boundary of this world gets returned.
+	 * @return	...
+	 * 			| @see implementation
+	 */
 	public double getDistanceToBoundaries(Entity entity) {
 		if (getDistanceToNearestVerticalBoundary(entity) <
 				getDistanceToNearestHorizontalBoundary(entity))
@@ -148,12 +220,12 @@ public class World{
 		else
 			return getDistanceToNearestHorizontalBoundary(entity);
 	}
+	
 	/**
 	 * Returns true if and only if the entity fits in the world, is not a duplicate, does not overlap.
 	 * @param entity
 	 * @return
 	 */
-	
 	public boolean overlapBoundaries(Entity entity) {
 		double radius = entity.getRadius();
 		if (getDistanceToBoundaries(entity) < 0.99*radius)
