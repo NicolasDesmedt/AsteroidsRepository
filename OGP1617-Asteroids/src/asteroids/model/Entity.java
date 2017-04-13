@@ -424,7 +424,7 @@ public abstract class Entity {
 			}else{
 				double timeToCollision = -(diffVX*diffX + diffVY*diffY + Math.sqrt(varD))/((Math.pow(diffVX,2) + Math.pow(diffVY,2)));
 				if (timeToCollision<0){
-					System.out.println(timeToCollision);
+					timeToCollision = 0;
 				}
 				return timeToCollision;
 			}

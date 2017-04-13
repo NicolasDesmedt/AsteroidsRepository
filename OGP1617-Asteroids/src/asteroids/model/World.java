@@ -6,6 +6,7 @@ import java.util.Hashtable;
 
 
 import asteroids.part2.CollisionListener;
+import asteroids.util.Util;
 import be.kuleuven.cs.som.annotate.*;
 
 /**
@@ -406,6 +407,8 @@ public class World{
 				time = entity.getTimeToCollision(other);
 			}
 		}
+		if (time < 0)
+			time = 0;
 		return time;	
 	}
 	
@@ -497,14 +500,15 @@ public class World{
 			for (Entity entity : allEntities) {
 				entity.move(timeToNextCollision);
 			}
+			//if (collisionListener != null)
+			//	 updateCollisionListener(collisionListener);
 			resolveCollisions();
 			double newTime = dt - timeToNextCollision;
-			evolve(newTime, null);
+			evolve(newTime, collisionListener);
 		}
 		else
 			for (Entity entity : allEntities) {
 				entity.move(dt);
-				
 			}
 	}
 	
@@ -523,7 +527,7 @@ public class World{
 				((Ship)entity1).getsHitBy((Bullet)entity2, this);
 			}
 			else if ( (entity1 instanceof Bullet) && (entity2 instanceof Ship) ){
-				System.out.print("yes");
+				System.out.print("no");
 				((Ship)entity2).getsHitBy((Bullet)entity1, this);
 			}else{
 				((Bullet)entity1).cancelsOut((Bullet)entity2);
@@ -531,4 +535,24 @@ public class World{
 		}
 	}
 	
+
+ 	public void updateCollisionListener(CollisionListener collisionListener) throws IllegalStateException {
+ 		double xPos = getPositionNextCollision()[0];
+ 		double yPos = getPositionNextCollision()[1];
+ 		Entity[] firstCollidingEntities = getFirstCollidingEntities();
+ 		if (firstCollidingEntities[0] == null)
+ 			throw new IllegalStateException("There are no colliding entities");
+ 		Entity entity1 = null;
+ 		Entity entity2 = null;
+ 		for (Entity entity : firstCollidingEntities) {
+ 			if (entity1 == null)
+ 				entity1 = entity;
+ 			else 
+ 				entity2 = entity;
+ 		}
+ 		if (entity2 == null)
+ 			collisionListener.boundaryCollision(entity1, xPos, yPos);
+ 		else
+ 			collisionListener.objectCollision(entity1, entity2, xPos, yPos);
+ 	}
 }
