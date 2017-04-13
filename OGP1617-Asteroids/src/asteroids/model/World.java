@@ -3,7 +3,6 @@ package asteroids.model;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
-import java.util.Set;
 
 
 import asteroids.part2.CollisionListener;
@@ -155,12 +154,15 @@ public class World{
 	 */
 	
 	public boolean overlapsWithOtherEntities(Entity entity) {
-		for (Entity other : positionsAndEntities.values()) {
+		HashSet<Entity> allEntities = getAllEntities();
+		for (Entity other : allEntities) {
 			if (entity.overlap(other)){
 				if ((entity instanceof Ship) && (other instanceof Bullet) && (((Bullet)other).getShip() == entity)){
 					
 				}else if ((entity instanceof Bullet) && (other instanceof Ship) && (((Bullet)entity).getShip() == other)){
 					
+				}else if ((entity instanceof Bullet) && (other instanceof Bullet) && (((Bullet)entity).getShip() == ((Bullet)other).getShip())){
+				
 				}else{
 					return true;
 				}
@@ -184,12 +186,6 @@ public class World{
 			("The entity overlaps with other entities that is shouldn't overlap with");
 		
 		positionsAndEntities.put(entity.getPosition(), entity);
-		if (entity instanceof Ship){
-			Set<Bullet> bullets = ((Ship)entity).getBulletsOnShip();
-			for (Bullet bullet : bullets){
-				addEntity(bullet);
-			}
-		}
 		entity.setWorld(this);
 	}	
 	
@@ -330,6 +326,8 @@ public class World{
 				
 			}else if ((other instanceof Ship) && (entity instanceof Bullet) && (((Bullet)entity).getShip() == other)){
 				
+			}else if ((other instanceof Bullet) && (entity instanceof Bullet) && (((Bullet)entity).getShip() == ((Bullet)other).getShip())){
+				
 			}else if(entity.getTimeToCollision(other) < time){
 				time = entity.getTimeToCollision(other);
 			}
@@ -432,6 +430,7 @@ public class World{
 		else
 			for (Entity entity : allEntities) {
 				entity.move(dt);
+				
 			}
 	}
 	

@@ -236,7 +236,6 @@ public class Facade implements asteroids.part2.facade.IFacade {
 	public void addBulletToWorld(World world, Bullet bullet) throws ModelException {
 		try{
 			world.addEntity(bullet);
-			return;		
 		}catch( IllegalArgumentException e){
 			throw new ModelException(e.getMessage());
 		}
@@ -265,8 +264,6 @@ public class Facade implements asteroids.part2.facade.IFacade {
 	@Override
 	public void loadBulletOnShip(Ship ship, Bullet bullet) throws ModelException {
 		ship.loadBulletOnShip(bullet);
-		return;
-		
 	}
 
 	@Override

@@ -78,8 +78,8 @@ public class Ship extends Entity{
 		super(x, y, xVelocity, yVelocity, radius, mass, maxSpeed);
 		this.setOrientation(orientation);
 		this.thrusterForce = defaultThrusterForce;
-		Bullet newBullet = new Bullet(0,0,0,0,10,0);
-		this.loadBulletOnShip(newBullet);
+		//Bullet newBullet = new Bullet(0,0,0,0,10,0);
+		//this.loadBulletOnShip(newBullet);
 		
 	}
 	
@@ -269,7 +269,7 @@ public class Ship extends Entity{
 		}
 	}
 
-	public final static double defaultThrusterForce = 1.1E22;
+	public final static double defaultThrusterForce = 1.1E21;
 	
 	public void setThrusterForce(double newThrusterforce){
 		if ( (newThrusterforce>=0) && (!Double.isInfinite(newThrusterforce)) && (!Double.isNaN(newThrusterforce))){
@@ -292,11 +292,10 @@ public class Ship extends Entity{
 	
 	public void loadBulletOnShip(Bullet bullet){
 		this.bullets.add(bullet);
-		bullet.setVelocity(0, 0);
 		this.setMass(this.getMass() + bullet.getMass());
 		bullet.setShip(this);
 		bullet.setPosition(this.getPositionX(), this.getPositionY());
-		bullet.setVelocity(this.getVelocityX(), this.getVelocityY());
+		bullet.setVelocity(0, 0);
 	}
 
 	public void loadBulletsOnShip(Bullet[] bullets){
@@ -335,14 +334,15 @@ public class Ship extends Entity{
 	
 	public void fireBullet(){
 		if ((this.getNbBulletsOnShip() == 0)){   // || this.getWorld() == null)
+			System.out.println("no bullets left");
 			return;
 		}
 		Bullet bullet = this.selectLoadedBullet();
+		this.getWorld().addEntity(bullet);;
 		this.removeBulletFromShip(bullet);
-		System.out.println("fire " + bullet.getPositionX());
+		System.out.println("fire " + this.getNbBulletsOnShip());
 		this.putInFiringPosition(bullet);
-		System.out.println( bullet.getPositionX()  + "   " + bullet.getPositionY());
-		bullet.setVelocity(bulletSpeed*Math.cos(getOrientation()), bulletSpeed*Math.sin(getOrientation()));
+		bullet.setVelocity(bulletSpeed*Math.cos(this.getOrientation()), bulletSpeed*Math.sin(this.getOrientation()));
 		bullet.setSource(this);
 		
 	}
