@@ -332,18 +332,19 @@ public class Ship extends Entity{
 			return;
 		}
 		Bullet bullet = this.selectLoadedBullet();
-		this.removeBulletFromShip(bullet);
-		System.out.println("fire " + this.getNbBulletsOnShip());
 		Entity entityInRangeOfFiringPosition = this.getEntityInRangeOfFiringPosition(bullet);
-		bullet.setSource(this);	
-		if ( entityInRangeOfFiringPosition == null) {
+		if (entityInRangeOfFiringPosition == null) {
+			this.getWorld().addEntity(bullet);
+			this.removeBulletFromShip(bullet);
+			System.out.println("fire " + this.getNbBulletsOnShip());
 			this.putInFiringPosition(bullet);
 			bullet.setVelocity(bulletSpeed*Math.cos(this.getOrientation()), bulletSpeed*Math.sin(this.getOrientation()));
-			this.getWorld().addEntity(bullet);
-		} else {	
+			bullet.setSource(this);
+		}
+		else {
 			if (entityInRangeOfFiringPosition instanceof Bullet)
 				((Bullet)entityInRangeOfFiringPosition).cancelsOut(bullet);
-			else
+			else if (entityInRangeOfFiringPosition instanceof Ship)
 				((Ship)entityInRangeOfFiringPosition).getsHitBy(bullet);
 		}
 	}
@@ -355,7 +356,8 @@ public class Ship extends Entity{
 		Set<Entity> allEntities = world.getAllEntities();
 		for (Entity entity : allEntities) {
 			if (world.getDistanceBetweenCoordinates(entity.getPosition(), positionToCheck)
-					<= 1.01*(entity.getRadius() + radiusBullet) )
+					<= 0.99*(entity.getRadius() + radiusBullet) )
+				System.out.println("culprit");
 				return entity;
 		}
 		return null;

@@ -521,9 +521,10 @@ public class World{
 	public void evolve(double dt, CollisionListener collisionListener) {
 		double timeToNextCollision = getTimeToNextCollision();
 		if (timeToNextCollision < dt) {
-			for (Entity entity : allEntities) {
-				entity.move(timeToNextCollision);
-			}
+//			for (Entity entity : allEntities) {
+//				entity.move(timeToNextCollision);
+			advanceAllEntities(timeToNextCollision);
+			
 			if (collisionListener != null)
 			  updateCollisionListener(collisionListener);
 			resolveCollisions();
@@ -531,9 +532,21 @@ public class World{
 			evolve(newTime, collisionListener);
 		}
 		else
-			for (Entity entity : allEntities) {
-				entity.move(dt);
-			}
+//			for (Entity entity : allEntities) {
+//				entity.move(dt);
+//			}
+			advanceAllEntities(dt);
+	}
+	
+	public void advanceAllEntities (double duration) {
+		for (Entity entity : allEntities) {
+			entity.move(duration);	
+			if (entity instanceof Ship && ((Ship)entity).isShipThrusterActive()) {
+				Ship ship = (Ship)entity;
+				double velocityToAdd = ship.getThrusterForce()*duration / (ship.getMass()*1000);
+				ship.thrust(velocityToAdd); 
+			}	
+		}
 	}
 	
 	public void resolveCollisions() {

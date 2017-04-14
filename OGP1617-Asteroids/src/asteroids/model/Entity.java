@@ -381,20 +381,20 @@ public abstract class Entity {
 		 */
 		public boolean overlap(Entity other) throws NullPointerException{
 			if (other == null) throw new NullPointerException("The other ship is not effective");
-			if ((this instanceof Ship) && (other instanceof Bullet)) {
-				if (((Bullet)other).getSource() == this)
-					return false;
-				else if (this.getDistanceBetweenCenters(other) <= 0.99*(this.getRadius()+other.getRadius()))
-					return true;
-				else return false;
-			}
-			else if ((this instanceof Bullet) && (other instanceof Ship)) {
-				if (((Bullet)this).getSource() == other)
-					return false;
-				else if (this.getDistanceBetweenCenters(other) <= 0.99*(this.getRadius()+other.getRadius()))
-					return true;
-				else return false;
-			}
+//			if ((this instanceof Ship) && (other instanceof Bullet)) {
+//				if (((Bullet)other).getSource() == this)
+//					return false;
+//				else if (this.getDistanceBetweenCenters(other) <= 0.99*(this.getRadius()+other.getRadius()))
+//					return true;
+//				else return false;
+//			}
+//			else if ((this instanceof Bullet) && (other instanceof Ship)) {
+//				if (((Bullet)this).getSource() == other)
+//					return false;
+//				else if (this.getDistanceBetweenCenters(other) <= 0.99*(this.getRadius()+other.getRadius()))
+//					return true;
+//				else return false;
+//			}
 			else if (this.getDistanceBetweenCenters(other) <= 0.99*(this.getRadius()+other.getRadius())){
 				return true;
 			}else{

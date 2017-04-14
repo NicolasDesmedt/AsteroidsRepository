@@ -115,7 +115,7 @@ public class Bullet extends Entity{
 	public int getMaxBoundaryCollisions() {
 		return maxBoundaryCollisions;
 	}
-	
+ 
 	private final int maxBoundaryCollisions = 3;
 	
 	private int counterBoundaryCollisions = 0;
