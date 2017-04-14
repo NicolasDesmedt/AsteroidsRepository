@@ -79,7 +79,7 @@ public class Bullet extends Entity{
 	}
 	
 	public void setShip(Ship ship){
-		this.ship = ship;    //deze fu nog opnieuw bekijken want mag niet aan world en ship teglijk behoren
+		this.ship = ship;    
 	}
 	
 	public Ship ship;
@@ -123,8 +123,9 @@ public class Bullet extends Entity{
 	public void collidesWithBoundary(World world) {
 		this.setCounterBoundaryCollisions(getCounterBoundaryCollisions() + 1);
 		if (getCounterBoundaryCollisions() == getMaxBoundaryCollisions()) {
-				this.removeFromWorld();
-				world.removeEntity(this);
+				this.terminate();
+				//this.removeFromWorld();
+				//world.removeEntity(this);
 				return;
 		}
 		else if (world.getDistanceToNearestHorizontalBoundary(this) <

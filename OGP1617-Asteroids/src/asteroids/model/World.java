@@ -6,7 +6,7 @@ import java.util.Hashtable;
 import java.util.Set;
 
 import asteroids.part2.CollisionListener;
-import asteroids.util.Util;
+//import asteroids.util.Util;
 import be.kuleuven.cs.som.annotate.*;
 
 /**
@@ -39,25 +39,12 @@ public class World{
 	 * 			| new.getAllEntities().isEmpty() == true
 	 */
 	public World(double width, double height){
-		if (((width < 0) || (width > upperBound)) && ((height < 0) || (height > upperBound))){
-			this.width = upperBound;
-			this.height = upperBound;
-		}else if((width < 0) || (width > upperBound)){
-			this.width = upperBound;
-			this.height = height;
-		}else if((width < 0) || (width > upperBound)){
-			this.width = width;
-			this.height = upperBound;
-		}else{
+		if ((width < 0) || (width > upperBound)) 
+			width = upperBound;
+		if ((height < 0) || (height > upperBound))
+			height = upperBound;
 		this.width = width;
 		this.height = height;
-		}							// Enkel de variabelen herschrijven indien fout en dan achteraf waardes voor this toekennen is genoeg
-//		if ((width < 0) || (width > upperBound)) 
-//			width = upperBound;
-//		if ((height < 0) || (height > upperBound))
-//			height = upperBound;
-//		this.width = width;
-//		this.height = height;
 	}
 	
 	/**
@@ -220,6 +207,15 @@ public class World{
 			return getDistanceToNearestHorizontalBoundary(entity);
 	}
 	
+	public double getDistanceBetweenCoordinates(double[] position1, double[] position2) {
+		double x1 = position1[0];
+		double x2 = position2[0];
+		double y1 = position1[1];
+		double y2 = position2[1];
+		double distance = (Math.sqrt(Math.pow((x2 - x1), 2)) + Math.pow((y2 - y1), 2));
+		return distance;
+	}
+	
 	/**
 	 * Returns true if and only if the entity fits in the world, is not a duplicate, does not overlap.
 	 * @param entity
@@ -230,12 +226,14 @@ public class World{
 	public boolean overlapsWithOtherEntities(Entity entity) {
 		for (Entity other : allEntities) {
 			if (entity.overlap(other)){
-				if ((entity instanceof Ship) && (other instanceof Bullet) && (((Bullet)other).getShip() == entity)){
-					
+				if (entity == other) {
+					return false;
+				} else if ((entity instanceof Ship) && (other instanceof Bullet) && (((Bullet)other).getShip() == entity)){
+					return false;
 				}else if ((entity instanceof Bullet) && (other instanceof Ship) && (((Bullet)entity).getShip() == other)){
-					
+					return false;
 				}else if ((entity instanceof Bullet) && (other instanceof Bullet) && (((Bullet)entity).getShip() == ((Bullet)other).getShip())){
-				
+					return false;
 				}else{
 					return true;
 				}
@@ -243,6 +241,8 @@ public class World{
 		}
 		return false;
 	}
+	
+	
 	
 	/**
 	 * Add entity to this world. (Defensive)
@@ -399,7 +399,10 @@ public class World{
 			//}else if ((other instanceof Ship) && (entity instanceof Bullet) && (((Bullet)entity).getShip() == other)){
 				
 			//}else if ((other instanceof Bullet) && (entity instanceof Bullet) && (((Bullet)entity).getShip() == ((Bullet)other).getShip())){
-				
+			//if (entity.overlap(other)) 
+			//	return 0;
+			
+			
 			if(entity.getTimeToCollision(other) < time){
 				time = entity.getTimeToCollision(other);
 			}
@@ -461,6 +464,33 @@ public class World{
 		}
 		if (entity2 == null)
 			return this.getPositionCollisionWithBoundary(entity1);
+//		else if (entity1.overlap(entity2)) {
+//			double diffX = entity2.getPositionX() - entity1.getPositionX();
+//			double diffY = entity2.getPositionY() - entity1.getPositionY();
+//			double angleCenters = 0;
+//			if (diffX*diffY >= 0){
+//				if (diffX == 0){
+//					if (diffY > 0){
+//						angleCenters = (Math.PI/2);
+//					}else{
+//						angleCenters = -(Math.PI/2);
+//					}
+//				}else if ((diffX > 0) || (diffY == 0)){
+//					angleCenters = Math.atan(diffY/diffX) + Math.PI;
+//				}else if((diffX < 0) || (diffY == 0)){
+//					angleCenters = Math.atan(diffY/diffX);
+//				}
+//			}else {
+//				if (diffY > 0){
+//					angleCenters = Math.atan(diffY/diffX);
+//				}else if(diffY < 0){
+//					angleCenters = Math.atan(diffY/diffX) + Math.PI;
+//				}
+//			}
+//			double[] collisionPoint = {entity2.getPositionX() + entity2.getRadius()*Math.cos(angleCenters), 
+//					entity2.getPositionY() + entity2.getRadius()*Math.sin(angleCenters)};
+//			return collisionPoint;
+//		}
 		else
 			return entity1.getCollisionPosition(entity2);
 	}
@@ -518,11 +548,11 @@ public class World{
 			}
 			else if ( (entity1 instanceof Ship) && (entity2 instanceof Bullet) ){
 				System.out.print("yes");
-				((Ship)entity1).getsHitBy((Bullet)entity2, this);
+				((Ship)entity1).getsHitBy((Bullet)entity2);
 			}
 			else if ( (entity1 instanceof Bullet) && (entity2 instanceof Ship) ){
 				System.out.println("no");
-				((Ship)entity2).getsHitBy((Bullet)entity1, this);
+				((Ship)entity2).getsHitBy((Bullet)entity1);
 			}else{
 				System.out.println("collidingBullets");
 				((Bullet)entity1).cancelsOut((Bullet)entity2);

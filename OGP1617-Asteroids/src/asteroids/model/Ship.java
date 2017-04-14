@@ -261,7 +261,7 @@ public class Ship extends Entity{
 		}
 	}
 
-	public final static double defaultThrusterForce = 1.1E21;
+	public final static double defaultThrusterForce = 2.1E21;
 	
 	public void setThrusterForce(double newThrusterforce){
 		if ( (newThrusterforce>=0) && (!Double.isInfinite(newThrusterforce)) && (!Double.isNaN(newThrusterforce))){
@@ -285,9 +285,11 @@ public class Ship extends Entity{
 	public void loadBulletOnShip(Bullet bullet){
 		this.bullets.add(bullet);
 		this.setMass(this.getMass() + bullet.getMass());
+		bullet.removeFromWorld();
 		bullet.setShip(this);
 		bullet.setPosition(this.getPositionX(), this.getPositionY());
 		bullet.setVelocity(0, 0);
+		System.out.println("check");
 	}
 
 	public void loadBulletsOnShip(Bullet[] bullets){
@@ -330,19 +332,45 @@ public class Ship extends Entity{
 			return;
 		}
 		Bullet bullet = this.selectLoadedBullet();
-		this.getWorld().addEntity(bullet);
 		this.removeBulletFromShip(bullet);
 		System.out.println("fire " + this.getNbBulletsOnShip());
-		this.putInFiringPosition(bullet);
-		bullet.setVelocity(bulletSpeed*Math.cos(this.getOrientation()), bulletSpeed*Math.sin(this.getOrientation()));
-		bullet.setSource(this);
-		
+		Entity entityInRangeOfFiringPosition = this.getEntityInRangeOfFiringPosition(bullet);
+		bullet.setSource(this);	
+		if ( entityInRangeOfFiringPosition == null) {
+			this.putInFiringPosition(bullet);
+			bullet.setVelocity(bulletSpeed*Math.cos(this.getOrientation()), bulletSpeed*Math.sin(this.getOrientation()));
+			this.getWorld().addEntity(bullet);
+		} else {	
+			if (entityInRangeOfFiringPosition instanceof Bullet)
+				((Bullet)entityInRangeOfFiringPosition).cancelsOut(bullet);
+			else
+				((Ship)entityInRangeOfFiringPosition).getsHitBy(bullet);
+		}
+	}
+	
+	public Entity getEntityInRangeOfFiringPosition(Bullet bullet) {
+		double[] positionToCheck = getFiringPosition(bullet);
+		double radiusBullet = bullet.getRadius();
+		World world = this.getWorld();
+		Set<Entity> allEntities = world.getAllEntities();
+		for (Entity entity : allEntities) {
+			if (world.getDistanceBetweenCoordinates(entity.getPosition(), positionToCheck)
+					<= 1.01*(entity.getRadius() + radiusBullet) )
+				return entity;
+		}
+		return null;
 	}
 	
 	public void putInFiringPosition(Bullet bullet){
+		double[] newPosition = this.getFiringPosition(bullet);
+		bullet.setPosition(newPosition[0], newPosition[1]);
+	}
+	
+	public double[] getFiringPosition(Bullet bullet) {
 		double newXPosition = bullet.getPositionX() + (this.getRadius() + bullet.getRadius())*Math.cos(getOrientation());
 		double newYPosition = bullet.getPositionY() + (this.getRadius() + bullet.getRadius())*Math.sin(getOrientation());
-		bullet.setPosition(newXPosition, newYPosition);
+		double[] position = {newXPosition,newYPosition};
+		return position;
 	}
 	
 	public Bullet selectLoadedBullet(){
@@ -379,9 +407,9 @@ public class Ship extends Entity{
 		other.setVelocity(newXVelocityOther, newYVelocityOther);
 	}
 	
-	public void getsHitBy(Bullet other, World world) {
+	public void getsHitBy(Bullet other) {
 		if (other.getSource() == this){
-			System.out.println("damn");
+			System.out.println("damn5");
 			this.loadBulletOnShip(other);
 		}else{
 			this.terminate();
