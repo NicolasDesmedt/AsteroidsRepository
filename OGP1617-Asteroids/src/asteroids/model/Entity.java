@@ -571,8 +571,8 @@ public abstract class Entity {
 		
 		protected void terminate() {
 			if (!this.isTerminated) {
-				if (getWorld() != null)
-					getWorld().removeEntity(this);
+				if (this.getWorld() != null)
+					this.getWorld().removeEntity(this);
 				this.isTerminated = true;
 			}
 		}

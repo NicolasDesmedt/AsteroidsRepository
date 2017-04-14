@@ -34,11 +34,11 @@ public class Bullet extends Entity{
 	 *       | ...
 	 */
 	@Raw
-	 public void terminate() {
-		 if (this.hasShip()){
-			 this.ship = null;
-		 }
-		 super.terminate();
+	public void terminate() {
+		if (this.hasShip()){
+			 this.setShip(null);
+		}
+		super.terminate();
 	 }
 	
 	public double calculateMinimalMass(){
@@ -92,11 +92,13 @@ public class Bullet extends Entity{
 		return this.world != null;
 	}
 	
-	public void setWorld(World world){
+	public void setWorld(World world) throws IllegalArgumentException {
+		if (this.hasShip())
+			this.setShip(null);
 		if (!hasShip() && !hasWorld()){
 			this.world = world;
 		}else{
-			//throw new exception
+			throw new IllegalArgumentException();
 		}
 	}
 	

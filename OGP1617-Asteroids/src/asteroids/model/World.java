@@ -390,16 +390,17 @@ public class World{
 	
 	public double getTimeToNextCollisionEntity(Entity entity) {
 		double time = getTimeCollisionToBoundary(entity);
-		for (Entity other : allEntities) {
-			if (entity == other){
+		Set<Entity> allEntitiesCopy = getAllEntities();
+		allEntitiesCopy.remove(entity);
+		for (Entity other : allEntitiesCopy ) {
+			
+			//}else if ((entity instanceof Ship) && (other instanceof Bullet) && (((Bullet)other).getShip() == entity)){
 				
-			}else if ((entity instanceof Ship) && (other instanceof Bullet) && (((Bullet)other).getShip() == entity)){
+			//}else if ((other instanceof Ship) && (entity instanceof Bullet) && (((Bullet)entity).getShip() == other)){
 				
-			}else if ((other instanceof Ship) && (entity instanceof Bullet) && (((Bullet)entity).getShip() == other)){
+			//}else if ((other instanceof Bullet) && (entity instanceof Bullet) && (((Bullet)entity).getShip() == ((Bullet)other).getShip())){
 				
-			}else if ((other instanceof Bullet) && (entity instanceof Bullet) && (((Bullet)entity).getShip() == ((Bullet)other).getShip())){
-				
-			}else if(entity.getTimeToCollision(other) < time){
+			if(entity.getTimeToCollision(other) < time){
 				time = entity.getTimeToCollision(other);
 			}
 		}
@@ -493,8 +494,8 @@ public class World{
 			for (Entity entity : allEntities) {
 				entity.move(timeToNextCollision);
 			}
-			//if (collisionListener != null)
-			//	 updateCollisionListener(collisionListener);
+			if (collisionListener != null)
+			  updateCollisionListener(collisionListener);
 			resolveCollisions();
 			double newTime = dt - timeToNextCollision;
 			evolve(newTime, collisionListener);
@@ -523,6 +524,7 @@ public class World{
 				System.out.println("no");
 				((Ship)entity2).getsHitBy((Bullet)entity1, this);
 			}else{
+				System.out.println("collidingBullets");
 				((Bullet)entity1).cancelsOut((Bullet)entity2);
 			}
 		}

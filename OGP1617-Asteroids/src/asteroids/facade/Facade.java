@@ -60,7 +60,7 @@ public class Facade implements asteroids.part2.facade.IFacade {
 	public double getTimeToCollision(Ship ship1, Ship ship2) throws ModelException {
 		try{
 			return ship1.getTimeToCollision(ship2);
-		}catch( IllegalArgumentException e){
+		}catch( IllegalStateException e){
 			throw new ModelException(e.getMessage());
 		}catch( NullPointerException e){
 			throw new ModelException(e.getMessage());

@@ -330,7 +330,7 @@ public class Ship extends Entity{
 			return;
 		}
 		Bullet bullet = this.selectLoadedBullet();
-		this.getWorld().addEntity(bullet);;
+		this.getWorld().addEntity(bullet);
 		this.removeBulletFromShip(bullet);
 		System.out.println("fire " + this.getNbBulletsOnShip());
 		this.putInFiringPosition(bullet);
