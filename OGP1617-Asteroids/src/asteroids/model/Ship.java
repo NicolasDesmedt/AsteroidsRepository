@@ -289,7 +289,6 @@ public class Ship extends Entity{
 		bullet.setShip(this);
 		bullet.setPosition(this.getPositionX(), this.getPositionY());
 		bullet.setVelocity(0, 0);
-		System.out.println("check");
 	}
 
 	public void loadBulletsOnShip(Bullet[] bullets){
@@ -334,18 +333,25 @@ public class Ship extends Entity{
 		Bullet bullet = this.selectLoadedBullet();
 		Entity entityInRangeOfFiringPosition = this.getEntityInRangeOfFiringPosition(bullet);
 		if (entityInRangeOfFiringPosition == null) {
-			this.getWorld().addEntity(bullet);
-			this.removeBulletFromShip(bullet);
-			System.out.println("fire " + this.getNbBulletsOnShip());
-			this.putInFiringPosition(bullet);
-			bullet.setVelocity(bulletSpeed*Math.cos(this.getOrientation()), bulletSpeed*Math.sin(this.getOrientation()));
-			bullet.setSource(this);
+//			try {
+//				this.getWorld().addEntity(bullet);
+//			} catch(IllegalArgumentException e) {
+//				System.out.println("Exception was caught");
+//				bullet.terminate();
+//			}
+			if (!bullet.isTerminated()){
+				this.getWorld().addEntity(bullet);
+				this.removeBulletFromShip(bullet);
+				System.out.println("fire " + this.getNbBulletsOnShip());
+				this.putInFiringPosition(bullet);
+				bullet.setVelocity(bulletSpeed*Math.cos(this.getOrientation()), bulletSpeed*Math.sin(this.getOrientation()));
+				bullet.setSource(this);
+				System.out.println("normaal afgeschoten");
+			}
 		}
 		else {
-			if (entityInRangeOfFiringPosition instanceof Bullet)
-				((Bullet)entityInRangeOfFiringPosition).cancelsOut(bullet);
-			else if (entityInRangeOfFiringPosition instanceof Ship)
-				((Ship)entityInRangeOfFiringPosition).getsHitBy(bullet);
+			bullet.terminate();
+			entityInRangeOfFiringPosition.terminate();
 		}
 	}
 	
@@ -356,9 +362,10 @@ public class Ship extends Entity{
 		Set<Entity> allEntities = world.getAllEntities();
 		for (Entity entity : allEntities) {
 			if (world.getDistanceBetweenCoordinates(entity.getPosition(), positionToCheck)
-					<= 0.99*(entity.getRadius() + radiusBullet) )
-				System.out.println("culprit");
+					<= 0.99*(entity.getRadius() + radiusBullet) ) {
 				return entity;
+//				System.out.println(entity+"staat in de weg, source:="+bullet.getSource());
+				}
 		}
 		return null;
 	}
@@ -411,7 +418,7 @@ public class Ship extends Entity{
 	
 	public void getsHitBy(Bullet other) {
 		if (other.getSource() == this){
-			System.out.println("damn5");
+			System.out.println("hertanken");
 			this.loadBulletOnShip(other);
 		}else{
 			this.terminate();

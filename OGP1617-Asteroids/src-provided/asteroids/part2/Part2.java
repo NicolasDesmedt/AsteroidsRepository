@@ -14,7 +14,7 @@ public class Part2 {
 				enableSound = false;
 			} else {
 				System.out.println("unknown option: " + arg);
-				return;
+				return;	
 			}
 		}
 

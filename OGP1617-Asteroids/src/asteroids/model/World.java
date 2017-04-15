@@ -249,8 +249,8 @@ public class World{
 	 */
 
 	public void addEntity(Entity entity) throws IllegalArgumentException {
-		if (allEntities.contains(entity))throw new IllegalArgumentException
-		("The given entity already belongs to this world.");
+		if (allEntities.contains(entity))
+			return;
 		if (entity.getWorld() != null) throw new IllegalArgumentException
 			("The given entity already belongs to a world.");
 		if (!this.withinBoundaries(entity)) throw new IllegalArgumentException
@@ -402,10 +402,13 @@ public class World{
 			//if (entity.overlap(other)) 
 			//	return 0;
 			
-			
-			if(entity.getTimeToCollision(other) < time){
-				time = entity.getTimeToCollision(other);
-			}
+			try {
+				if(entity.getTimeToCollision(other) < time)
+					time = entity.getTimeToCollision(other);
+				} catch(IllegalArgumentException e) {
+					System.out.println("time caught");
+					throw new IllegalArgumentException("Overlapping entities!");
+				}
 		}
 		if (time < 0)
 			time = 0;
@@ -426,10 +429,14 @@ public class World{
 	
 	public double getTimeToNextCollision() {
 		double time = Double.POSITIVE_INFINITY;
-		for (Entity entity : allEntities) {
-			if (getTimeToNextCollisionEntity(entity) < time)
-				time = getTimeToNextCollisionEntity(entity);
-		}
+		try {
+			for (Entity entity : allEntities) {
+				if (getTimeToNextCollisionEntity(entity) < time)
+					time = getTimeToNextCollisionEntity(entity);
+			} 
+		}catch(IllegalArgumentException e) {
+			throw new IllegalArgumentException("Alright");
+			}
 		return time;
 	}
 	
@@ -512,6 +519,23 @@ public class World{
 		return collidingEntities;
 	}
 	
+	public Entity[] getOverlappingEntities() {
+		Entity[] overlappingEntities = new Entity[]{null,null};
+		Set<Entity> allEntitiesCopy = getAllEntities();
+		Set<Entity> otherAllEntitiesCopy = getAllEntities();
+		for (Entity entity : allEntitiesCopy) {
+			otherAllEntitiesCopy.remove(entity);
+			for (Entity other : otherAllEntitiesCopy) {
+				if (entity.overlap(other)){
+					overlappingEntities[0] = entity;
+					overlappingEntities[1] = other;
+					return overlappingEntities;	
+				}
+			}
+		}
+		return overlappingEntities;
+	}
+	
 	private Hashtable<Entity, Entity> collidingEntities = new Hashtable<Entity, Entity>();
 	
 	/**
@@ -519,23 +543,23 @@ public class World{
 	 * @param dt
 	 */
 	public void evolve(double dt, CollisionListener collisionListener) {
-		double timeToNextCollision = getTimeToNextCollision();
-		if (timeToNextCollision < dt) {
-//			for (Entity entity : allEntities) {
-//				entity.move(timeToNextCollision);
-			advanceAllEntities(timeToNextCollision);
-			
-			if (collisionListener != null)
-			  updateCollisionListener(collisionListener);
-			resolveCollisions();
-			double newTime = dt - timeToNextCollision;
-			evolve(newTime, collisionListener);
+		try {
+			double timeToNextCollision = getTimeToNextCollision();
+			if (timeToNextCollision < dt) {
+				advanceAllEntities(timeToNextCollision);
+				if (collisionListener != null)
+				  updateCollisionListener(collisionListener);
+				resolveCollisions();
+				double newTime = dt - timeToNextCollision;
+				evolve(newTime, collisionListener);
+			} else {
+				advanceAllEntities(dt);
+			}
+		} catch(IllegalArgumentException e) {
+			Entity[] overlappingEntities = this.getOverlappingEntities();
+			overlappingEntities[0].terminate();
+			overlappingEntities[1].terminate();
 		}
-		else
-//			for (Entity entity : allEntities) {
-//				entity.move(dt);
-//			}
-			advanceAllEntities(dt);
 	}
 	
 	public void advanceAllEntities (double duration) {
@@ -560,11 +584,11 @@ public class World{
 				((Ship)entity1).collidesWithShip((Ship)entity2);
 			}
 			else if ( (entity1 instanceof Ship) && (entity2 instanceof Bullet) ){
-				System.out.print("yes");
+				System.out.print("entity1(Ship) collides w entity2(Bullet)");
 				((Ship)entity1).getsHitBy((Bullet)entity2);
 			}
 			else if ( (entity1 instanceof Bullet) && (entity2 instanceof Ship) ){
-				System.out.println("no");
+				System.out.println("entity1(Bullet) collides w entity2(Ship)");
 				((Ship)entity2).getsHitBy((Bullet)entity1);
 			}else{
 				System.out.println("collidingBullets");

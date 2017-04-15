@@ -121,18 +121,23 @@ public class Bullet extends Entity{
 	private int counterBoundaryCollisions = 0;
 	
 	public void collidesWithBoundary(World world) {
-		this.setCounterBoundaryCollisions(getCounterBoundaryCollisions() + 1);
-		if (getCounterBoundaryCollisions() == getMaxBoundaryCollisions()) {
-				this.terminate();
-				//this.removeFromWorld();
-				//world.removeEntity(this);
-				return;
+		if (!this.getWorld().withinBoundaries(this)) {
+			System.out.println("bullet should be terminated");
+			this.terminate();
+		}else {
+			this.setCounterBoundaryCollisions(getCounterBoundaryCollisions() + 1);
+			if (getCounterBoundaryCollisions() == getMaxBoundaryCollisions()) {
+					this.terminate();
+					//this.removeFromWorld();
+					//world.removeEntity(this);
+					return;
+			}
+			else if (world.getDistanceToNearestHorizontalBoundary(this) <
+					world.getDistanceToNearestVerticalBoundary(this) )
+				this.setVelocity(getVelocityX(), -getVelocityY());
+			else
+				this.setVelocity(-getVelocityX(), getVelocityY());
 		}
-		else if (world.getDistanceToNearestHorizontalBoundary(this) <
-				world.getDistanceToNearestVerticalBoundary(this) )
-			this.setVelocity(getVelocityX(), -getVelocityY());
-		else
-			this.setVelocity(-getVelocityX(), getVelocityY());
 	}
 	
 	public void setSource(Ship ship){
