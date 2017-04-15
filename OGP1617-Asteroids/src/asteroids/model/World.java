@@ -556,6 +556,8 @@ public class World{
 				advanceAllEntities(dt);
 			}
 		} catch(IllegalArgumentException e) {
+			if (collisionListener != null)
+				  updateCollisionListener(collisionListener);
 			Entity[] overlappingEntities = this.getOverlappingEntities();
 			overlappingEntities[0].terminate();
 			overlappingEntities[1].terminate();
@@ -599,13 +601,29 @@ public class World{
 	
 
  	public void updateCollisionListener(CollisionListener collisionListener) throws IllegalStateException {
+ 		Entity entity1 = null;
+ 		Entity entity2 = null;
+ 		Entity[] overlappingEntities = this.getOverlappingEntities();
+ 		if (overlappingEntities[0] != null) {
+ 			entity1 = overlappingEntities[0];
+ 			entity2 = overlappingEntities[1];
+ 			double xPos = 0;
+ 			double yPos = 0;
+ 			if (entity1 instanceof Ship) {
+ 				xPos = entity1.getPositionX();
+ 				yPos = entity1.getPositionY();
+ 			}
+ 			else
+ 				xPos = entity2.getPositionX();
+ 				yPos = entity2.getPositionY();
+ 			collisionListener.objectCollision(entity1, entity2, xPos, yPos);
+ 			return;
+ 		}
  		double xPos = getPositionNextCollision()[0];
  		double yPos = getPositionNextCollision()[1];
  		Entity[] firstCollidingEntities = getFirstCollidingEntities();
  		if (firstCollidingEntities[0] == null)
  			throw new IllegalStateException("There are no colliding entities");
- 		Entity entity1 = null;
- 		Entity entity2 = null;
  		for (Entity entity : firstCollidingEntities) {
  			if (entity1 == null)
  				entity1 = entity;
