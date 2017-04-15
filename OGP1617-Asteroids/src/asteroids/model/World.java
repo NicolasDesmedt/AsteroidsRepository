@@ -630,9 +630,20 @@ public class World{
  			else 
  				entity2 = entity;
  		}
- 		if (entity2 == null)
- 			collisionListener.boundaryCollision(entity1, xPos, yPos);
- 		else
+ 		if (entity2 == null) {
+ 			if (entity1.getWorld().withinBoundaries(entity1))
+ 				collisionListener.boundaryCollision(entity1, xPos, yPos);
+ 		}
+ 		else {
+ 	 		System.out.println("We raken hier");
+ 			if( (entity1 instanceof Bullet) && (entity2 instanceof Ship)) {
+ 				if (((Bullet)entity1).getSource() == entity2)
+ 					return;
+ 			} else if ((entity1 instanceof Ship) && (entity2 instanceof Bullet)) {
+ 				if (((Bullet)entity2).getSource() == entity1)
+ 					return;
+ 			}
  			collisionListener.objectCollision(entity1, entity2, xPos, yPos);
+ 		}
  	}
 }
