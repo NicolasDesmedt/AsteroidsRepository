@@ -442,12 +442,6 @@ public class World{
 	
 	public Entity[] getFirstCollidingEntities() {
 		Entity[] firstCollidingEntities = new Entity[]{null,null};
-		Entity[] overlappingEntities = this.getOverlappingEntitiesNotSource();
-		Entity[] overlappingBulletAndSource = this.getOverlappingBulletAndSource();
-		if (overlappingEntities[0] != null)
-			return overlappingEntities;
-		if (overlappingBulletAndSource[0] != null)
-			return overlappingBulletAndSource;
 		double timeToNextCollision = getTimeToNextCollision();
 		for (Entity entity : allEntities) {
 			if (getTimeToNextCollisionEntity(entity) == timeToNextCollision) {
@@ -525,7 +519,7 @@ public class World{
 		return collidingEntities;
 	}
 	
-	public Entity[] getOverlappingEntitiesNotSource() {
+	public Entity[] getOverlappingEntities() {
 		Entity[] overlappingEntities = new Entity[]{null,null};
 		Set<Entity> allEntitiesCopy = getAllEntities();
 		Set<Entity> otherAllEntitiesCopy = getAllEntities();
@@ -533,43 +527,8 @@ public class World{
 			otherAllEntitiesCopy.remove(entity);
 			for (Entity other : otherAllEntitiesCopy) {
 				if (entity.overlap(other)){
-					if ( (entity instanceof Ship) && (other instanceof Bullet) ){
-						if (((Bullet)other).getSource() == entity) {
-							return overlappingEntities;
-						}	
-					} else if ( (entity instanceof Bullet) && (other instanceof Ship) ){
-						if (((Bullet)entity).getSource() == other) {
-							return overlappingEntities;
-						}
-					}
 					overlappingEntities[0] = entity;
 					overlappingEntities[1] = other;
-					return overlappingEntities;	
-				}
-			}
-		}
-		return overlappingEntities;
-	}
-	
-	public Entity[] getOverlappingBulletAndSource() {
-		Entity[] overlappingEntities = new Entity[]{null,null};
-		Set<Entity> allEntitiesCopy = getAllEntities();
-		Set<Entity> otherAllEntitiesCopy = getAllEntities();
-		for (Entity entity : allEntitiesCopy) {
-			otherAllEntitiesCopy.remove(entity);
-			for (Entity other : otherAllEntitiesCopy) {
-				if (entity.overlap(other)){
-					if ( (entity instanceof Ship) && (other instanceof Bullet) ){
-						if (((Bullet)other).getSource() == entity) {
-							overlappingEntities[0] = entity;
-							overlappingEntities[1] = other;
-						}	
-					} else if ( (entity instanceof Bullet) && (other instanceof Ship) ){
-						if (((Bullet)entity).getSource() == other) {
-							overlappingEntities[0] = other;
-							overlappingEntities[1] = entity;
-						}
-					}
 					return overlappingEntities;	
 				}
 			}
@@ -599,22 +558,9 @@ public class World{
 		} catch(IllegalArgumentException e) {
 			if (collisionListener != null)
 				  updateCollisionListener(collisionListener);
-			Entity[] overlappingBulletWithSource = this.getOverlappingBulletAndSource();
-			if (overlappingBulletWithSource[0] != null){
-				Entity entity1 = overlappingBulletWithSource[0];
-				Entity entity2 = overlappingBulletWithSource[1];
-				if ( (entity1 instanceof Ship) && (entity2 instanceof Bullet) ){
-					((Ship)entity1).getsHitBy((Bullet)entity2);
-				}
-				else if ( (entity1 instanceof Bullet) && (entity2 instanceof Ship) ){
-					((Ship)entity2).getsHitBy((Bullet)entity1);
-				}
-			}
-			Entity[] overlappingEntities = this.getOverlappingEntitiesNotSource();
-			if (overlappingEntities[0] != null) {
-				overlappingEntities[0].terminate();
-				overlappingEntities[1].terminate();
-			}
+			Entity[] overlappingEntities = this.getOverlappingEntities();
+			overlappingEntities[0].terminate();
+			overlappingEntities[1].terminate();
 		}
 	}
 	
@@ -657,7 +603,7 @@ public class World{
  	public void updateCollisionListener(CollisionListener collisionListener) throws IllegalStateException {
  		Entity entity1 = null;
  		Entity entity2 = null;
- 		Entity[] overlappingEntities = this.getOverlappingEntitiesNotSource();
+ 		Entity[] overlappingEntities = this.getOverlappingEntities();
  		if (overlappingEntities[0] != null) {
  			entity1 = overlappingEntities[0];
  			entity2 = overlappingEntities[1];
@@ -673,6 +619,8 @@ public class World{
  			collisionListener.objectCollision(entity1, entity2, xPos, yPos);
  			return;
  		}
+ 		double xPos = getPositionNextCollision()[0];
+ 		double yPos = getPositionNextCollision()[1];
  		Entity[] firstCollidingEntities = getFirstCollidingEntities();
  		if (firstCollidingEntities[0] == null)
  			throw new IllegalStateException("There are no colliding entities");
@@ -682,21 +630,19 @@ public class World{
  			else 
  				entity2 = entity;
  		}
- 		System.out.println("We raken hier");
-		if( (entity1 instanceof Bullet) && (entity2 instanceof Ship)) {
-			if (((Bullet)entity1).getSource() == entity2)
-				return;
-		} else if ((entity1 instanceof Ship) && (entity2 instanceof Bullet)) {
-			if (((Bullet)entity2).getSource() == entity1)
-				return;
-		}
- 		double xPos = getPositionNextCollision()[0];
- 		double yPos = getPositionNextCollision()[1];
  		if (entity2 == null) {
  			if (entity1.getWorld().withinBoundaries(entity1))
  				collisionListener.boundaryCollision(entity1, xPos, yPos);
  		}
  		else {
+ 	 		System.out.println("We raken hier");
+ 			if( (entity1 instanceof Bullet) && (entity2 instanceof Ship)) {
+ 				if (((Bullet)entity1).getSource() == entity2)
+ 					return;
+ 			} else if ((entity1 instanceof Ship) && (entity2 instanceof Bullet)) {
+ 				if (((Bullet)entity2).getSource() == entity1)
+ 					return;
+ 			}
  			collisionListener.objectCollision(entity1, entity2, xPos, yPos);
  		}
  	}
