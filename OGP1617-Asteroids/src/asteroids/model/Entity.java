@@ -401,21 +401,17 @@ public abstract class Entity {
 		 * 			| other == null
 		 */
 		public boolean overlapFiltered(Entity other) throws NullPointerException{
-			if (other == null) throw new NullPointerException("The other ship is not effective");
-			if ((this instanceof Ship) && (other instanceof Bullet)) {
-				if (((Bullet)other).getSource() == this) {
-					return false;
-				}
-			} else if ((this instanceof Bullet) && (other instanceof Ship)) {
-				if (((Bullet)this).getSource() == other) {
-					return false;
-				}
-			}
-			if (this.getDistanceBetweenCenters(other) <= 0.99*(this.getRadius()+other.getRadius())){
-				return true;
-			}
-			else
+			if (this == other) {
 				return false;
+			} else if ((this instanceof Ship) && (other instanceof Bullet) && (((Bullet)other).getShip() == this)){
+				return false;
+			}else if ((this instanceof Bullet) && (other instanceof Ship) && (((Bullet)this).getShip() == other)){
+				return false;
+			}else if ((this instanceof Bullet) && (other instanceof Bullet) && (((Bullet)this).getShip() == ((Bullet)other).getShip())){
+				return false;
+			}else{
+				return this.overlap(other);
+			}
 		}
 		
 		/**

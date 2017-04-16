@@ -443,6 +443,16 @@ public class WorldTest {
 		assertTrue(booleanToCheck2);
 	}
 	
+	/*
+	 * This world contains 2 ships, one of the ships fires a bullet,
+	 *  but the firing position of the bullet is occupied by the other ship,
+	 *  meaning the bullet would spawn in the other ship, resulting in overlapping entities.
+	 *  As a result both the bullet and the other ship are terminated.
+	 *  
+	 * Test 1 tests if the bullet and the other ship are terminated.
+	 * Test 2 & 3 check the new position of the ship who survived,
+	 *  after keeping the same speed for a given amount of time.
+	 */
 	@Test
 	public void evolve_OverlappingEntities() {
 		World world1000x1000 = new World(1000,1000);
@@ -463,6 +473,15 @@ public class WorldTest {
 		assertEquals(600,shootingShip.getPositionY(),EPSILON);
 	}
 	
+	/*
+	 * This world contains two ships. One with a velocity in the positive x-direction,
+	 *  the other with a velocity in the positive y-direction.
+	 *  Both ships collide after 9 seconds, resulting in an added y-velocity for the ship going
+	 *  in the positive x-direction. And a diminished y-velocity for the ship going in the
+	 *  positive y-direction.
+	 *  
+	 *  Tests 1, 2, 3 & 4 test the new velocities after 10 seconds.
+	 */
 	@Test
 	public void evolve_CollisionShips() {
 		World world1000x1000 = new World(1000,1000);
@@ -479,6 +498,12 @@ public class WorldTest {
 		assertTrue(mutableShip3.getVelocityY() > 0);
 	}
 	
+	/*
+	 * This world contains a bullet and a ship. The bullet and
+	 * 	the ship collide after 9 seconds, resulting in an empty world.
+	 * 
+	 * This test tests if the world is empty after 10 seconds.
+	 */
 	@Test
 	public void evolve_CollisionShipAndBullet() {
 		World world1000x1000 = new World(1000,1000);
