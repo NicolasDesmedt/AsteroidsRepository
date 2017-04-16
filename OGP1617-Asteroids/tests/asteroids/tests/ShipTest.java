@@ -280,7 +280,7 @@ public class ShipTest {
 	public void move_LegalCase(){
 		mutableShip2.loadBulletOnShip(mutableMinimalBullet);
 		mutableShip2.loadBulletOnShip(mutableBullet1);
-		mutableShip2.move(10);
+		mutableShip2.move(20);
 		assertEquals(mutableMinimalBullet.getPositionX(), mutableShip2.getPositionX(), EPSILON);
 		assertEquals(mutableMinimalBullet.getPositionY(), mutableShip2.getPositionY(), EPSILON);
 		assertEquals(mutableBullet1.getPositionX(), mutableShip2.getPositionX(), EPSILON);

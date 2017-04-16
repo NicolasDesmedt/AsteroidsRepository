@@ -381,25 +381,41 @@ public abstract class Entity {
 		 */
 		public boolean overlap(Entity other) throws NullPointerException{
 			if (other == null) throw new NullPointerException("The other ship is not effective");
-			if ((this instanceof Ship) && (other instanceof Bullet)) {
-				if (((Bullet)other).getSource() == this)
-					return false;
-				else if (this.getDistanceBetweenCenters(other) <= 0.99*(this.getRadius()+other.getRadius()))
-					return true;
-				else return false;
-			}
-			else if ((this instanceof Bullet) && (other instanceof Ship)) {
-				if (((Bullet)this).getSource() == other)
-					return false;
-				else if (this.getDistanceBetweenCenters(other) <= 0.99*(this.getRadius()+other.getRadius()))
-					return true;
-				else return false;
-			}
-			else if (this.getDistanceBetweenCenters(other) <= 0.99*(this.getRadius()+other.getRadius())){
+			if (this.getDistanceBetweenCenters(other) <= 0.99*(this.getRadius()+other.getRadius())){
 				return true;
 			}else{
 				return false;
 			}
+			
+		}
+		/**
+		 * Check whether this ship overlaps with a given ship.
+		 * 
+		 * @param 	other
+		 * 			The given ship.
+		 * @return	True if and only if the distance between this ship and
+		 * 			the given ship is smaller than or equal to zero.
+		 * 			| result == (this.getDistanceBetween(ship2) <= 0)
+		 * @throws 	NullPointerException
+		 * 			The other ship is not effective
+		 * 			| other == null
+		 */
+		public boolean overlapFiltered(Entity other) throws NullPointerException{
+			if (other == null) throw new NullPointerException("The other ship is not effective");
+			if ((this instanceof Ship) && (other instanceof Bullet)) {
+				if (((Bullet)other).getSource() == this) {
+					return false;
+				}
+			} else if ((this instanceof Bullet) && (other instanceof Ship)) {
+				if (((Bullet)this).getSource() == other) {
+					return false;
+				}
+			}
+			if (this.getDistanceBetweenCenters(other) <= 0.99*(this.getRadius()+other.getRadius())){
+				return true;
+			}
+			else
+				return false;
 		}
 		
 		/**
@@ -426,7 +442,7 @@ public abstract class Entity {
 		public double getTimeToCollision(Entity other)
 				throws IllegalStateException, NullPointerException{
 			if (other == null) throw new NullPointerException("The other ship is not effective");
-			if (this.overlap(other)) throw new IllegalArgumentException("This method does not apply to ships that overlap");
+			if (this.overlapFiltered(other)) throw new IllegalArgumentException("This method does not apply to ships that overlap");
 			double diffX = other.getPosition()[0] - this.getPosition()[0];
 			double diffY = other.getPosition()[1] - this.getPosition()[1];
 			double diffVX = other.getVelocity()[0] - this.getVelocity()[0];
@@ -469,7 +485,7 @@ public abstract class Entity {
 		 */
 		public double[] getCollisionPosition(Entity other) throws NullPointerException, IllegalStateException{
 			if (other == null) throw new NullPointerException("The other ship is not effective");
-			if (this.overlap(other)) throw new IllegalArgumentException("This method does not apply to ships that overlap");
+			if (this.overlapFiltered(other)) throw new IllegalArgumentException("This method does not apply to ships that overlap");
 			
 			if (this.getTimeToCollision(other) == Double.POSITIVE_INFINITY){
 				return null;
@@ -485,9 +501,9 @@ public abstract class Entity {
 				if (diffX*diffY >= 0){
 					if (diffX == 0){
 						if (diffY > 0){
-							angleCenters = (Math.PI/2);
-						}else{
 							angleCenters = -(Math.PI/2);
+						}else{
+							angleCenters = (Math.PI/2);
 						}
 					}else if ((diffX > 0) || (diffY == 0)){
 						angleCenters = Math.atan(diffY/diffX) + Math.PI;

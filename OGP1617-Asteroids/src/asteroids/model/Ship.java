@@ -331,43 +331,14 @@ public class Ship extends Entity{
 			return;
 		}
 		Bullet bullet = this.selectLoadedBullet();
-		Entity entityInRangeOfFiringPosition = this.getEntityInRangeOfFiringPosition(bullet);
-		if (entityInRangeOfFiringPosition == null) {
-//			try {
-//				this.getWorld().addEntity(bullet);
-//			} catch(IllegalArgumentException e) {
-//				System.out.println("Exception was caught");
-//				bullet.terminate();
-//			}
-			if (!bullet.isTerminated()){
-				this.getWorld().addEntity(bullet);
-				this.removeBulletFromShip(bullet);
-				System.out.println("fire " + this.getNbBulletsOnShip());
-				this.putInFiringPosition(bullet);
-				bullet.setVelocity(bulletSpeed*Math.cos(this.getOrientation()), bulletSpeed*Math.sin(this.getOrientation()));
-				bullet.setSource(this);
-				System.out.println("normaal afgeschoten");
-			}
+		if (!bullet.isTerminated()){
+			this.getWorld().addEntity(bullet);
+			this.removeBulletFromShip(bullet);
+			System.out.println("fire " + this.getNbBulletsOnShip());
+			this.putInFiringPosition(bullet);
+			bullet.setVelocity(bulletSpeed*Math.cos(this.getOrientation()), bulletSpeed*Math.sin(this.getOrientation()));
+			bullet.setSource(this);
 		}
-		else {
-			bullet.terminate();
-			entityInRangeOfFiringPosition.terminate();
-		}
-	}
-	
-	public Entity getEntityInRangeOfFiringPosition(Bullet bullet) {
-		double[] positionToCheck = getFiringPosition(bullet);
-		double radiusBullet = bullet.getRadius();
-		World world = this.getWorld();
-		Set<Entity> allEntities = world.getAllEntities();
-		for (Entity entity : allEntities) {
-			if (world.getDistanceBetweenCoordinates(entity.getPosition(), positionToCheck)
-					<= 0.99*(entity.getRadius() + radiusBullet) ) {
-				return entity;
-//				System.out.println(entity+"staat in de weg, source:="+bullet.getSource());
-				}
-		}
-		return null;
 	}
 	
 	public void putInFiringPosition(Bullet bullet){
