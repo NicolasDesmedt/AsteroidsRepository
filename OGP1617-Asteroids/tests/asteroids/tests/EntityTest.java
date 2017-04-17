@@ -333,7 +333,7 @@ public class EntityTest {
 		assertEquals(null, CollisionPosition);
 	}
 
-	@Test(expected = IllegalStateException.class)
+	@Test(expected = IllegalArgumentException.class)
 	public void getCollisionPosition_OverlappingShips() throws NullPointerException, IllegalStateException{
 		immutableShip2.getCollisionPosition(immutableShip3);
 	}

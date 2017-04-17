@@ -39,9 +39,9 @@ public class World{
 	 * 			| new.getAllEntities().isEmpty() == true
 	 */
 	public World(double width, double height){
-		if ((width < 0) || (width > upperBound)) 
+		if ((width < 0) || (width > upperBound) || (Double.isNaN(width))) 
 			width = upperBound;
-		if ((height < 0) || (height > upperBound))
+		if ((height < 0) || (height > upperBound) || (Double.isNaN(width)))
 			height = upperBound;
 		this.width = width;
 		this.height = height;
@@ -111,7 +111,7 @@ public class World{
 	 public void terminate() {
 		 for (Entity entity : allEntities)
 			 entity.removeFromWorld();
-		 positionsAndEntities.clear();
+		 allEntities.clear();
 		 this.isTerminated = true;
 	 }
 	 
@@ -155,6 +155,9 @@ public class World{
 	 * 			horizontal boundary of this world gets returned.
 	 * @return	...
 	 * 			| @see implementation
+	 * @throws	IllegalArgumentException
+	 * 			...
+	 * 			| (!withinBoundaries(entity))
 	 */
 	public double getDistanceToNearestHorizontalBoundary(Entity entity) throws IllegalArgumentException {
 		if (!withinBoundaries(entity)) throw new IllegalArgumentException("The entity is not located in the world.");
@@ -177,8 +180,12 @@ public class World{
 	 * 			vertical boundary of this world gets returned.
 	 * @return	...
 	 * 			| @see implementation
+	 * @throws	IllegalArgumentException
+	 * 			...
+	 * 			| (!withinBoundaries(entity))
 	 */
-	public double getDistanceToNearestVerticalBoundary(Entity entity) {
+	public double getDistanceToNearestVerticalBoundary(Entity entity) throws IllegalArgumentException{
+		if (!withinBoundaries(entity)) throw new IllegalArgumentException("The entity is not located in the world.");
 		double distance = Double.POSITIVE_INFINITY;
 		double distanceLeft = width - entity.getPositionX();
 		double distanceRight = entity.getPositionX();
@@ -199,7 +206,7 @@ public class World{
 	 * @return	...
 	 * 			| @see implementation
 	 */
-	public double getDistanceToBoundaries(Entity entity) {
+	public double getDistanceToBoundaries(Entity entity) throws IllegalArgumentException{
 		if (getDistanceToNearestVerticalBoundary(entity) <
 				getDistanceToNearestHorizontalBoundary(entity))
 			return getDistanceToNearestVerticalBoundary(entity);
@@ -207,6 +214,16 @@ public class World{
 			return getDistanceToNearestHorizontalBoundary(entity);
 	}
 	
+	/**
+	 * Return the distance between the given positions, in a 2D-field.
+	 * 
+	 * @param 	position1
+	 * 			The first position, a set of coordinates.
+	 * @param 	position2
+	 * 			The second position, a set of coordinates.
+	 * @return	...
+	 * 			| @see implementation
+	 */
 	public double getDistanceBetweenCoordinates(double[] position1, double[] position2) {
 		double x1 = position1[0];
 		double x2 = position2[0];
@@ -215,28 +232,21 @@ public class World{
 		double distance = (Math.sqrt(Math.pow((x2 - x1), 2)) + Math.pow((y2 - y1), 2));
 		return distance;
 	}
-	
-	/**
-	 * Returns true if and only if the entity fits in the world, is not a duplicate, does not overlap.
-	 * @param entity
-	 * @return
-	 */
 
-	
+	/**
+	 * Return a boolean indicating whether or not in this world the given entity overlaps
+	 *  with an other entity, that is not the source of the given entity or a bullet fired 
+	 *  from the given entity or a bullet with the same source as the given entity.
+	 *  
+	 * @param 	entity
+	 * 			The entity to check.
+	 * @return	...
+	 * 			| @see implementation
+	 */
 	public boolean overlapsWithOtherEntities(Entity entity) {
 		for (Entity other : allEntities) {
-			if (entity.overlap(other)){
-				if (entity == other) {
-					return false;
-				} else if ((entity instanceof Ship) && (other instanceof Bullet) && (((Bullet)other).getShip() == entity)){
-					return false;
-				}else if ((entity instanceof Bullet) && (other instanceof Ship) && (((Bullet)entity).getShip() == other)){
-					return false;
-				}else if ((entity instanceof Bullet) && (other instanceof Bullet) && (((Bullet)entity).getShip() == ((Bullet)other).getShip())){
-					return false;
-				}else{
-					return true;
-				}
+			if (entity.overlapFiltered(other)){
+				return true;
 			}
 		}
 		return false;
@@ -245,9 +255,21 @@ public class World{
 	
 	
 	/**
-	 * Add entity to this world. (Defensive)
+	 * Add the given entity to this world.
+	 * 
+	 * @param	entity
+	 * 			The entity to add to this world.
+	 * @post	...
+	 * 			| new.getAllEntities().contains(entity)
+	 * @post	...
+	 * 			| (new entity).getWorld() == this
+	 * @post	...
+	 * 			| if old.getAllEntities().contains(entity)
+	 * 			|	then new == old
+	 * @throws	IllegalArgumentException
+	 * 			...
+	 * 			| (((old entity).getWorld() != null) || (!withinBoundaries(entity)) || (overlapsWithOtherEntities(entity))
 	 */
-
 	public void addEntity(Entity entity) throws IllegalArgumentException {
 		if (allEntities.contains(entity))
 			return;
@@ -263,8 +285,17 @@ public class World{
 	}	
 	
 	/**
-	 * Defensive
-	 * @param entity
+	 * Remove the given entity from this world
+	 * 
+	 * @param 	entity
+	 * 			The entity to remove from this world.
+	 * @post	...
+	 * 			| !new.getAllEntities().contains(entity)
+	 * @post	...
+	 * 			| (new entity).getWorld() == null
+	 * @throws	IllegalArgumentException
+	 * 			...
+	 * 			| !this.getAllEntities().contains(entity)
 	 */
 	public void removeEntity(Entity entity) {
 		if (allEntities.contains(entity)) {
@@ -275,7 +306,7 @@ public class World{
 	}
 	
 	/**
-	 * Total
+	 * 
 	 * @param x
 	 * @param y
 	 * @return
@@ -283,7 +314,7 @@ public class World{
 	public Entity getEntityAt(double x, double y) {
 		double[] position = {x,y};
 		for (Entity entity : allEntities) {
-			if (entity.getPosition() == position)
+			if ((entity.getPositionX() == position[0]) && (entity.getPositionY() == position[1]))
 				return entity;
 		}
 		return null;
@@ -309,20 +340,14 @@ public class World{
 		return allBullets;
 	}
 	
-	/**
-	 * A hashmap containing all the entities in the world with their position.
-	 */
-	private HashMap<double[], Entity> positionsAndEntities = new HashMap<>();
-	
 	private final Set<Entity> allEntities = new HashSet<Entity>();
 	
 	public double getTimeCollisionVerticalBoundary(Entity entity) {
+		//if (!withinBoundaries(entity)) throw new IllegalArgumentException("The entity is not located in the world.");
 		double time = Double.POSITIVE_INFINITY;
 		double distance = 0;
-		if (entity.getVelocityX() == 0){
+		if (entity.getVelocityX() == 0.0){
 			return time;
-		}else if (!this.withinBoundaries(entity)){
-			return 0;
 		}else {
 			if (entity.getVelocityX() < 0){
 				distance = entity.getPositionX() - entity.getRadius();
@@ -334,12 +359,11 @@ public class World{
 	}
 	
 	public double getTimeCollisionHorizontalBoundary(Entity entity) {
+		//if (!withinBoundaries(entity)) throw new IllegalArgumentException("The entity is not located in the world.");
 		double time = Double.POSITIVE_INFINITY;
 		double distance = 0;
-		if (entity.getVelocityY() == 0)
+		if (entity.getVelocityY() == 0.0)
 			return time;
-		else if (!this.withinBoundaries(entity))
-			return 0;
 		else {
 			if (entity.getVelocityY() < 0)
 				distance = entity.getPositionY() - entity.getRadius();
@@ -364,27 +388,33 @@ public class World{
 	 * @return
 	 */
 	public double[] getPositionCollisionWithBoundary(Entity entity) {
+		//if (!withinBoundaries(entity)) throw new IllegalArgumentException("The entity is not located in the world.");
 		double xPos = Double.POSITIVE_INFINITY;
 		double yPos = Double.POSITIVE_INFINITY;
 		double verticalTime = getTimeCollisionVerticalBoundary(entity);
 		double horizontalTime = getTimeCollisionHorizontalBoundary(entity);
-		if (horizontalTime < verticalTime) {
+		double[] position = {xPos, yPos};
+		if ( (verticalTime == Double.POSITIVE_INFINITY) && (horizontalTime == Double.POSITIVE_INFINITY) ) {
+			return position;
+		}
+		else if (horizontalTime < verticalTime) {
 			if (entity.getVelocityY() < 0){
 				yPos = 0;
 			}else{
 				yPos = height;
-			xPos = entity.getPositionX() + entity.getVelocityX()*verticalTime;
 			}
+			xPos = entity.getPositionX() + entity.getVelocityX()*verticalTime;
 		}
 		else {
 			if (entity.getVelocityX() < 0){
 				xPos = 0;
 			}else{
 				xPos = width;
-			yPos = entity.getPositionY() + entity.getVelocityY()*verticalTime;
 			}
+			yPos = entity.getPositionY() + entity.getVelocityY()*verticalTime;
 		}
-		double[] position = {xPos, yPos};
+		position[0] = xPos;
+		position[1] = yPos;
 		return position;
 	}
 	
@@ -502,22 +532,22 @@ public class World{
 			return entity1.getCollisionPosition(entity2);
 	}
 	
-	public Hashtable<Entity, Entity> getCollidingEntities() {
-		Set<Entity> allEntitiesCopy = getAllEntities();
-		Set<Entity> otherAllEntitiesCopy = getAllEntities();
-		for (Entity entity : allEntitiesCopy) {
-			otherAllEntitiesCopy.remove(entity);
-			for (Entity other : otherAllEntitiesCopy) {
-				if (entity.apparentlyCollide(other)){
-					collidingEntities.put(entity, other);
-					allEntitiesCopy.remove(other);
-				}else if (!((entity.getVelocityX()!=0) && (entity.getVelocityY()!=0))){
-					collidingEntities.put(entity, null);
-				}
-			}
-		}
-		return collidingEntities;
-	}
+//	public Hashtable<Entity, Entity> getCollidingEntities() {
+//		Set<Entity> allEntitiesCopy = getAllEntities();
+//		Set<Entity> otherAllEntitiesCopy = getAllEntities();
+//		for (Entity entity : allEntitiesCopy) {
+//			otherAllEntitiesCopy.remove(entity);
+//			for (Entity other : otherAllEntitiesCopy) {
+//				if (entity.apparentlyCollide(other)){
+//					collidingEntities.put(entity, other);
+//					allEntitiesCopy.remove(other);
+//				}else if (!((entity.getVelocityX()!=0) && (entity.getVelocityY()!=0))){
+//					collidingEntities.put(entity, null);
+//				}
+//			}
+//		}
+//		return collidingEntities;
+//	}
 	
 	public Entity[] getOverlappingEntities() {
 		Entity[] overlappingEntities = new Entity[]{null,null};
@@ -526,7 +556,7 @@ public class World{
 		for (Entity entity : allEntitiesCopy) {
 			otherAllEntitiesCopy.remove(entity);
 			for (Entity other : otherAllEntitiesCopy) {
-				if (entity.overlap(other)){
+				if (entity.overlapFiltered(other)){
 					overlappingEntities[0] = entity;
 					overlappingEntities[1] = other;
 					return overlappingEntities;	
@@ -536,7 +566,7 @@ public class World{
 		return overlappingEntities;
 	}
 	
-	private Hashtable<Entity, Entity> collidingEntities = new Hashtable<Entity, Entity>();
+	//private Hashtable<Entity, Entity> collidingEntities = new Hashtable<Entity, Entity>();
 	
 	/**
 	 * no specification, defensive
@@ -561,6 +591,7 @@ public class World{
 			Entity[] overlappingEntities = this.getOverlappingEntities();
 			overlappingEntities[0].terminate();
 			overlappingEntities[1].terminate();
+			evolve(dt, collisionListener);
 		}
 	}
 	
@@ -569,8 +600,8 @@ public class World{
 			entity.move(duration);	
 			if (entity instanceof Ship && ((Ship)entity).isShipThrusterActive()) {
 				Ship ship = (Ship)entity;
-				double velocityToAdd = ship.getThrusterForce()*duration / (ship.getMass()*1000);
-				ship.thrust(velocityToAdd); 
+				//double velocityToAdd = ship.getThrusterForce()*duration / (ship.getMass()*1000);
+				//ship.thrust(velocityToAdd); 
 			}	
 		}
 	}
