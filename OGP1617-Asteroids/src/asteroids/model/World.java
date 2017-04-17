@@ -664,12 +664,12 @@ public class World{
 	 * 			The given duration.
 	 * @pre		No collisions occur during the given duration.
 	 * 			| for each entity in allEntities:
-	 * 			|	this.getTimeToCollision(entity) > duration
+	 * 			|	this.getTimeToCollision(entity) >= duration
 	 * @effect	...
 	 * 			| @see implementation
 	 */
 	public void advanceAllEntities (double dt) {
-		assert this.getTimeToNextCollision() > dt;
+		assert this.getTimeToNextCollision() >= dt;
 		for (Entity entity : allEntities) {
 			entity.move(dt);	
 			if (entity instanceof Ship && ((Ship)entity).isShipThrusterActive()) {
