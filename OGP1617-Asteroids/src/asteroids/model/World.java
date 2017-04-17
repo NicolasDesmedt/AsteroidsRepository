@@ -4,7 +4,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import asteroids.part2.CollisionListener;
-//import asteroids.util.Util;
 import be.kuleuven.cs.som.annotate.*;
 
 /**
