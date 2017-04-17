@@ -437,9 +437,7 @@ public abstract class Entity {
 				return Double.POSITIVE_INFINITY;
 			}else{
 				double timeToCollision = -(diffVX*diffX + diffVY*diffY + Math.sqrt(varD))/((Math.pow(diffVX,2) + Math.pow(diffVY,2)));
-				if (timeToCollision<0){
-					timeToCollision = 0;
-				}
+				
 				return timeToCollision;
 			}
 		}
