@@ -56,7 +56,7 @@ public class World{
 	 * 	given boundary length as the length of its boundary.
 	 */
 	@Raw
-	public boolean canHaveAsBoundaryLength(double length) {
+	public static boolean canHaveAsBoundaryLength(double length) {
 		if ((length < 0) || (length > upperBound) || (Double.isNaN(length)))
 			return false;
 		else
@@ -694,7 +694,7 @@ public class World{
 	public void advanceAllEntities (double dt) {
 		assert this.getTimeToNextCollision() >= dt;
 		for (Entity entity : allEntities) {
-			entity.move(dt);	
+			entity.move(dt);
 		}
 	}
 	

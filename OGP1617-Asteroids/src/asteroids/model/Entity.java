@@ -57,6 +57,7 @@ public abstract class Entity {
 	 *         | result == ( (!Double.isNaN(position[0])) && (!Double.isNaN(position[1])) &&
 	 *         |			 (!Double.isInfinite(position[0])) && (!Double.isInfinite(position[0])) && (position.length == 2) )
 	 */
+	@Raw
 	public static boolean isValidPosition(double[] position){
 		if ( (!Double.isNaN(position[0])) && (!Double.isNaN(position[1])) && 
 				(!Double.isInfinite(position[0])) && (!Double.isInfinite(position[1])) && (position.length == 2) ) {
@@ -114,6 +115,7 @@ public abstract class Entity {
 	 * @return True if and only if the velocity consists of a double containing two real numbers.
 	 *         | result == ( (!Double.isNaN(velocity[0])) && (!Double.isNaN(velocity[1])) && (velocity.length == 2) )
 	 */
+	@Raw
 	public static boolean isValidVelocity(double[] velocity){
 		if ( (!Double.isNaN(velocity[0])) && (!Double.isNaN(velocity[1])) && (velocity.length == 2) ){
 			return true;
@@ -272,6 +274,7 @@ public abstract class Entity {
 	 * 			real number greater than or equal to the minimum radius.
 	 * 			| result == ( (radius >= MIN_RADIUS) && (!Double.isInfinite(radius)) && (!Double.isNaN(radius)) )
 	 */
+	@Raw
 	public abstract boolean isValidRadius(double radius);
 	
 	/**
@@ -297,6 +300,7 @@ public abstract class Entity {
 	 * @return True if and only if the maximum speed consists of a double between 0 and SPEED_OF_LIGHT.
 	 *         | result == ((!Double.isNaN(maxSpeed)) && (0 < maxSpeed) && (maxSpeed< SPEED_OF_LIGHT))
 	 */
+	@Raw
 	public static boolean isValidMaxSpeed(double maxSpeed){
 		if ((!Double.isNaN(maxSpeed)) && (0 < maxSpeed) && (maxSpeed<= SPEED_OF_LIGHT)){
 			return true;
@@ -316,291 +320,288 @@ public abstract class Entity {
 	/**
 	 * Variable registering the radius of this ship.
 	 */
-	private double maxSpeed;
+	private double maxSpeed;	
 	
+	public void move(double duration) throws IllegalArgumentException{
+		if (!isValidDuration(duration)) throw new IllegalArgumentException("The given duration " + duration + " isn't a valid one");
+		double newX = (getPositionX() + duration*getVelocityX());
+		double newY = (getPositionY() + duration*getVelocityY());
+		setPosition(newX, newY);
+	}
+		
+	/**
+	 * Check whether the given duration is a valid
+	 * duration for any ship.
+	 * 
+	 * @param 	duration
+	 * 			The duration to check.
+	 * @return	True if and only if the duration is a real number,
+	 * 			greater than zero and not infinite.
+	 * 			| result == ( (!Double.isNaN(duration)) && (!Double.isInfinite(duration)) && (duration >= 0) )
+	 */
+	public static boolean isValidDuration(double duration){
+		if ( (!Double.isNaN(duration)) && (!Double.isInfinite(duration)) && (duration >= 0) ) {
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
 	
+	public double getDistanceBetweenCenters(Entity other) throws NullPointerException{
+		if (other == null) throw new NullPointerException("The other ship is not effective");
+		double distance = (Math.sqrt(Math.pow((other.getPositionX() - this.getPositionX()), 2) + Math.pow((other.getPositionY() - this.getPositionY()), 2)));
+		return distance;
+	}
 	
-	public void move(double duration)
-			throws IllegalArgumentException{
-			if (!isValidDuration(duration)) throw new IllegalArgumentException("The given duration " + duration + " isn't a valid one");
-			double newX = (getPosition()[0] + duration*getVelocity()[0]);
-			double newY = (getPosition()[1] + duration*getVelocity()[1]);
-			setPosition(newX, newY);
+	public double getDistanceBetween(Entity other) throws NullPointerException{
+		if (other == null) throw new NullPointerException("The other ship is not effective");
+		if (this == other){
+			return 0;
+		}
+		double distance = (Math.sqrt(Math.pow((other.getPositionX() - this.getPositionX()), 2) + Math.pow((other.getPositionY() - this.getPositionY()), 2)) - this.getRadius() - other.getRadius());
+		return distance;
+	}
+	
+	/**
+	 * Check whether this ship overlaps with a given ship.
+	 * 
+	 * @param 	other
+	 * 			The given ship.
+	 * @return	True if and only if the distance between this ship and
+	 * 			the given ship is smaller than or equal to zero.
+	 * 			| result == (this.getDistanceBetween(ship2) <= 0)
+	 * @throws 	NullPointerException
+	 * 			The other ship is not effective
+	 * 			| other == null
+	 */
+	public boolean overlap(Entity other) throws NullPointerException{
+		if (other == null) throw new NullPointerException("The other ship is not effective");
+		if (this.getDistanceBetweenCenters(other) <= 0.99*(this.getRadius()+other.getRadius())){
+			return true;
+		}else{
+			return false;
 		}
 		
-		/**
-		 * Check whether the given duration is a valid
-		 * duration for any ship.
-		 * 
-		 * @param 	duration
-		 * 			The duration to check.
-		 * @return	True if and only if the duration is a real number,
-		 * 			greater than zero and not infinite.
-		 * 			| result == ( (!Double.isNaN(duration)) && (!Double.isInfinite(duration)) && (duration >= 0) )
-		 */
-		public static boolean isValidDuration(double duration){
-			if ( (!Double.isNaN(duration)) && (!Double.isInfinite(duration)) && (duration >= 0) ) {
-				return true;
-			}
-			else{
-				return false;
-			}
+	}
+	/**
+	 * Check whether this ship overlaps with a given ship.
+	 * 
+	 * @param 	other
+	 * 			The given ship.
+	 * @return	True if and only if the distance between this ship and
+	 * 			the given ship is smaller than or equal to zero.
+	 * 			| result == (this.getDistanceBetween(ship2) <= 0)
+	 * @throws 	NullPointerException
+	 * 			The other ship is not effective
+	 * 			| other == null
+	 */
+	@Model
+	public boolean overlapFiltered(Entity other) throws NullPointerException{
+		if (this == other) {
+			return false;
+		} else if ((this instanceof Ship) && (other instanceof Bullet) && (((Bullet)other).getShip() == this)){
+			return false;
+		}else if ((this instanceof Bullet) && (other instanceof Ship) && (((Bullet)this).getShip() == other)){
+			return false;
+		}else if ((this instanceof Bullet) && (other instanceof Bullet) && (((Bullet)this).getShip() == ((Bullet)other).getShip())){
+			return false;
+		}else{
+			return this.overlap(other);
 		}
-		
-		public double getDistanceBetweenCenters(Entity other) throws NullPointerException{
-			if (other == null) throw new NullPointerException("The other ship is not effective");
-			double distance = (Math.sqrt(Math.pow((other.getPositionX() - this.getPositionX()), 2) + Math.pow((other.getPositionY() - this.getPositionY()), 2)));
-			return distance;
-		}
-		
-		public double getDistanceBetween(Entity other) throws NullPointerException{
-			if (other == null) throw new NullPointerException("The other ship is not effective");
-			if (this == other){
-				return 0;
-			}
-			double distance = (Math.sqrt(Math.pow((other.getPositionX() - this.getPositionX()), 2) + Math.pow((other.getPositionY() - this.getPositionY()), 2)) - this.getRadius() - other.getRadius());
-			return distance;
-		}
-		
-		/**
-		 * Check whether this ship overlaps with a given ship.
-		 * 
-		 * @param 	other
-		 * 			The given ship.
-		 * @return	True if and only if the distance between this ship and
-		 * 			the given ship is smaller than or equal to zero.
-		 * 			| result == (this.getDistanceBetween(ship2) <= 0)
-		 * @throws 	NullPointerException
-		 * 			The other ship is not effective
-		 * 			| other == null
-		 */
-		public boolean overlap(Entity other) throws NullPointerException{
-			if (other == null) throw new NullPointerException("The other ship is not effective");
-			if (this.getDistanceBetweenCenters(other) <= 0.99*(this.getRadius()+other.getRadius())){
-				return true;
-			}else{
-				return false;
-			}
+	}
+	
+	/**
+	 * Return when (i.e. in how many seconds), if ever, this ship 
+	 * and a given ship will collide. This method does not apply to 
+	 * ships that overlap. If this ship and the given ship never collide,
+	 * return positive infinity.
+	 * 
+	 * @param 	other
+	 * 			The given ship.
+	 * @return 	The resulting time to collision is a double greater than zero.
+	 * 			| result > 0
+	 * @return	No smaller double that specifies the time to collision between
+	 * 			this ship and the given ship exists.
+	 * 			| for each double < result:
+	 * 			| 	this.getDistanceBetween(other) > 0
+	 * @throws 	IllegalStateException
+	 * 			The ships overlap.
+	 * 			| this.overlap(ship2)
+	 * @throws 	NullPointerException
+	 * 			The other ship is not effective
+	 * 			| other == null
+	 */
+	@Model
+	public double getTimeToCollision(Entity other)
+			throws IllegalArgumentException, NullPointerException{
+		if (other == null) throw new NullPointerException("The other ship is not effective");
+		if (this.overlapFiltered(other)) throw new IllegalArgumentException("This method does not apply to ships that overlap");
+		double diffX = other.getPosition()[0] - this.getPosition()[0];
+		double diffY = other.getPosition()[1] - this.getPosition()[1];
+		double diffVX = other.getVelocity()[0] - this.getVelocity()[0];
+		double diffVY = other.getVelocity()[1] - this.getVelocity()[1];
+		double distanceCentersSquared = Math.pow((this.getRadius() + other.getRadius()), 2);
+		double varD = (Math.pow((diffX*diffVX + diffY*diffVY), 2) - (Math.pow(diffVX,2) + Math.pow(diffVY,2))*((Math.pow(diffX,2) + Math.pow(diffY,2)) - distanceCentersSquared));
+		if ((diffVX*diffX + diffVY*diffY) >= 0 || varD <= 0){
+			return Double.POSITIVE_INFINITY;
+		}else{
+			double timeToCollision = -(diffVX*diffX + diffVY*diffY + Math.sqrt(varD))/((Math.pow(diffVX,2) + Math.pow(diffVY,2)));
 			
+			return timeToCollision;
 		}
-		/**
-		 * Check whether this ship overlaps with a given ship.
-		 * 
-		 * @param 	other
-		 * 			The given ship.
-		 * @return	True if and only if the distance between this ship and
-		 * 			the given ship is smaller than or equal to zero.
-		 * 			| result == (this.getDistanceBetween(ship2) <= 0)
-		 * @throws 	NullPointerException
-		 * 			The other ship is not effective
-		 * 			| other == null
-		 */
-		@Model
-		public boolean overlapFiltered(Entity other) throws NullPointerException{
-			if (this == other) {
-				return false;
-			} else if ((this instanceof Ship) && (other instanceof Bullet) && (((Bullet)other).getShip() == this)){
-				return false;
-			}else if ((this instanceof Bullet) && (other instanceof Ship) && (((Bullet)this).getShip() == other)){
-				return false;
-			}else if ((this instanceof Bullet) && (other instanceof Bullet) && (((Bullet)this).getShip() == ((Bullet)other).getShip())){
-				return false;
-			}else{
-				return this.overlap(other);
-			}
-		}
+	}
+	
+	/**
+	 * Return where, if ever, this ship and the given ship will collide. 
+	 * The method shall return null if the ships never collide. 
+	 * This method does not apply to ships that overlap.
+	 * 
+	 * @param 	other
+	 * 			The given ship.
+	 * @return	Null if this ship never collides with
+	 * 			the given ship.
+	 * 			| if (getTimeToCollision(ship2) == Double.POSITIVE_INFINITY)
+	 * 			|	then result == null
+	 * 			Otherwise, the position of the collision between 
+	 * 			this ship and the given ship.
+	 * 			| else
+	 * 			|	result == {collisionX2 + ship2.getRadius()*Math.cos(angleCenters), 
+	 * 			|			   collisionY2 + ship2.getRadius()*Math.sin(angleCenters)}
+	 * @throws	IllegalStateException
+	 * 			The ships overlap.
+	 * 			| this.overlap(ship2)
+	 * @throws 	NullPointerException
+	 * 			The other ship is not effective
+	 * 			| other == null
+	 */
+	public double[] getCollisionPosition(Entity other) throws NullPointerException, IllegalStateException{
+		if (other == null) throw new NullPointerException("The other ship is not effective");
+		if (this.overlapFiltered(other)) throw new IllegalArgumentException("This method does not apply to ships that overlap");
 		
-		/**
-		 * Return when (i.e. in how many seconds), if ever, this ship 
-		 * and a given ship will collide. This method does not apply to 
-		 * ships that overlap. If this ship and the given ship never collide,
-		 * return positive infinity.
-		 * 
-		 * @param 	other
-		 * 			The given ship.
-		 * @return 	The resulting time to collision is a double greater than zero.
-		 * 			| result > 0
-		 * @return	No smaller double that specifies the time to collision between
-		 * 			this ship and the given ship exists.
-		 * 			| for each double < result:
-		 * 			| 	this.getDistanceBetween(other) > 0
-		 * @throws 	IllegalStateException
-		 * 			The ships overlap.
-		 * 			| this.overlap(ship2)
-		 * @throws 	NullPointerException
-		 * 			The other ship is not effective
-		 * 			| other == null
-		 */
-		@Model
-		public double getTimeToCollision(Entity other)
-				throws IllegalArgumentException, NullPointerException{
-			if (other == null) throw new NullPointerException("The other ship is not effective");
-			if (this.overlapFiltered(other)) throw new IllegalArgumentException("This method does not apply to ships that overlap");
-			double diffX = other.getPosition()[0] - this.getPosition()[0];
-			double diffY = other.getPosition()[1] - this.getPosition()[1];
-			double diffVX = other.getVelocity()[0] - this.getVelocity()[0];
-			double diffVY = other.getVelocity()[1] - this.getVelocity()[1];
-			double distanceCentersSquared = Math.pow((this.getRadius() + other.getRadius()), 2);
-			double varD = (Math.pow((diffX*diffVX + diffY*diffVY), 2) - (Math.pow(diffVX,2) + Math.pow(diffVY,2))*((Math.pow(diffX,2) + Math.pow(diffY,2)) - distanceCentersSquared));
-			if ((diffVX*diffX + diffVY*diffY) >= 0 || varD <= 0){
-				return Double.POSITIVE_INFINITY;
-			}else{
-				double timeToCollision = -(diffVX*diffX + diffVY*diffY + Math.sqrt(varD))/((Math.pow(diffVX,2) + Math.pow(diffVY,2)));
-				
-				return timeToCollision;
-			}
-		}
-		
-		/**
-		 * Return where, if ever, this ship and the given ship will collide. 
-		 * The method shall return null if the ships never collide. 
-		 * This method does not apply to ships that overlap.
-		 * 
-		 * @param 	other
-		 * 			The given ship.
-		 * @return	Null if this ship never collides with
-		 * 			the given ship.
-		 * 			| if (getTimeToCollision(ship2) == Double.POSITIVE_INFINITY)
-		 * 			|	then result == null
-		 * 			Otherwise, the position of the collision between 
-		 * 			this ship and the given ship.
-		 * 			| else
-		 * 			|	result == {collisionX2 + ship2.getRadius()*Math.cos(angleCenters), 
-		 * 			|			   collisionY2 + ship2.getRadius()*Math.sin(angleCenters)}
-		 * @throws	IllegalStateException
-		 * 			The ships overlap.
-		 * 			| this.overlap(ship2)
-		 * @throws 	NullPointerException
-		 * 			The other ship is not effective
-		 * 			| other == null
-		 */
-		public double[] getCollisionPosition(Entity other) throws NullPointerException, IllegalStateException{
-			if (other == null) throw new NullPointerException("The other ship is not effective");
-			if (this.overlapFiltered(other)) throw new IllegalArgumentException("This method does not apply to ships that overlap");
-			
-			if (this.getTimeToCollision(other) == Double.POSITIVE_INFINITY){
-				return null;
-			}else{
-				double duration = this.getTimeToCollision(other);
-				double collisionX1 = (this.getPosition()[0] + duration*this.getVelocity()[0]);
-				double collisionY1 = (this.getPosition()[1] + duration*this.getVelocity()[1]);
-				double collisionX2 = (other.getPosition()[0] + duration*other.getVelocity()[0]);
-				double collisionY2 = (other.getPosition()[1] + duration*other.getVelocity()[1]);
-				double diffX = collisionX2 - collisionX1;
-				double diffY = collisionY2 - collisionY1;
-				double angleCenters = 0;
-				if (diffX*diffY >= 0){
-					if (diffX == 0){
-						if (diffY > 0){
-							angleCenters = -(Math.PI/2);
-						}else{
-							angleCenters = (Math.PI/2);
-						}
-					}else if ((diffX > 0) || (diffY == 0)){
-						angleCenters = Math.atan(diffY/diffX) + Math.PI;
-					}else if((diffX < 0) || (diffY == 0)){
-						angleCenters = Math.atan(diffY/diffX);
-					}
-				}else {
+		if (this.getTimeToCollision(other) == Double.POSITIVE_INFINITY){
+			return null;
+		}else{
+			double duration = this.getTimeToCollision(other);
+			double collisionX1 = (this.getPosition()[0] + duration*this.getVelocity()[0]);
+			double collisionY1 = (this.getPosition()[1] + duration*this.getVelocity()[1]);
+			double collisionX2 = (other.getPosition()[0] + duration*other.getVelocity()[0]);
+			double collisionY2 = (other.getPosition()[1] + duration*other.getVelocity()[1]);
+			double diffX = collisionX2 - collisionX1;
+			double diffY = collisionY2 - collisionY1;
+			double angleCenters = 0;
+			if (diffX*diffY >= 0){
+				if (diffX == 0){
 					if (diffY > 0){
-						angleCenters = Math.atan(diffY/diffX);
-					}else if(diffY < 0){
-						angleCenters = Math.atan(diffY/diffX) + Math.PI;
+						angleCenters = -(Math.PI/2);
+					}else{
+						angleCenters = (Math.PI/2);
 					}
+				}else if ((diffX > 0) || (diffY == 0)){
+					angleCenters = Math.atan(diffY/diffX) + Math.PI;
+				}else if((diffX < 0) || (diffY == 0)){
+					angleCenters = Math.atan(diffY/diffX);
 				}
-				
-				double[] collisionPoint = {collisionX2 + other.getRadius()*Math.cos(angleCenters), collisionY2 + other.getRadius()*Math.sin(angleCenters)};
-				return collisionPoint;
+			}else {
+				if (diffY > 0){
+					angleCenters = Math.atan(diffY/diffX);
+				}else if(diffY < 0){
+					angleCenters = Math.atan(diffY/diffX) + Math.PI;
+				}
 			}
+			
+			double[] collisionPoint = {collisionX2 + other.getRadius()*Math.cos(angleCenters), collisionY2 + other.getRadius()*Math.sin(angleCenters)};
+			return collisionPoint;
 		}
-		
-		public boolean apparentlyCollide(Entity other) {
-			if ( (this.getDistanceBetweenCenters(other) > 0.99*(this.getRadius() + other.getRadius()))
-					&& (this.getDistanceBetweenCenters(other) < 1.01*(this.getRadius() + other.getRadius())) )
-				return true;
-			else return false;
-		}
-		
-		@Basic @Immutable
-		public double getMass() {
-			return this.mass;
-		}
-		
-		@Raw
-		public void setMass(double mass){
-			if (!isValidMass(mass)){
-				if (isValidMass(this.getMass())){
-					return;
-				}else{
-				this.mass = this.calculateMinimalMass();
-				}
+	}
+	
+	public boolean apparentlyCollide(Entity other) {
+		if ( (this.getDistanceBetweenCenters(other) > 0.99*(this.getRadius() + other.getRadius()))
+				&& (this.getDistanceBetweenCenters(other) < 1.01*(this.getRadius() + other.getRadius())) )
+			return true;
+		else return false;
+	}
+	
+	@Basic @Immutable
+	public double getMass() {
+		return this.mass;
+	}
+	
+	@Raw
+	public void setMass(double mass){
+		if (!isValidMass(mass)){
+			if (isValidMass(this.getMass())){
+				return;
 			}else{
-				this.mass = mass;
+			this.mass = this.calculateMinimalMass();
 			}
+		}else{
+			this.mass = mass;
 		}
-		
-		@Basic
-		public double getDensity(double mass) {
-			double density = ((mass*3)/(4*(Math.PI)*Math.pow(this.getRadius(),3)));
-			return density;
-		}
-		
-		abstract double calculateMinimalMass();
-		
-		abstract boolean isValidMass(double mass);
-		
-		abstract void collidesWithBoundary(World world);
+	}
+	
+	@Basic
+	public double getDensity(double mass) {
+		double density = ((mass*3)/(4*(Math.PI)*Math.pow(this.getRadius(),3)));
+		return density;
+	}
+	
+	abstract double calculateMinimalMass();
+	
+	abstract boolean isValidMass(double mass);
+	
+	abstract void collidesWithBoundary(World world);
 
-		/**
-		 * Set the world of this space object to the given world.
-		 * 
-		 * @param	world
-		 * 			...
-		 * @post	...
-		 * 			new.getWorld() == world
-		 * @throws	IllegalArgumentException
-		 * 			( world == null || !world.getAllSpaceObjects().contains(this) )
-		 */
-		@Raw
-		public void setWorld(World world) throws IllegalArgumentException {
-			if (world == null)
-				throw new IllegalArgumentException ("Not a valid world for this entity");
-			this.world = world;
+	/**
+	 * Set the world of this space object to the given world.
+	 * 
+	 * @param	world
+	 * 			...
+	 * @post	...
+	 * 			new.getWorld() == world
+	 * @throws	IllegalArgumentException
+	 * 			( world == null || !world.getAllSpaceObjects().contains(this) )
+	 */
+	@Raw
+	public void setWorld(World world) throws IllegalArgumentException {
+		if (world == null)
+			throw new IllegalArgumentException ("Not a valid world for this entity");
+		this.world = world;
+	}
+	
+	public boolean hasWorld(){
+		return this.world != null;
+	}
+	
+	@Model
+	public World getWorld() {
+		return this.world;
+	}
+	
+	private World world = null;
+	
+	/**
+	 * Variable registering the mass of this ship.
+	 */
+	public double mass;
+	
+	@Raw
+	protected void removeFromWorld(){
+    	this.world = null;
+	}
+	protected void terminate() {
+		if (!this.isTerminated) {
+			if (this.getWorld() != null)
+				this.getWorld().removeEntity(this);
+			this.isTerminated = true;
 		}
-		
-		public boolean hasWorld(){
-			return this.world != null;
-		}
-		
-		@Model
-		public World getWorld() {
-			return this.world;
-		}
-		
-		private World world = null;
-		
-		/**
-		 * Variable registering the mass of this ship.
-		 */
-		public double mass;
-		
-		@Raw
-		protected void removeFromWorld(){
-	    	this.world = null;
-		}
-		protected void terminate() {
-			if (!this.isTerminated) {
-				if (this.getWorld() != null)
-					this.getWorld().removeEntity(this);
-				this.isTerminated = true;
-			}
-		}
-		
-		public boolean isTerminated(){
-			return this.isTerminated;
-		}
-		
-		private boolean isTerminated = false;
-		
-	}	
+	}
+	
+	public boolean isTerminated(){
+		return this.isTerminated;
+	}
+	
+	private boolean isTerminated = false;
+	
+}	
 
