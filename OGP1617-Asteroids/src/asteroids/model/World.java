@@ -4,7 +4,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import asteroids.part2.CollisionListener;
-//import asteroids.util.Util;
 import be.kuleuven.cs.som.annotate.*;
 
 /**
@@ -12,7 +11,14 @@ import be.kuleuven.cs.som.annotate.*;
  * and facilities to evolve the state of this world a given time.
  * 
  * @invar	...
- * 			| 
+ * 			| canHaveAsBoundaryLength(width)
+ * @invar	...
+ * 			| canHaveAsBoundaryLength(length)
+ * @invar	...
+ * 			| for each entity in allEntities:
+ * 			|	((this.withinBoundaries(entity)) &&
+ * 			|	(entity.getWorld() == this) &&
+ * 			|	(! this.overlapsWithOtherEntities(entity)))
  * 
  * @author 	Nicolas Desmedt and Lucas Desard
  * @version 1.0
@@ -37,18 +43,30 @@ public class World{
 	 * 			| new.getAllEntities().isEmpty() == true
 	 */
 	public World(double width, double height){
-		if ((width < 0) || (width > upperBound) || (Double.isNaN(width))) 
+		if (!canHaveAsBoundaryLength(width)) 
 			width = upperBound;
-		if ((height < 0) || (height > upperBound) || (Double.isNaN(width)))
+		if (!canHaveAsBoundaryLength(height)) 
 			height = upperBound;
 		this.width = width;
 		this.height = height;
 	}
 	
 	/**
+	 * Return a boolean indicating whether or not a world can have the 
+	 * 	given boundary length as the length of its boundary.
+	 */
+	@Raw
+	public static boolean canHaveAsBoundaryLength(double length) {
+		if ((length < 0) || (length > upperBound) || (Double.isNaN(length)))
+			return false;
+		else
+			return true;
+	}
+	
+	/**
 	 * Return the upper bound on the height and the width.
 	 */
-	@Basic @Immutable
+	@Basic @Immutable 
 	public static double getUpperBound() {
 		return World.upperBound;
 	}
@@ -136,6 +154,7 @@ public class World{
 	 * @return	...
 	 * 			| @see implementation
 	 */
+	 @Model
 	public boolean withinBoundaries(Entity entity) {
 		double xPos = entity.getPositionX();
 		double yPos = entity.getPositionY();
@@ -241,6 +260,7 @@ public class World{
 	 * @return	...
 	 * 			| @see implementation
 	 */
+	@Raw @Model
 	public boolean overlapsWithOtherEntities(Entity entity) {
 		for (Entity other : allEntities) {
 			if (entity.overlapFiltered(other)){
@@ -249,8 +269,6 @@ public class World{
 		}
 		return false;
 	}
-	
-	
 	
 	/**
 	 * Add the given entity to this world.
@@ -336,6 +354,7 @@ public class World{
 	 * 			| 	if (entity.getWorld() == this)
 	 * 			|		then result.contains(entity)
 	 */
+	@Basic @Model
 	public Set<Entity> getAllEntities() {
 		return new HashSet<Entity>(allEntities);
 	}
@@ -507,6 +526,7 @@ public class World{
 	 * 			|		(entity.getTimeToCollision(other)))
 	 * 			|			throws IllegalArgumentException
 	 */
+	@Model
 	public double getTimeToNextCollisionEntity(Entity entity) throws IllegalArgumentException {
 		double time = this.getTimeCollisionToBoundary(entity);
 		Set<Entity> allEntitiesCopy = getAllEntities();
@@ -530,7 +550,7 @@ public class World{
 	 * 
 	 * @return	...
 	 * 			| for each entity in allEntities:
-	 * 			|	result <= this.getTimeToCollision(entity)
+	 * 			|	result <= this.getTimeToNextCollision(entity)
 	 */
 	public double getTimeToNextCollision() {
 		double time = Double.POSITIVE_INFINITY;
@@ -553,8 +573,9 @@ public class World{
 	 * 
 	 * @return	...
 	 * 			| for each entity not in result:
-	 * 			| 	this.getTimeToCollision(entity) > this.getTimeToCollision(result[0])
+	 * 			| 	this.getTimeToNextCollision(entity) > this.getTimeToNextCollision(result[0])
 	 */
+	@Model
 	public Entity[] getFirstCollidingEntities() {
 		Entity[] firstCollidingEntities = new Entity[]{null,null};
 		double timeToNextCollision = getTimeToNextCollision();
@@ -610,6 +631,7 @@ public class World{
 	 * @return	...
 	 * 			| result[0].overlapFiltered(result[1]) == true;
 	 */
+	@Raw
 	public Entity[] getOverlappingEntities() {
 		Entity[] overlappingEntities = new Entity[]{null,null};
 		Set<Entity> allEntitiesCopy = getAllEntities();
@@ -631,6 +653,7 @@ public class World{
 	 * Evolve the state of this world a given amount of time and 
 	 * update the collisionListener on any collisions occurring.
 	 */
+	@Raw
 	public void evolve(double dt, CollisionListener collisionListener) throws IllegalArgumentException {
 		if (dt < 0) {
 			throw new IllegalArgumentException("The given amount of time must be positive");
@@ -664,14 +687,14 @@ public class World{
 	 * 			The given duration.
 	 * @pre		No collisions occur during the given duration.
 	 * 			| for each entity in allEntities:
-	 * 			|	this.getTimeToCollision(entity) >= duration
+	 * 			|	this.getTimeToNextCollision(entity) >= duration
 	 * @effect	...
 	 * 			| @see implementation
 	 */
 	public void advanceAllEntities (double dt) {
 		assert this.getTimeToNextCollision() >= dt;
 		for (Entity entity : allEntities) {
-			entity.move(dt);	
+			entity.move(dt);
 		}
 	}
 	
@@ -720,6 +743,7 @@ public class World{
 	 * 			...
 	 * 			| this.getTimeToNextCollision() > 0
 	 */
+	@Raw
  	public void updateCollisionListener(CollisionListener collisionListener) throws IllegalStateException {
  		Entity entity1 = null;
  		Entity entity2 = null;

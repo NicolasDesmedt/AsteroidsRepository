@@ -185,11 +185,30 @@ public class Bullet extends Entity{
 	 * A newly created bullet doesn't belong to a ship.
 	 */
 	public Ship ship = null;
+ 	
+ 	public World getWorld(){
+ 		return this.world;
+ 	}
+ 	
+ 	public boolean hasWorld(){
+ 		return this.world != null;
+	}
+  	
+ 	public void setWorld(World world) throws IllegalArgumentException {
+ 		if (this.hasShip())
+ 			this.setShip(null);
+ 		if (!hasShip() && !hasWorld()){
+			this.world = world;
+		}else{
+			throw new IllegalArgumentException();
+ 		}
+ 	}
+  	
+ 	public World world;
 	
 	/**
 	 * Returns the number of times the bullet has collided with a boundary of the world.
 	 */
-	
 	public int getCounterBoundaryCollisions() {
 		return this.counterBoundaryCollisions;
 	}
