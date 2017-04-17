@@ -1,8 +1,6 @@
 package asteroids.model;
 
-import be.kuleuven.cs.som.annotate.Basic;
-import be.kuleuven.cs.som.annotate.Immutable;
-import be.kuleuven.cs.som.annotate.Raw;
+import be.kuleuven.cs.som.annotate.*;
 
 public abstract class Entity {
 	
@@ -30,7 +28,7 @@ public abstract class Entity {
 	 * Return the position of the entity.
 	 * 	The position of an entity locates the ship in an unbounded two-dimensional space.
 	 */
-	@Basic @Raw
+	@Basic @Raw 
 	public double[] getPosition(){
 		return position.clone();
 	}
@@ -397,6 +395,7 @@ public abstract class Entity {
 		 * 			The other ship is not effective
 		 * 			| other == null
 		 */
+		@Model
 		public boolean overlapFiltered(Entity other) throws NullPointerException{
 			if (this == other) {
 				return false;
@@ -432,6 +431,7 @@ public abstract class Entity {
 		 * 			The other ship is not effective
 		 * 			| other == null
 		 */
+		@Model
 		public double getTimeToCollision(Entity other)
 				throws IllegalArgumentException, NullPointerException{
 			if (other == null) throw new NullPointerException("The other ship is not effective");
@@ -572,6 +572,7 @@ public abstract class Entity {
 			return this.world != null;
 		}
 		
+		@Model
 		public World getWorld() {
 			return this.world;
 		}
@@ -587,7 +588,6 @@ public abstract class Entity {
 		protected void removeFromWorld(){
 	    	this.world = null;
 		}
-		
 		protected void terminate() {
 			if (!this.isTerminated) {
 				if (this.getWorld() != null)
