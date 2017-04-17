@@ -40,7 +40,6 @@ public class Bullet extends Entity{
 	 * 			The given argument is not a valid argument for a bullet.
 	 * 			| (! isValidPosition(position)) ||  (! isValidRadius(radius))
 	 */
-	
 	public Bullet(double x, double y, double xVelocity, double yVelocity, double radius) 
 			throws IllegalArgumentException{
 		this(x, y, xVelocity, yVelocity, radius, calculateMassBullet(minBulletRadius), SPEED_OF_LIGHT);
@@ -66,7 +65,6 @@ public class Bullet extends Entity{
 	 * 			minBulletRadius and minimal bullet mass, and its maxSpeed equal to SPEED_OF_LIGHT. 
 	 * 			| this(0,0,0,0,minBulletRadius);
 	 */
-	
 	public Bullet(){
 		this(0, 0, 0, 0, minBulletRadius);
 
@@ -107,7 +105,6 @@ public class Bullet extends Entity{
      * 			minimal density and not be NaN.
      *       	| @see implementation
      */
-	 
 	public boolean isValidMass(double mass){
 		if ((getDensity(mass) >= minBulletDensity) && (mass < Double.MAX_VALUE) && (!Double.isNaN(mass))){
 			return true;
@@ -125,7 +122,6 @@ public class Bullet extends Entity{
 	/**
      * Variable registering the minimal density of all bullets.
      */
-	
 	public final static double minBulletDensity = 7.8E12;
 	
 	/**
@@ -133,7 +129,6 @@ public class Bullet extends Entity{
 	 * @return Returns the mass assuming it has minBulletDensity
 	 *         | @see implementation
 	 */
-	
 	public static double calculateMassBullet(double radius){
 		return ((4*Math.PI*Math.pow(radius, 3)*minBulletDensity)/3);
 	}
@@ -146,7 +141,6 @@ public class Bullet extends Entity{
      * @return The radius must be bigger than the minBulletRadius and not be infinite or NaN.
      *       	| @see implementation
      */
-	
 	public boolean isValidRadius(double radius){
 		if ( (radius >= minBulletRadius) && (!Double.isInfinite(radius)) && (!Double.isNaN(radius)) ) {
 			return true;
@@ -190,7 +184,6 @@ public class Bullet extends Entity{
 	 * Variable registering the ship to which the bullet belongs.
 	 * A newly created bullet doesn't belong to a ship.
 	 */
-	
 	public Ship ship = null;
 	
 	/**
