@@ -351,9 +351,6 @@ public abstract class Entity {
 		
 		public double getDistanceBetweenCenters(Entity other) throws NullPointerException{
 			if (other == null) throw new NullPointerException("The other ship is not effective");
-			if (this == other){
-				return 0;
-			}
 			double distance = (Math.sqrt(Math.pow((other.getPositionX() - this.getPositionX()), 2) + Math.pow((other.getPositionY() - this.getPositionY()), 2)));
 			return distance;
 		}
@@ -436,7 +433,7 @@ public abstract class Entity {
 		 * 			| other == null
 		 */
 		public double getTimeToCollision(Entity other)
-				throws IllegalStateException, NullPointerException{
+				throws IllegalArgumentException, NullPointerException{
 			if (other == null) throw new NullPointerException("The other ship is not effective");
 			if (this.overlapFiltered(other)) throw new IllegalArgumentException("This method does not apply to ships that overlap");
 			double diffX = other.getPosition()[0] - this.getPosition()[0];
@@ -449,9 +446,7 @@ public abstract class Entity {
 				return Double.POSITIVE_INFINITY;
 			}else{
 				double timeToCollision = -(diffVX*diffX + diffVY*diffY + Math.sqrt(varD))/((Math.pow(diffVX,2) + Math.pow(diffVY,2)));
-				if (timeToCollision<0){
-					timeToCollision = 0;
-				}
+				
 				return timeToCollision;
 			}
 		}
@@ -519,15 +514,9 @@ public abstract class Entity {
 			}
 		}
 		
-		public double getDistanceBetweenRadii(Entity other) {
-			double distance = (Math.sqrt(Math.pow((other.getPositionX() - this.getPositionX()), 2) 
-								+ Math.pow((other.getPositionY() - this.getPositionY()), 2)) );
-			return distance;
-		}
-		
 		public boolean apparentlyCollide(Entity other) {
-			if ( (this.getDistanceBetweenRadii(other) > 0.99*(this.getRadius() + other.getRadius()))
-					&& (this.getDistanceBetweenRadii(other) < 1.01*(this.getRadius() + other.getRadius())) )
+			if ( (this.getDistanceBetweenCenters(other) > 0.99*(this.getRadius() + other.getRadius()))
+					&& (this.getDistanceBetweenCenters(other) < 1.01*(this.getRadius() + other.getRadius())) )
 				return true;
 			else return false;
 		}
@@ -573,7 +562,7 @@ public abstract class Entity {
 		 * 			( world == null || !world.getAllSpaceObjects().contains(this) )
 		 */
 		@Raw
-		protected void setWorld(World world) throws IllegalArgumentException {
+		public void setWorld(World world) throws IllegalArgumentException {
 			if (world == null)
 				throw new IllegalArgumentException ("Not a valid world for this entity");
 			this.world = world;
@@ -591,7 +580,7 @@ public abstract class Entity {
 		public double mass;
 		
 		@Raw
-		protected void removeFromWorld() throws IllegalArgumentException {
+		protected void removeFromWorld(){
 	    	this.world = null;
 		}
 		

@@ -676,7 +676,7 @@ public class World{
 				Ship ship = (Ship)entity;
 				//double velocityToAdd = ship.getThrusterForce()*duration / (ship.getMass()*1000);
 				//ship.thrust(velocityToAdd); 
-			}	
+			}
 		}
 	}
 	

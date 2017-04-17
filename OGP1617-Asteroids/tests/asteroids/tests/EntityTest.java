@@ -266,6 +266,23 @@ public class EntityTest {
 	}
 	
 	@Test
+	public void GetDistanceBetweenCenters_LegalCase(){
+		double distance = immutableShip1.getDistanceBetweenCenters(immutableShip2);
+		assertEquals(Math.sqrt(20000), distance, EPSILON);
+	}
+	
+	@Test
+	public void GetDistanceBetweenCenters_Itselfs(){
+		double distance = immutableShip1.getDistanceBetweenCenters(immutableShip1);
+		assertEquals(0, distance, EPSILON);
+	}
+	
+	@Test(expected = NullPointerException.class)
+	public void GetDistanceBetweenCenters_NullShip(){
+		immutableShip1.getDistanceBetweenCenters(null);
+	}
+	
+	@Test
 	public void GetDistanceBetween_LegalCase(){
 		double distance = immutableShip1.getDistanceBetween(immutableShip2);
 		assertEquals(Math.sqrt(20000)-immutableShip1.getRadius()-immutableShip2.getRadius(), distance, EPSILON);
@@ -308,13 +325,12 @@ public class EntityTest {
 		double timeToCollision = immutableShip1.getTimeToCollision(immutableShip2);
 		assertEquals(Double.POSITIVE_INFINITY, timeToCollision, EPSILON);
 	}
-	/*
-	@Test(expected = IllegalStateException.class)
+
+	@Test(expected = IllegalArgumentException.class)
 	public void GetTimeToCollision_OverlappingShips() throws IllegalStateException, NullPointerException{
 		immutableShip2.getTimeToCollision(immutableShip3);
 	}
-	*/
-	
+
 	@Test(expected = NullPointerException.class)
 	public void GetTimeToCollision_NullShip() throws IllegalStateException, NullPointerException{
 		immutableShip2.getTimeToCollision(null);
@@ -324,7 +340,7 @@ public class EntityTest {
 	public void getCollisionPosition_LegalCase() throws NullPointerException, IllegalStateException{
 		double[] CollisionPosition = immutableShip1.getCollisionPosition(immutableShip3);
 		assertEquals(10, CollisionPosition[0], EPSILON);
-		assertEquals(-70, CollisionPosition[1], EPSILON);
+		assertEquals(-90, CollisionPosition[1], EPSILON);
 	}
 
 	@Test

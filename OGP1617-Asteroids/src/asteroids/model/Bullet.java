@@ -122,14 +122,11 @@ public class Bullet extends Entity{
 	
 	public void collidesWithBoundary(World world) {
 		if (!this.getWorld().withinBoundaries(this)) {
-			System.out.println("bullet should be terminated");
 			this.terminate();
 		}else {
 			this.setCounterBoundaryCollisions(getCounterBoundaryCollisions() + 1);
 			if (getCounterBoundaryCollisions() == getMaxBoundaryCollisions()) {
 					this.terminate();
-					//this.removeFromWorld();
-					//world.removeEntity(this);
 					return;
 			}
 			else if (world.getDistanceToNearestHorizontalBoundary(this) <
@@ -153,14 +150,5 @@ public class Bullet extends Entity{
 	public void cancelsOut(Bullet other) {
 		this.terminate();
 		other.terminate();
-	}
-	
-//	public void getsHitBy(Ship other) {
-//		if (this.getSource() == other)
-//			other.loadBulletOnShip(this);
-//		else {
-//			this.terminate();
-//			other.terminate();
-//		}
-//	}
+	}	
 }

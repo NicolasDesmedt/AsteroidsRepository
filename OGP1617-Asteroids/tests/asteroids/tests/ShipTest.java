@@ -39,6 +39,8 @@ public class ShipTest {
 	
 	private static Bullet mutableMinimalBullet, mutableBullet1;
 	
+	private static World world1000x1000;
+	
 	/**
 	 * Set up a mutable test fixture.
 	 * 
@@ -75,7 +77,7 @@ public class ShipTest {
 	public static void setUpImmutableFixture() {
 		immutableShip1 = new Ship(0,0,0,0,10,(Math.PI/2));
 		immutableMinimalShip = new Ship(0,0,0,0,Ship.minRadiusShip,0);
-		
+		world1000x1000 = new World (1000,1000);
 	}
 	
 	@Test
@@ -233,8 +235,6 @@ public class ShipTest {
 		assertEquals(mutableMinimalBullet.getShip(), mutableShip2);
 		assertEquals(mutableMinimalBullet.getPositionX(), mutableShip2.getPositionX(), EPSILON);
 		assertEquals(mutableMinimalBullet.getPositionY(), mutableShip2.getPositionY(), EPSILON);
-		assertEquals(mutableMinimalBullet.getVelocityX(), mutableShip2.getVelocityX(), EPSILON);
-		assertEquals(mutableMinimalBullet.getVelocityY(), mutableShip2.getVelocityY(), EPSILON);
 	}
 	
 	@Test
@@ -251,12 +251,8 @@ public class ShipTest {
 		assertEquals(mutableBullet1.getShip(), mutableShip2);
 		assertEquals(mutableMinimalBullet.getPositionX(), mutableShip2.getPositionX(), EPSILON);
 		assertEquals(mutableMinimalBullet.getPositionY(), mutableShip2.getPositionY(), EPSILON);
-		assertEquals(mutableMinimalBullet.getVelocityX(), mutableShip2.getVelocityX(), EPSILON);
-		assertEquals(mutableMinimalBullet.getVelocityY(), mutableShip2.getVelocityY(), EPSILON);
 		assertEquals(mutableBullet1.getPositionX(), mutableShip2.getPositionX(), EPSILON);
 		assertEquals(mutableBullet1.getPositionY(), mutableShip2.getPositionY(), EPSILON);
-		assertEquals(mutableBullet1.getVelocityX(), mutableShip2.getVelocityX(), EPSILON);
-		assertEquals(mutableBullet1.getVelocityY(), mutableShip2.getVelocityY(), EPSILON);
 	}
 	
 	@Test
@@ -289,13 +285,13 @@ public class ShipTest {
 	
 	@Test
 	public void fireBullet_LegalCase(){
+		mutableShip2.setWorld(world1000x1000);
 		mutableShip2.loadBulletOnShip(mutableMinimalBullet);
 		mutableShip2.fireBullet();
 		assertEquals(mutableMinimalBullet.getVelocityX(), 0, EPSILON);
 		assertEquals(mutableMinimalBullet.getVelocityY(), Ship.bulletSpeed, EPSILON);
 		assertFalse(mutableShip2.getBulletsOnShip().contains(mutableMinimalBullet));
 		assertEquals(mutableMinimalBullet.getSource(), mutableShip2);
-
 	}
 	
 	@Test
@@ -304,7 +300,6 @@ public class ShipTest {
 		mutableShip2.putInFiringPosition(mutableMinimalBullet);
 		assertEquals(mutableMinimalBullet.getPositionX(), 10, EPSILON);
 		assertEquals(mutableMinimalBullet.getPositionY(), (10+mutableShip2.getRadius()+mutableMinimalBullet.getRadius()), EPSILON);
-
 	}
 	
 	@Test
