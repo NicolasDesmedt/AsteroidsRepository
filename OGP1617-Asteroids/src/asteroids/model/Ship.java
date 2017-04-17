@@ -64,22 +64,35 @@ public class Ship extends Entity{
 	public Ship(double x, double y, double xVelocity, double yVelocity, double radius, double orientation) 
 			throws IllegalArgumentException{
 		this(x, y, xVelocity, yVelocity, radius, orientation, 0, SPEED_OF_LIGHT);
-
+		
 	}
 	
 	public Ship(double x, double y, double xVelocity, double yVelocity, double radius, double orientation, double mass) 
 			throws IllegalArgumentException{
 		this(x, y, xVelocity, yVelocity, radius, orientation, mass, SPEED_OF_LIGHT);
-
+		
 	}
 	
 	public Ship(double x, double y, double xVelocity, double yVelocity, double radius, double orientation, double mass, double maxSpeed) 
 			throws IllegalArgumentException{
 		super(x, y, xVelocity, yVelocity, radius, mass, maxSpeed);
 		this.setOrientation(orientation);
-		this.thrusterForce = defaultThrusterForce;
-		//Bullet newBullet = new Bullet(0,0,0,0,10,0);
-		//this.loadBulletOnShip(newBullet);
+		this.thrusterForce = defaultThrusterForce;	
+		
+	}
+	
+	/**
+	 * Initialize this new ship in the origin of the axes with zero velocity, with a radius 
+	 * set to its lowest possible value and with an orientation facing up at an angle of PI/2.
+	 * 
+	 * @effect	This new ship is initialized with the x-coordinate, y-coordinate, 
+	 * 			xVelocity and yVelocity being zero, the radius being of minimal value minRadius,
+	 * 			and the orientation of the ship being PI/2.
+	 * 			| this(0,0,0,0,minRadius,(Math.PI/2));
+	 */
+
+	public Ship(){
+		this(0,0,0,0,minRadiusShip,(Math.PI/2), 0);
 		
 	}
 	
@@ -88,6 +101,7 @@ public class Ship extends Entity{
 			bullet.terminate();
 		}
 		super.terminate();
+		
 	}
 	
 	
@@ -104,20 +118,6 @@ public class Ship extends Entity{
 	}
 	
 	public static final double MIN_DENSITY = 1.42E12;
-	
-	/**
-	 * Initialize this new ship in the origin of the axes with zero velocity, with a radius 
-	 * set to its lowest possible value and with an orientation facing up at an angle of PI/2.
-	 * 
-	 * @effect	This new ship is initialized with the x-coordinate, y-coordinate, 
-	 * 			xVelocity and yVelocity being zero, the radius being of minimal value minRadius,
-	 * 			and the orientation of the ship being PI/2.
-	 * 			| this(0,0,0,0,minRadius,(Math.PI/2));
-	 */
-
-	public Ship(){
-		this(0,0,0,0,minRadiusShip,(Math.PI/2), 0);
-	}
 
 	/**
 	 * Check whether the given radius is a valid radius for
@@ -261,7 +261,7 @@ public class Ship extends Entity{
 		}
 	}
 
-	public final static double defaultThrusterForce = 2.1E21;
+	public final static double defaultThrusterForce = 1.1E21;
 	
 	public void setThrusterForce(double newThrusterforce){
 		if ( (newThrusterforce>=0) && (!Double.isInfinite(newThrusterforce)) && (!Double.isNaN(newThrusterforce))){
@@ -326,15 +326,13 @@ public class Ship extends Entity{
     }
 	
 	public void fireBullet(){
-		if ((this.getNbBulletsOnShip() == 0)){   // || this.getWorld() == null)
-			System.out.println("no bullets left");
+		if ((this.getNbBulletsOnShip() == 0) || (this.getWorld() == null)){
 			return;
 		}
 		Bullet bullet = this.selectLoadedBullet();
 		if (!bullet.isTerminated()){
 			this.getWorld().addEntity(bullet);
 			this.removeBulletFromShip(bullet);
-			System.out.println("fire " + this.getNbBulletsOnShip());
 			this.putInFiringPosition(bullet);
 			bullet.setVelocity(bulletSpeed*Math.cos(this.getOrientation()), bulletSpeed*Math.sin(this.getOrientation()));
 			bullet.setSource(this);
@@ -389,7 +387,6 @@ public class Ship extends Entity{
 	
 	public void getsHitBy(Bullet other) {
 		if (other.getSource() == this){
-			System.out.println("hertanken");
 			this.loadBulletOnShip(other);
 		}else{
 			this.terminate();

@@ -501,53 +501,9 @@ public class World{
 		}
 		if (entity2 == null)
 			return this.getPositionCollisionWithBoundary(entity1);
-//		else if (entity1.overlap(entity2)) {
-//			double diffX = entity2.getPositionX() - entity1.getPositionX();
-//			double diffY = entity2.getPositionY() - entity1.getPositionY();
-//			double angleCenters = 0;
-//			if (diffX*diffY >= 0){
-//				if (diffX == 0){
-//					if (diffY > 0){
-//						angleCenters = (Math.PI/2);
-//					}else{
-//						angleCenters = -(Math.PI/2);
-//					}
-//				}else if ((diffX > 0) || (diffY == 0)){
-//					angleCenters = Math.atan(diffY/diffX) + Math.PI;
-//				}else if((diffX < 0) || (diffY == 0)){
-//					angleCenters = Math.atan(diffY/diffX);
-//				}
-//			}else {
-//				if (diffY > 0){
-//					angleCenters = Math.atan(diffY/diffX);
-//				}else if(diffY < 0){
-//					angleCenters = Math.atan(diffY/diffX) + Math.PI;
-//				}
-//			}
-//			double[] collisionPoint = {entity2.getPositionX() + entity2.getRadius()*Math.cos(angleCenters), 
-//					entity2.getPositionY() + entity2.getRadius()*Math.sin(angleCenters)};
-//			return collisionPoint;
-//		}
 		else
 			return entity1.getCollisionPosition(entity2);
 	}
-	
-//	public Hashtable<Entity, Entity> getCollidingEntities() {
-//		Set<Entity> allEntitiesCopy = getAllEntities();
-//		Set<Entity> otherAllEntitiesCopy = getAllEntities();
-//		for (Entity entity : allEntitiesCopy) {
-//			otherAllEntitiesCopy.remove(entity);
-//			for (Entity other : otherAllEntitiesCopy) {
-//				if (entity.apparentlyCollide(other)){
-//					collidingEntities.put(entity, other);
-//					allEntitiesCopy.remove(other);
-//				}else if (!((entity.getVelocityX()!=0) && (entity.getVelocityY()!=0))){
-//					collidingEntities.put(entity, null);
-//				}
-//			}
-//		}
-//		return collidingEntities;
-//	}
 	
 	public Entity[] getOverlappingEntities() {
 		Entity[] overlappingEntities = new Entity[]{null,null};
@@ -565,9 +521,7 @@ public class World{
 		}
 		return overlappingEntities;
 	}
-	
-	//private Hashtable<Entity, Entity> collidingEntities = new Hashtable<Entity, Entity>();
-	
+		
 	/**
 	 * no specification, defensive
 	 * @param dt
@@ -598,12 +552,7 @@ public class World{
 	public void advanceAllEntities (double duration) {
 		for (Entity entity : allEntities) {
 			entity.move(duration);	
-			if (entity instanceof Ship && ((Ship)entity).isShipThrusterActive()) {
-				Ship ship = (Ship)entity;
-				//double velocityToAdd = ship.getThrusterForce()*duration / (ship.getMass()*1000);
-				//ship.thrust(velocityToAdd); 
 			}	
-		}
 	}
 	
 	public void resolveCollisions() {
