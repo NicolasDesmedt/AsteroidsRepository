@@ -135,7 +135,7 @@ public class World{
 	  * Return a boolean indicating whether or not this world
 	  * is terminated.
 	  */
-	 @Basic @Raw
+	 @Basic @Raw @Model
 	 public boolean isTerminated() {
 		 return this.isTerminated;
 	 }
