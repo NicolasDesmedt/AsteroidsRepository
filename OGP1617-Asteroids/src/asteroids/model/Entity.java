@@ -568,6 +568,10 @@ public abstract class Entity {
 			this.world = world;
 		}
 		
+		public boolean hasWorld(){
+			return this.world != null;
+		}
+		
 		public World getWorld() {
 			return this.world;
 		}
