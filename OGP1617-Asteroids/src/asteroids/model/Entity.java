@@ -512,22 +512,23 @@ public abstract class Entity {
 	abstract void collidesWithBoundary(World world);
 
 	/**
-	 * Set the world of this space object to the given world.
+	 * Set the world of this entity to the given world.
 	 * 
 	 * @param	world
-	 * 			...
+	 * 			The given world
 	 * @post	...
 	 * 			new.getWorld() == world
 	 * @throws	IllegalArgumentException
-	 * 			( world == null || !world.getAllSpaceObjects().contains(this) )
+	 * 			| (world == null) || (this.hasWorld())
 	 */
 	@Raw
 	public void setWorld(World world) throws IllegalArgumentException {
-		if (world == null)
+		if ((world == null) || (this.hasWorld()))
 			throw new IllegalArgumentException ("Not a valid world for this entity");
 		this.world = world;
 	}
 	
+	@Model
 	public boolean hasWorld(){
 		return this.world != null;
 	}
