@@ -7,22 +7,21 @@ import be.kuleuven.cs.som.annotate.*;
 //import be.kuleuven.cs.som.taglet.*;
 
 /**
- * A class for flying a ship in space involving the position, radius, velocity
- * and orientation of the ship. With facilities to move the ship by accelerating
- * and turning and a facility to predict the time and location of it colliding 
- * with an other ship.
+ * A class for flying a ship in space involving the mass, radius
+ * and orientation of the ship. With facilities to accelerate the ship by thrusting,
+ * to fire of bullets from the ship and to resolve collisions this ship is a part of.
  * 
- * @invar	The position of each ship must be a valid position for any ship.
- * 			| isValidPosition(getPosition())
- * @invar	The velocity of each ship must be a valid velocity for any ship.
- * 			| isValidVelocity(getVelocity())
+ * @invar	The mass of each ship must be a valid mass for any ship.
+ * 			| isValidMass(getMass())
+ * @invar	The orientation of each entity must be a valid orientation for any entity.
+ * 			| isValidOrientation(getOrientation())
  * @invar	The radius of each ship must be a valid radius for any ship.
  * 			| isValidRadius(getRadius())
- * @invar	The orientation of each ship must be a valid orientation for any ship.
- * 			| isValidOrientation(getOrientation())
  * 
  * @version	1.0
  * @author 	Lucas Desard and Nicolas Desmedt
+ * 
+ * TODO: specification for various methods
  * 			
  * Course studies: 2nd Bachelor Engineering: Computer science/Electrical Engineering
  * Code Repository: https://github.com/NicolasDesmedt/RepositoryLucasNicolas
@@ -246,12 +245,21 @@ public class Ship extends Entity{
 		}
 	}
 	
+	/**
+	 * Return a boolean indicating whether or not the thruster of this ship is active.
+	 */
 	public boolean isShipThrusterActive(){
 		return isTrusterOn;
 	}
 	
+	/**
+	 * A boolean registering whether or not the thruster of this ship is on.
+	 */
 	private boolean isTrusterOn;
 	
+	/**
+	 * Set the thruster to a given boolean.
+	 */
 	public void setThrust(boolean active){
 		if(active){
 			isTrusterOn = true;
@@ -260,9 +268,17 @@ public class Ship extends Entity{
 
 		}
 	}
-
+	
+	/**
+	 * A variable registering the default thruster force.
+	 */
 	public final static double defaultThrusterForce = 1.1E21;
 	
+	/**
+	 * Set the thruster force of this ship to a given thruster force.
+	 * 
+	 * @param newThrusterforce
+	 */
 	public void setThrusterForce(double newThrusterforce){
 		if ( (newThrusterforce>=0) && (!Double.isInfinite(newThrusterforce)) && (!Double.isNaN(newThrusterforce))){
 			this.thrusterForce = newThrusterforce;
@@ -270,18 +286,38 @@ public class Ship extends Entity{
 			this.thrusterForce = defaultThrusterForce;
 		}
 	}
-
+	
+	/**
+	 * Return the thruster force of this ship.
+	 * 
+	 * @return
+	 */
+	@Basic
 	public double getThrusterForce(){
 		return this.thrusterForce;
 	}
 	
+	/**
+	 * A variable registering the thruster force of this ship.
+	 */
 	public double thrusterForce;
 	
+	/**
+	 * Return the acceleration of this ship.
+	 * 
+	 * @return
+	 */
 	public double getAcceleration(){
 		double acceleration = this.getThrusterForce()/this.getMass();
 		return acceleration;
 	}
 	
+	/**
+	 * Load a given bullet on this ship. The mass of the bullet gets added
+	 * to the mass of the ship.
+	 * 
+	 * @param bullet
+	 */
 	public void loadBulletOnShip(Bullet bullet){
 		this.bullets.add(bullet);
 		this.setMass(this.getMass() + bullet.getMass());
@@ -290,23 +326,47 @@ public class Ship extends Entity{
 		bullet.setPosition(this.getPositionX(), this.getPositionY());
 		bullet.setVelocity(0, 0);
 	}
-
+	
+	/**
+	 * Load an array of bullets on this ship.
+	 * 
+	 * @param bullets
+	 */
 	public void loadBulletsOnShip(Bullet[] bullets){
 		for(Bullet bullet: bullets){
 			this.loadBulletOnShip(bullet);
 		}
 	}
 	
+	/**
+	 * A variable set registering all the bullets on this ship.
+	 */
 	public Set<Bullet> bullets = new HashSet<>();
 	
+	/**
+	 * Return a set containing all the bullets on this ship.
+	 * 
+	 * @return
+	 */
+	@Basic
 	public Set<Bullet> getBulletsOnShip(){
 		return this.bullets;
 	}
 	
+	/**
+	 * Return the amount of bullets on this ship.
+	 * 
+	 * @return
+	 */
 	public int getNbBulletsOnShip(){
 		return this.bullets.size();
 	}
 	
+	/**
+	 * Remove the given bullet from this ship.
+	 * 
+	 * @param bullet
+	 */
 	public void removeBulletFromShip(Bullet bullet){
 		if (this.getBulletsOnShip().contains(bullet)){
 			bullet.setShip(null);
@@ -314,6 +374,12 @@ public class Ship extends Entity{
 		}
 	}
 	
+	/**
+	 * Move this ship a given amount of time, taking the state of the thruster
+	 * 	into account.
+	 * 
+	 * @effect	
+	 */
 	@Override
     public void move(double duration){
         super.move(duration);
@@ -325,6 +391,11 @@ public class Ship extends Entity{
         }
     }
 	
+	/**
+	 * Fire a bullet, the source of that bullet is therefore this ship.
+	 * 
+	 * @effect	
+	 */
 	public void fireBullet(){
 		if ((this.getNbBulletsOnShip() == 0) || (this.getWorld() == null)){
 			return;
@@ -339,11 +410,22 @@ public class Ship extends Entity{
 		}
 	}
 	
+	/**
+	 * Put the given bullet in the firing position of this ship.
+	 * 	
+	 * @param 	bullet
+	 */
 	public void putInFiringPosition(Bullet bullet){
 		double[] newPosition = this.getFiringPosition(bullet);
 		bullet.setPosition(newPosition[0], newPosition[1]);
 	}
 	
+	/**
+	 * Return the firing position of this ship for the given bullet.
+	 * 
+	 * @param 	bullet
+	 * @return
+	 */
 	public double[] getFiringPosition(Bullet bullet) {
 		double newXPosition = bullet.getPositionX() + (this.getRadius() + bullet.getRadius())*Math.cos(getOrientation());
 		double newYPosition = bullet.getPositionY() + (this.getRadius() + bullet.getRadius())*Math.sin(getOrientation());
@@ -351,6 +433,11 @@ public class Ship extends Entity{
 		return position;
 	}
 	
+	/**
+	 * Select a loaded bullet from the bullets on this ship.
+	 * 
+	 * @return
+	 */
 	public Bullet selectLoadedBullet(){
 		for(Bullet bullet: this.getBulletsOnShip()){
 			return bullet;
@@ -358,6 +445,10 @@ public class Ship extends Entity{
 		return null;
 	}
 	
+	/**
+	 * Resolve the collision between this ship and a boundary of the given world.
+	 * 
+	 */
 	public void collidesWithBoundary(World world) {
 		if (world.getDistanceToNearestHorizontalBoundary(this) <
 				world.getDistanceToNearestVerticalBoundary(this) )
@@ -366,6 +457,11 @@ public class Ship extends Entity{
 			this.setVelocity(-getVelocityX(), getVelocityY());
 	}
 	
+	/**
+	 * Resolve a collision between this ship and a given ship.
+	 * 
+	 * @param other
+	 */
 	public void collidesWithShip(Ship other) {
 		double diffX = other.getPositionX() - this.getPositionX();
 		double diffY = other.getPositionY() - this.getPositionY();
@@ -385,6 +481,11 @@ public class Ship extends Entity{
 		other.setVelocity(newXVelocityOther, newYVelocityOther);
 	}
 	
+	/**
+	 * Resolve a collision between this ship and a given bullet.
+	 * 
+	 * @param other
+	 */
 	public void getsHitBy(Bullet other) {
 		if (other.getSource() == this){
 			this.loadBulletOnShip(other);
@@ -394,6 +495,9 @@ public class Ship extends Entity{
 		}
 	}
 	
+	/**
+	 * A variable registering the bullet speed of any bullet of any ship.
+	 */
 	public static double bulletSpeed = 250;
 	
 

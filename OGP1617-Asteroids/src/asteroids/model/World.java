@@ -695,6 +695,9 @@ public class World{
 		assert this.getTimeToNextCollision() >= dt;
 		for (Entity entity : allEntities) {
 			entity.move(dt);
+			if (entity instanceof Ship && ((Ship)entity).isShipThrusterActive()) {
+				//TODO
+			}
 		}
 	}
 	

@@ -3,10 +3,23 @@ package asteroids.model;
 import be.kuleuven.cs.som.annotate.*;
 
 /**
+ * An abstract class of entities involving a position, velocity,
+ * 	radius, mass, facilities to predict collisions and a world.
+ * 
+ * @invar	The position of each entity must be a valid position for any entity.
+ * 			| isValidPosition(getPosition())
+ * @invar	The velocity of each entity must be a valid velocity for any entity.
+ * 			| isValidVelocity(getVelocity())
+ * @invar	The radius of each entity must be a valid radius for any entity.
+ * 			| isValidRadius(getRadius())
+ * @invar	The mass of each entity must be a valid mass for any entity.
+ * 			| isValidMass(getMass())
  * 
  * @author 	Nicolas Desmedt and Lucas Desard
  * @version	1.0
  *
+ * Course studies: 2nd Bachelor Engineering: Computer science/Electrical Engineering
+ * Code Repository: https://github.com/NicolasDesmedt/RepositoryLucasNicolas
  */
 public abstract class Entity {
 	

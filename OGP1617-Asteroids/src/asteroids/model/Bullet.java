@@ -2,6 +2,21 @@ package asteroids.model;
 
 import be.kuleuven.cs.som.annotate.*;
 
+/**
+ * A class of bullets involving a mass, a radius, a source, and a world.
+ * And facilities to resolve collisions this bullet is a part of.
+ * 
+ * @invar	The mass of each bullet must be a valid mass for any bullet.
+ * 			| isValidMass(getMass())
+ * @invar	The radius of each bullet must be a valid radius for any bullet.
+ * 			| isValidRadius(getRadius())
+ * 
+ * @author 	Nicolas Desmedt and Lucas Desard
+ * @version	1.0
+ *
+ * Course studies: 2nd Bachelor Engineering: Computer science/Electrical Engineering
+ * Code Repository: https://github.com/NicolasDesmedt/RepositoryLucasNicolas
+ */
 public class Bullet extends Entity{
 	
 	/**
@@ -186,14 +201,24 @@ public class Bullet extends Entity{
 	 */
 	public Ship ship = null;
  	
+	/**
+	 * Return the world this bullet belongs to.
+	 */
  	public World getWorld(){
  		return this.world;
  	}
  	
+ 	/**
+ 	 * Return a boolean indicating whether or not this bullet belongs to a world.
+ 	 */
  	public boolean hasWorld(){
  		return this.world != null;
 	}
   	
+ 	/**
+ 	 * Set the world this bullet belongs to to a given world.
+ 	 * A bullet can only belong to a world or a ship at the same time.
+ 	 */
  	public void setWorld(World world) throws IllegalArgumentException {
  		if (this.hasShip())
  			this.setShip(null);
@@ -204,6 +229,9 @@ public class Bullet extends Entity{
  		}
  	}
   	
+ 	/**
+ 	 * A variable registering the world of this bullet.
+ 	 */
  	public World world;
 	
 	/**

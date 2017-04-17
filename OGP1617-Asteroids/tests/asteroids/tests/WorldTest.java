@@ -13,85 +13,21 @@ public class WorldTest {
 	 */
 	private static final double EPSILON = 0.0001;
 	
-	/**
-	 * Variables referencing ships with position [0,0], 
-	 * velocity[0,0], radius 10 and orientation facing right (0),
-	 * respectively with position [0,0], 
-	 * velocity[0,0], radius 10 and orientation facing right (0).
-	 */
-	//private static Ship mutableShip1, mutableShip2, mutableShip3;
-	
-	/**
-	 * Variables referencing ships with position [0,0], 
-	 * velocity[0,0], radius 10 and orientation facing right (0),
-	 * respectively with position [0,0], 
-	 * velocity[0,0], radius 10 and orientation facing right (0).
-	 */
-	//private static Ship immutableShip1, immutableShip2, immutableOverlappingShip, immutableOutOfBoundariesShip;
-	
-	//private static Bullet mutableBullet1, mutableBullet2;
-	
-	//private static World world100x100; //world1000x1000;
-	
-	/**
-	 * Set up a mutable test fixture.
-	 * 
-	 * @post The variable ship1 references a new ship with position [0,0], 
-	 * velocity[0,0], radius 10 and orientation facing right (0).
-	 * 
-	 * @post The variable ship2 references a new ship with position [0,0], 
-	 * velocity[0,0], radius 10 and orientation facing up (PI/2).
-	 */
-	
-//	@Before
-//	public void setUpMutableFixture() {
-//		mutableShip1 = new Ship(100,100,20,20,10,0, 5.5E20);
-//		mutableShip2 = new Ship(500,500,30,10,10,(Math.PI/2), 10E15);
-//		mutableShip3 = new Ship(10,300,10,0,10,0,10E15);
-//		
-//		mutableBullet1 = new Bullet(200,200,10,0,Bullet.minBulletRadius);
-//		mutableBullet2 = new Bullet(900,900,0,-10,(Bullet.minBulletRadius+1));
-//	}
-	
-	/**
-	 * Set up a immutable test fixture.
-	 * 
-	 * @post The variable immutableShip1 references a new ship with position [0,0], 
-	 * velocity[0,0], radius 10 and orientation facing right (0).
-	 * 
-	 * @post The variable immutableShip1 references a new ship with position [0,0], 
-	 * velocity[0,0], radius 10 and orientation facing up (PI/2).
-	 * 
-	 * @post The variable immutableShip1 references a new ship with position [0,0], 
-	 * velocity[0,0], radius 10 and orientation facing right (0).
-	 */
-	
-//	@BeforeClass
-//	public static void setUpImmutableFixture() {
-//		world100x100 = new World (100,100);
-//		//world1000x1000 = new World (1000,1000);
-//		
-//		immutableShip1 = new Ship(70,70,0,0,10,(Math.PI/2));
-//		immutableShip2 = new Ship(700,700,0,0,Ship.minRadiusShip,0);
-//
-//		immutableOverlappingShip = new Ship(70,65,0,0,10,0);
-//		immutableOutOfBoundariesShip = new Ship(1000,0,0,0,10,0);
-		
-//	}
+	@BeforeClass
+	public static void setUpBeforeClass() throws Exception {
+	}
 
-//	public void setUpWorld() {
-//		world1000x1000 = new World (1000,1000);
-//		world1000x1000.addEntity(immutableShip2);
-//		world1000x1000.addEntity(mutableShip1);
-//		world1000x1000.addEntity(mutableShip2);
-//		world1000x1000.addEntity(mutableShip3);
-//		world1000x1000.addEntity(mutableBullet1);
-//		world1000x1000.addEntity(mutableBullet2);
-//	}
-//	
-//	public void clearWorld(World world) {
-//		world.terminate();
-//	}
+	@AfterClass
+	public static void tearDownAfterClass() throws Exception {
+	}
+	
+	@Before
+	public void setUp() throws Exception {
+	}
+	
+	@After
+	public void tearDown() throws Exception {
+	}
 	
 	@Test
 	public void worldConstructor_LegalCase(){
