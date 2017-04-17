@@ -672,11 +672,6 @@ public class World{
 		assert this.getTimeToNextCollision() > dt;
 		for (Entity entity : allEntities) {
 			entity.move(dt);	
-			if (entity instanceof Ship && ((Ship)entity).isShipThrusterActive()) {
-				Ship ship = (Ship)entity;
-				//double velocityToAdd = ship.getThrusterForce()*duration / (ship.getMass()*1000);
-				//ship.thrust(velocityToAdd); 
-			}
 		}
 	}
 	
