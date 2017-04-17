@@ -80,7 +80,7 @@ public class Bullet extends Entity{
 	 * @post If the given bullet belongs to a ship, ship is set to null
 	 * 		 | @see implementation
 	 */
-	@Raw
+	@Basic @Raw
 	public void terminate() {
 		if (this.hasShip()){
 			 this.setShip(null);
@@ -93,7 +93,7 @@ public class Bullet extends Entity{
 	 * @return Returns the minimal mass
 	 *         | @see implementation
 	 */
-	
+	@Raw
 	public double calculateMinimalMass(){
 		return ((4*Math.PI*Math.pow(this.getRadius(), 3)*minBulletDensity)/3);
 	}
@@ -157,10 +157,10 @@ public class Bullet extends Entity{
 	}
 	
 	/**
-	 * Return the ship to which this bullet belongs, if the bullet doesn't belong
+	 * Returns the ship to which this bullet belongs, if the bullet doesn't belong
 	 *  to a ship, it returns null.
 	 */
-	
+	@Basic
 	public Ship getShip(){
 		return this.ship;
 	}
@@ -168,7 +168,7 @@ public class Bullet extends Entity{
 	/**
 	 * Returns whether or not the bullet belongs to a ship.
 	 */
-	
+	@Basic
 	public boolean hasShip(){
 		return this.ship != null;
 	}
@@ -193,29 +193,56 @@ public class Bullet extends Entity{
 	
 	public Ship ship = null;
 	
-	
+	/**
+	 * Returns the number of times the bullet has collided with a boundary of the world.
+	 */
 	
 	public int getCounterBoundaryCollisions() {
 		return this.counterBoundaryCollisions;
 	}
 	
-	public void setCounterBoundaryCollisions(int counter) {
-		this.counterBoundaryCollisions = counter;
+	/**
+	 * Increments the counterBoundaryCollisions of bullet with 1.
+	 */
+	
+	public void incrementCounterBoundaryCollisions() {
+		this.counterBoundaryCollisions++;
 	}
 	
+	/**
+	 * Returns the maximum number of times the bullet can collide with a boundary 
+	 * of the world before the bullet dies.
+	 */
+	@Basic @Raw
 	public int getMaxBoundaryCollisions() {
 		return maxBoundaryCollisions;
 	}
+	
+	/**
+	 * Variable registering the maximum number of times the bullet can collide with a boundary.
+	 */
  
 	private final int maxBoundaryCollisions = 3;
 	
+	/**
+	 * Variable registering the number of times the bullet has collided with a boundary.
+	 */
+	
 	private int counterBoundaryCollisions = 0;
+	
+	/**
+	 * Terminates the bullet if it isn't within the boundaries of the world.
+	 * If the bullet is within the boundaries of the world and hasn't collided
+	 * maxBoundaryCollisions times with the boundaries yet, is is handled as a normal
+	 * collision with a boundary, else if the bullet has collided maxBoundaryCollisions
+	 * times with the boundaries, it is terminated.
+	 */
 	
 	public void collidesWithBoundary(World world) {
 		if (!this.getWorld().withinBoundaries(this)) {
 			this.terminate();
 		}else {
-			this.setCounterBoundaryCollisions(getCounterBoundaryCollisions() + 1);
+			this.incrementCounterBoundaryCollisions();
 			if (getCounterBoundaryCollisions() == getMaxBoundaryCollisions()) {
 					this.terminate();
 					return;
@@ -228,15 +255,38 @@ public class Bullet extends Entity{
 		}
 	}
 	
+	/**
+	 * Set the source of this bullet to the given ship.
+	 * 
+	 * @param 	ship
+	 * 			The source ship for this bullet.
+     * @post	The source of this bullet is equal to the given ship.
+	 *       	| new.getSource() == ship
+	 */
+	
 	public void setSource(Ship ship){
 		this.source = ship;
 	}
 	
+	/**
+	 * Returns the source of the bullet, if the bullet isn't fired of a ship
+	 * yet, the source is null.
+	 */
+	@Basic
 	public Ship getSource(){
 		return this.source;
 	}
-		
+	
+	/**
+	 * A variable registering the source of a bullet, if the bullet isn't fired of a ship
+	 * yet, the source is null.
+	 */
+	
 	public Ship source = null;
+	
+	/**
+	 * Terminates both bullets
+	 */
 	
 	public void cancelsOut(Bullet other) {
 		this.terminate();
