@@ -298,7 +298,7 @@ public class Facade implements asteroids.part2.facade.IFacade {
 	public double[] getPositionCollisionBoundary(Object object) throws ModelException {
 		if (object instanceof Entity) {
 			World world = ((Entity)object).getWorld();
-			return world.getPositionEntityUponCollision((Entity)object);
+			return world.getPositionCollisionWithBoundary((Entity)object);
 		}
 		else
 			throw new ModelException("Argument must be of type Entity");

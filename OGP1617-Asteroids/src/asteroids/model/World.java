@@ -1,8 +1,6 @@
 package asteroids.model;
 
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Hashtable;
 import java.util.Set;
 
 import asteroids.part2.CollisionListener;
@@ -306,10 +304,20 @@ public class World{
 	}
 	
 	/**
+	 * Return the entity in this world at the given position.
 	 * 
-	 * @param x
-	 * @param y
-	 * @return
+	 * @param 	x
+	 * 			The x-coordinate of the given position.
+	 * @param 	y
+	 * 			The y-coordinate of the given position.
+	 * @return	Null if the given position is not occupied.
+	 * 			| if (for each entity in allEntities:
+	 * 			|	((entity.getPositionX() != x) || (entity.getPositionY() != y)))
+	 * 			|		then result == null;
+	 * @return	The entity at the given position if the position is occupied.
+	 * 			| if (for an entity in allEntities:
+	 *			|	((entity.getPositionX() != x) || (entity.getPositionY() != y)))
+	 *			|		then result == entity;
 	 */
 	public Entity getEntityAt(double x, double y) {
 		double[] position = {x,y};
@@ -320,10 +328,26 @@ public class World{
 		return null;
 	}
 	
+	/**
+	 * Return a set of all the entities that are in this world.
+	 * 
+	 * @return	...
+	 * 			| for each entity:
+	 * 			| 	if (entity.getWorld() == this)
+	 * 			|		then result.contains(entity)
+	 */
 	public Set<Entity> getAllEntities() {
 		return new HashSet<Entity>(allEntities);
 	}
 	
+	/**
+	 * Return a set of all the ships that are in this world.
+	 * 
+	 * @return	...
+	 * 			| for each entity in allEntities:
+	 * 			|	if (entity instanceof Ship)
+	 * 			|		then result.contains(entity)
+	 */
 	public Set<Ship> getAllShips() {
 		Set<Ship> allShips = new HashSet<Ship>();
 		for (Entity entity : allEntities)
@@ -332,6 +356,14 @@ public class World{
 		return allShips;
 	}
 	
+	/**
+	 * Return a set of all the bullets that are in this world.
+	 * 
+	 * @return	...
+	 * 			| for each entity in allEntities:
+	 * 			|	if (entity instanceof Bullet)
+	 * 			|		then result.contains(entity)
+	 */
 	public Set<Bullet> getAllBullets() {
 		Set<Bullet> allBullets = new HashSet<Bullet>();
 		for (Entity entity : allEntities)
@@ -340,16 +372,36 @@ public class World{
 		return allBullets;
 	}
 	
+	/**
+	 * A variable set registering all the entities in this world.
+	 * 
+	 * @invar   The set is effective.
+	 *        	| allEntities != null
+	 * @invar	...
+	 * 			| for each entity in allEntities:
+	 * 			|	(entity.getWorld() == this) &&
+	 * 			|	(this.withinBoundaries(entity)) &&
+	 * 			|	(!(this.overlapsWithOtherEntities(entity)))
+	 */
 	private final Set<Entity> allEntities = new HashSet<Entity>();
 	
+	/**
+	 * Return the time (in seconds) it takes for the given entity to collide
+	 * 	with a vertical boundary of this world. The movement of the given entity
+	 * 	is not influenced by other entities for this function.
+	 * 
+	 * @param 	entity
+	 * 			The given entity.
+	 * @return	...
+	 * 			| @see implementation
+	 */
 	public double getTimeCollisionVerticalBoundary(Entity entity) {
-		//if (!withinBoundaries(entity)) throw new IllegalArgumentException("The entity is not located in the world.");
 		double time = Double.POSITIVE_INFINITY;
 		double distance = 0;
 		if (entity.getVelocityX() == 0.0){
 			return time;
 		}else {
-			if (entity.getVelocityX() < 0){
+			if (entity.getVelocityX() < 0.0){
 				distance = entity.getPositionX() - entity.getRadius();
 			}else{
 				distance = width - entity.getPositionX() - entity.getRadius();
@@ -358,8 +410,17 @@ public class World{
 		}
 	}
 	
+	/**
+	 * Return the time (in seconds) it takes for the given entity to collide
+	 * 	with a horizontal boundary of this world. The movement of the given entity
+	 * 	is not influenced by other entities for this function.
+	 * 
+	 * @param 	entity
+	 * 			The given entity.
+	 * @return	...
+	 * 			| @see implementation
+	 */
 	public double getTimeCollisionHorizontalBoundary(Entity entity) {
-		//if (!withinBoundaries(entity)) throw new IllegalArgumentException("The entity is not located in the world.");
 		double time = Double.POSITIVE_INFINITY;
 		double distance = 0;
 		if (entity.getVelocityY() == 0.0)
@@ -373,6 +434,16 @@ public class World{
 		}
 	}
 	
+	/**
+	 * Return the time (in seconds) it takes for the given entity to collide
+	 * 	with a boundary of this world. The movement of the given entity
+	 * 	is not influenced by other entities for this function.
+	 * 
+	 * @param 	entity
+	 * 			The given entity.
+	 * @return	...
+	 * 			| @see implementation
+	 */
 	public double getTimeCollisionToBoundary(Entity entity) { 
 		double verticalTime = getTimeCollisionVerticalBoundary(entity);
 		double horizontalTime = getTimeCollisionHorizontalBoundary(entity);
@@ -383,12 +454,16 @@ public class World{
 	}
 	
 	/**
-	 * iets toevoegen voor al aan het botsen
-	 * @param entity
-	 * @return
+	 * Return the position where the given entity will collide 
+	 * 	with a boundary of this world. The movement of the given entity
+	 * 	is not influenced by other entities for this function.
+	 * 
+	 * @param 	entity
+	 * 			The given entity.
+	 * @return	...
+	 * 			| @see implementation
 	 */
 	public double[] getPositionCollisionWithBoundary(Entity entity) {
-		//if (!withinBoundaries(entity)) throw new IllegalArgumentException("The entity is not located in the world.");
 		double xPos = Double.POSITIVE_INFINITY;
 		double yPos = Double.POSITIVE_INFINITY;
 		double verticalTime = getTimeCollisionVerticalBoundary(entity);
@@ -418,20 +493,25 @@ public class World{
 		return position;
 	}
 	
-	public double getTimeToNextCollisionEntity(Entity entity) {
-		double time = getTimeCollisionToBoundary(entity);
+	/**
+	 * Return the time (in seconds) it takes for the given entity to 
+	 * 	collide with an other entity or with a boundary of this world.
+	 * 
+	 * @param 	entity
+	 * 			The given entity.
+	 * @return	...
+	 * 			| @see implementation
+	 * @throws	IllegalArugmentException
+	 * 			...
+	 * 			| if (for (other != entity) in allEntities:
+	 * 			|		(entity.getTimeToCollision(other)))
+	 * 			|			throws IllegalArgumentException
+	 */
+	public double getTimeToNextCollisionEntity(Entity entity) throws IllegalArgumentException {
+		double time = this.getTimeCollisionToBoundary(entity);
 		Set<Entity> allEntitiesCopy = getAllEntities();
 		allEntitiesCopy.remove(entity);
 		for (Entity other : allEntitiesCopy ) {
-			
-			//}else if ((entity instanceof Ship) && (other instanceof Bullet) && (((Bullet)other).getShip() == entity)){
-				
-			//}else if ((other instanceof Ship) && (entity instanceof Bullet) && (((Bullet)entity).getShip() == other)){
-				
-			//}else if ((other instanceof Bullet) && (entity instanceof Bullet) && (((Bullet)entity).getShip() == ((Bullet)other).getShip())){
-			//if (entity.overlap(other)) 
-			//	return 0;
-			
 			try {
 				if(entity.getTimeToCollision(other) < time)
 					time = entity.getTimeToCollision(other);
@@ -444,18 +524,14 @@ public class World{
 		return time;	
 	}
 	
-	public double[] getPositionEntityUponCollision(Entity entity) {
-		double xPos = Double.POSITIVE_INFINITY;
-		double yPos = Double.POSITIVE_INFINITY;
-		double time = getTimeToNextCollisionEntity(entity);
-		if (time < Double.POSITIVE_INFINITY) { 
-			xPos = xPos + entity.getVelocityX()*time;
-			yPos = yPos + entity.getVelocityY()*time;
-		}
-		double[] position = {xPos, yPos};
-		return position;
-	}
-	
+	/**
+	 * Return the time (in seconds) it takes for a collision
+	 * 	to happen in this world.
+	 * 
+	 * @return	...
+	 * 			| for each entity in allEntities:
+	 * 			|	result <= this.getTimeToCollision(entity)
+	 */
 	public double getTimeToNextCollision() {
 		double time = Double.POSITIVE_INFINITY;
 		try {
@@ -469,6 +545,16 @@ public class World{
 		return time;
 	}
 	
+	/**
+	 * Return an array containing the entities that will collide first 
+	 * 	in this world. If the first collision to happen in this world is 
+	 * 	a collision between an entity and a boundary of this world,
+	 * 	then only that entity gets returned.
+	 * 
+	 * @return	...
+	 * 			| for each entity not in result:
+	 * 			| 	this.getTimeToCollision(entity) > this.getTimeToCollision(result[0])
+	 */
 	public Entity[] getFirstCollidingEntities() {
 		Entity[] firstCollidingEntities = new Entity[]{null,null};
 		double timeToNextCollision = getTimeToNextCollision();
@@ -484,8 +570,18 @@ public class World{
 		return firstCollidingEntities;
 	}
 	
-	public double[] getPositionNextCollision() {
-		Entity[] firstCollidingEntities = getFirstCollidingEntities();
+	/**
+	 * Return the position in this world where the first
+	 * 	collision will happen.
+	 * 
+	 * @return	...
+	 * 			| @see implementation
+	 * @throws	IllegalStateException
+	 * 			...
+	 * 			| (this.getFirstCollidingEntities().length > 2) || (firstCollidingEntities[0] == null)
+	 */
+	public double[] getPositionNextCollision() throws IllegalStateException {
+		Entity[] firstCollidingEntities = this.getFirstCollidingEntities();
 		if (firstCollidingEntities.length > 2)
 			throw new IllegalStateException("Multiple collisions occur at once, there is no single 'position of first collision'");
 		if (firstCollidingEntities[0] == null)
@@ -504,6 +600,16 @@ public class World{
 			return entity1.getCollisionPosition(entity2);
 	}
 	
+	/**
+	 * Return an array containing the entities that are overlapping in this world,
+	 * not including ships overlapping with their own bullets.
+	 * 	There is only one way entities can overlap in the same world:
+	 * 	 when a ship fires a bullet and the firing position of the ship
+	 * 	 is occupied by an other entity.
+	 * 
+	 * @return	...
+	 * 			| result[0].overlapFiltered(result[1]) == true;
+	 */
 	public Entity[] getOverlappingEntities() {
 		Entity[] overlappingEntities = new Entity[]{null,null};
 		Set<Entity> allEntitiesCopy = getAllEntities();
@@ -522,10 +628,13 @@ public class World{
 	}
 		
 	/**
-	 * no specification, defensive
-	 * @param dt
+	 * Evolve the state of this world a given amount of time and 
+	 * update the collisionListener on any collisions occurring.
 	 */
-	public void evolve(double dt, CollisionListener collisionListener) {
+	public void evolve(double dt, CollisionListener collisionListener) throws IllegalArgumentException {
+		if (dt < 0) {
+			throw new IllegalArgumentException("The given amount of time must be positive");
+		}
 		try {
 			double timeToNextCollision = getTimeToNextCollision();
 			if (timeToNextCollision < dt) {
@@ -548,12 +657,39 @@ public class World{
 		}
 	}
 	
-	public void advanceAllEntities (double duration) {
+	/**
+	 * Advance the position of all entities a given duration.
+	 * 
+	 * @param 	duration
+	 * 			The given duration.
+	 * @pre		No collisions occur during the given duration.
+	 * 			| for each entity in allEntities:
+	 * 			|	this.getTimeToCollision(entity) > duration
+	 * @effect	...
+	 * 			| @see implementation
+	 */
+	public void advanceAllEntities (double dt) {
+		assert this.getTimeToNextCollision() > dt;
 		for (Entity entity : allEntities) {
-			entity.move(duration);	
-			}	
+			entity.move(dt);	
+			if (entity instanceof Ship && ((Ship)entity).isShipThrusterActive()) {
+				Ship ship = (Ship)entity;
+				//double velocityToAdd = ship.getThrusterForce()*duration / (ship.getMass()*1000);
+				//ship.thrust(velocityToAdd); 
+			}
+		}
 	}
 	
+	/**
+	 * Resolve the collision in this world.
+	 * 	Ships bounce of each other, bullets kill each other,
+	 * 	a colliding bullet and ship kill each other if the source
+	 * 	of the bullet is not the ship it collides with, if it is that 
+	 * 	ship then the bullet gets loaded on the ship.
+	 * 
+	 * @effect	...
+	 * 			| @see implementation
+	 */
 	public void resolveCollisions() {
 		Entity[] firstCollidingEntities = getFirstCollidingEntities();
 		Entity entity1 = firstCollidingEntities[0];
@@ -575,7 +711,20 @@ public class World{
 		}
 	}
 	
-
+	/**
+	 * Update the collision listener on the collision events.
+	 * 	The collision listener does not get updated on bullets colliding 
+	 * 	with their own ship. Collisions due to bullets overlapping with a ship 
+	 * 	upon getting put in firing position count as a normal objectCollision.
+	 * 	
+	 * @param 	collisionListener
+	 * 			The collision listener to update.
+	 * @effect	...
+	 * 			| @see implementation
+	 * @throws 	IllegalStateException
+	 * 			...
+	 * 			| this.getTimeToNextCollision() > 0
+	 */
  	public void updateCollisionListener(CollisionListener collisionListener) throws IllegalStateException {
  		Entity entity1 = null;
  		Entity entity2 = null;
@@ -589,9 +738,10 @@ public class World{
  				xPos = entity1.getPositionX();
  				yPos = entity1.getPositionY();
  			}
- 			else
+ 			else {
  				xPos = entity2.getPositionX();
  				yPos = entity2.getPositionY();
+ 			}
  			collisionListener.objectCollision(entity1, entity2, xPos, yPos);
  			return;
  		}
