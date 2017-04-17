@@ -436,7 +436,6 @@ public class World{
 				if(entity.getTimeToCollision(other) < time)
 					time = entity.getTimeToCollision(other);
 				} catch(IllegalArgumentException e) {
-					System.out.println("time caught");
 					throw new IllegalArgumentException("Overlapping entities!");
 				}
 		}
@@ -566,14 +565,11 @@ public class World{
 				((Ship)entity1).collidesWithShip((Ship)entity2);
 			}
 			else if ( (entity1 instanceof Ship) && (entity2 instanceof Bullet) ){
-				System.out.print("entity1(Ship) collides w entity2(Bullet)");
 				((Ship)entity1).getsHitBy((Bullet)entity2);
 			}
 			else if ( (entity1 instanceof Bullet) && (entity2 instanceof Ship) ){
-				System.out.println("entity1(Bullet) collides w entity2(Ship)");
 				((Ship)entity2).getsHitBy((Bullet)entity1);
 			}else{
-				System.out.println("collidingBullets");
 				((Bullet)entity1).cancelsOut((Bullet)entity2);
 			}
 		}
@@ -615,7 +611,6 @@ public class World{
  				collisionListener.boundaryCollision(entity1, xPos, yPos);
  		}
  		else {
- 	 		System.out.println("We raken hier");
  			if( (entity1 instanceof Bullet) && (entity2 instanceof Ship)) {
  				if (((Bullet)entity1).getSource() == entity2)
  					return;
