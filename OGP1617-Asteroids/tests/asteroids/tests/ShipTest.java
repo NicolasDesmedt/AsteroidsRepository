@@ -22,22 +22,30 @@ public class ShipTest {
 	private static final double EPSILON = 0.0001;
 	
 	/**
-	 * Variables referencing ships with position [0,0], 
-	 * velocity[0,0], radius 10 and orientation facing right (0),
-	 * respectively with position [0,0], 
-	 * velocity[0,0], radius 10 and orientation facing right (0).
+	 * Variable of a ship referencing ship with position [0,0], 
+	 * velocity[20,20], radius 10, orientation facing right (0) and mass 5.5E20.
+	 * respectively a ship with position [10,10], 
+	 * velocity[10,10], radius 10, orientation facing up (PI/2) and mass 10E15.
+	 * Variables of bullets referencing a bullet with position [0,0], 
+	 * velocity[0,0] and radius minBulletRadius
+	 * respectively a bullet with position [0,0], 
+	 * velocity[0,0] and radius (minBulletRadius+1)
 	 */
+
 	private static Ship mutableShip1, mutableShip2;
 	
-	/**
-	 * Variables referencing ships with position [0,0], 
-	 * velocity[0,0], radius 10 and orientation facing right (0),
-	 * respectively with position [0,0], 
-	 * velocity[0,0], radius 10 and orientation facing right (0).
-	 */
-	private static Ship immutableShip1, immutableMinimalShip;
-	
 	private static Bullet mutableMinimalBullet, mutableBullet1;
+	
+	/**
+	 *
+	 * Variable of a ship referencing ship with position [0,0], 
+	 * velocity[0,0], radius 10 and orientation facing up (PI/2).
+	 * respectively a ship with position [0,0], 
+	 * velocity[0,0], radius 10 and orientation facing up (0).
+	 * Variable of a world referencing a world with height and width 1000.
+	 */
+
+	private static Ship immutableShip1, immutableMinimalShip;
 	
 	private static World world1000x1000;
 	
@@ -45,10 +53,16 @@ public class ShipTest {
 	 * Set up a mutable test fixture.
 	 * 
 	 * @post The variable ship1 references a new ship with position [0,0], 
-	 * velocity[0,0], radius 10 and orientation facing right (0).
+	 * velocity[20,20], radius 10, orientation facing right (0) and mass 5.5E20.
 	 * 
 	 * @post The variable ship2 references a new ship with position [0,0], 
-	 * velocity[0,0], radius 10 and orientation facing up (PI/2).
+	 * velocity[0,0], radius 10, orientation facing right (PI/2) and mass 10E15.
+	 * 
+	 * @post The variable mutableMinimalBullet references a new bullet with position [0,0], 
+	 * velocity[0,0] and radius minBulletRadius
+	 * 
+	 * @post The variable mutableBullet1 references a new bullet with position with position [0,0], 
+	 * velocity[0,0] and radius (minBulletRadius+1)
 	 */
 	
 	@Before
@@ -64,13 +78,12 @@ public class ShipTest {
 	 * Set up a immutable test fixture.
 	 * 
 	 * @post The variable immutableShip1 references a new ship with position [0,0], 
-	 * velocity[0,0], radius 10 and orientation facing right (0).
+	 * velocity[0,0], radius 10 and orientation facing right (PI/2).
 	 * 
-	 * @post The variable immutableShip1 references a new ship with position [0,0], 
-	 * velocity[0,0], radius 10 and orientation facing up (PI/2).
+	 * @post The variable immutableMinimalShip references a new ship with position [0,0], 
+	 * velocity[0,0], radius minRadiusShip and orientation facing up (0).
 	 * 
-	 * @post The variable immutableShip1 references a new ship with position [0,0], 
-	 * velocity[0,0], radius 10 and orientation facing right (0).
+	 * @post The variable world1000x1000 references a new world with height and width 1000.
 	 */
 	
 	@BeforeClass

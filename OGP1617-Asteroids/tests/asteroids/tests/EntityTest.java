@@ -22,18 +22,20 @@ public class EntityTest {
 	private static final double EPSILON = 0.0001;
 	
 	/**
-	 * Variables referencing ships with position [0,0], 
-	 * velocity[0,0], radius 10 and orientation facing right (0),
-	 * respectively with position [0,0], 
-	 * velocity[0,0], radius 10 and orientation facing right (0).
+	 * Variable of a ship referencing ship with position [0,0], 
+	 * velocity[20,20], radius 10, orientation facing right (0) and mass 5.5E20.
+	 * respectively a ship with position [10,10], 
+	 * velocity[10,10], radius 10, orientation facing up (PI/2) and mass 10E15.
 	 */
 	private static Ship mutableShip1, mutableShip2;
 	
 	/**
-	 * Variables referencing ships with position [0,0], 
-	 * velocity[0,0], radius 10 and orientation facing right (0),
-	 * respectively with position [0,0], 
-	 * velocity[0,0], radius 10 and orientation facing right (0).
+	 * Variable of a ship referencing ship with position [100,-100], 
+	 * velocity[-20,0], radius 10 and orientation facing right (0).
+	 * respectively a ship with position [0,0], 
+	 * velocity[0,0], radius 10 and orientation facing up (PI/2).
+	 * respectively a ship with position [10,10], 
+	 * velocity[0,-20], radius 10, orientation facing up (0), mass 10E15 and maxSpeed 2E5.
 	 */
 	private static Ship immutableShip1, immutableShip2, immutableShip3;
 	
@@ -42,10 +44,10 @@ public class EntityTest {
 	 * Set up a mutable test fixture.
 	 * 
 	 * @post The variable ship1 references a new ship with position [0,0], 
-	 * velocity[0,0], radius 10 and orientation facing right (0).
+	 * velocity[20,20], radius 10, orientation facing right (0) and mass 5.5E20.
 	 * 
 	 * @post The variable ship2 references a new ship with position [0,0], 
-	 * velocity[0,0], radius 10 and orientation facing up (PI/2).
+	 * velocity[0,0], radius 10, orientation facing right (PI/2) and mass 10E15.
 	 */
 	
 	@Before
@@ -57,14 +59,14 @@ public class EntityTest {
 	/**
 	 * Set up a immutable test fixture.
 	 * 
-	 * @post The variable immutableShip1 references a new ship with position [0,0], 
-	 * velocity[0,0], radius 10 and orientation facing right (0).
+	 * @post The variable immutableShip1 references a new ship with position [100,-100], 
+	 * velocity[-20,0], radius 10 and orientation facing right (0).
 	 * 
 	 * @post The variable immutableShip2 references a new ship with position [0,0], 
 	 * velocity[0,0], radius 10 and orientation facing up (PI/2).
 	 * 
-	 * @post The variable immutableShip2 references a new ship with position [0,0], 
-	 * velocity[0,0], radius 10 and orientation facing right (0).
+	 * @post The variable immutableShip3 references a new ship with position [10,10], 
+	 * velocity[0,-20], radius 10, orientation facing up (0), mass 10E15 and maxSpeed 2E5.
 	 */
 	
 	@BeforeClass

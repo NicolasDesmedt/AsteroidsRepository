@@ -22,60 +22,50 @@ public class BulletTest {
 	private static final double EPSILON = 0.0001;
 	
 	/**
-	 * Variables referencing ships with position [0,0], 
-	 * velocity[0,0], radius 10 and orientation facing right (0),
-	 * respectively with position [0,0], 
-	 * velocity[0,0], radius 10 and orientation facing right (0).
+	 * Variable of a ship referencing ship with position [0,0], 
+	 * velocity[0,0], radius 10 and orientation facing up (PI/2).
+	 * Variables of bullets referencing a bullet with position [200,20], 
+	 * velocity[10,-10] and radius minBulletRadius
+	 * respectively a bullet with position [20,20], 
+	 * velocity[0,0] and radius (minBulletRadius+1)
+	 * Variable of a world referencing a world with height and width 1000.
 	 */
-	private static Ship mutableShip1, mutableShip2;
-	
-	/**
-	 * Variables referencing ships with position [0,0], 
-	 * velocity[0,0], radius 10 and orientation facing right (0),
-	 * respectively with position [0,0], 
-	 * velocity[0,0], radius 10 and orientation facing right (0).
-	 */
-	private static Ship immutableShip1, immutableMinimalShip;
+	private static Ship immutableShip1;
 	
 	private static Bullet mutableMinimalBullet, mutableBullet1;
+	
+	private static World world1000x1000;
+
 	
 	/**
 	 * Set up a mutable test fixture.
 	 * 
-	 * @post The variable ship1 references a new ship with position [0,0], 
-	 * velocity[0,0], radius 10 and orientation facing right (0).
+	 * @post The variable mutableMinimalBullet references a new bullet with position [200,20], 
+	 * velocity[10,-10] and radius minBulletRadius
 	 * 
-	 * @post The variable ship2 references a new ship with position [0,0], 
-	 * velocity[0,0], radius 10 and orientation facing up (PI/2).
+	 * @post The variable mutableBullet1 references a new bullet with position with position [20,20], 
+	 * velocity[0,0] and radius (minBulletRadius+1)
+	 * 
+	 * @post The variable world1000x1000 references a new world with height and width 1000.
 	 */
 	
 	@Before
 	public void setUpMutableFixture() {
-		mutableShip1 = new Ship(0,0,20,20,10,0, 5.5E20);
-		mutableShip2 = new Ship(10,10,10,10,10,(Math.PI/2), 10E15);
-		
-		mutableMinimalBullet = new Bullet(0,0,0,0,Bullet.minBulletRadius);
-		mutableBullet1 = new Bullet(0,0,0,0,(Bullet.minBulletRadius+1));
+		mutableMinimalBullet = new Bullet(200,20,10,-10,Bullet.minBulletRadius);
+		mutableBullet1 = new Bullet(20,20,0,0,(Bullet.minBulletRadius+1));
+		world1000x1000 = new World (1000,1000);
 	}
 	
 	/**
 	 * Set up a immutable test fixture.
 	 * 
 	 * @post The variable immutableShip1 references a new ship with position [0,0], 
-	 * velocity[0,0], radius 10 and orientation facing right (0).
-	 * 
-	 * @post The variable immutableShip1 references a new ship with position [0,0], 
 	 * velocity[0,0], radius 10 and orientation facing up (PI/2).
-	 * 
-	 * @post The variable immutableShip1 references a new ship with position [0,0], 
-	 * velocity[0,0], radius 10 and orientation facing right (0).
 	 */
 	
 	@BeforeClass
 	public static void setUpImmutableFixture() {
-		immutableShip1 = new Ship(0,0,0,0,10,(Math.PI/2));
-		immutableMinimalShip = new Ship(0,0,0,0,Ship.minRadiusShip,0);
-		
+		immutableShip1 = new Ship(0,0,0,0,10,(Math.PI/2));		
 	}
 	
 	@Test
@@ -100,6 +90,62 @@ public class BulletTest {
 		assertFalse(mutableBullet1.isValidMass(mutableBullet1.calculateMinimalMass()-1));
 		assertFalse(mutableBullet1.isValidMass(Double.MAX_VALUE));
 		assertFalse(mutableBullet1.isValidMass(Double.NaN));
+	}
+	
+	/*
+	 * Test number 1 tests a legal case.
+	 * Test number 2 tests the minimal possible radius for a given ship.
+	 * Test number 3 tests a value just under the minimal possible radius for a given ship.
+	 * Test number 4 tests in case the POSITIVE_INFINITY for double is provided.
+	 * Test number 5 tests in case NaN is provided.
+	 */
+	@Test
+	public void isValidRadius_Tests() {
+		assertTrue(mutableMinimalBullet.isValidRadius(Bullet.minBulletRadius+10));
+		assertTrue(mutableMinimalBullet.isValidRadius(Bullet.minBulletRadius));
+		assertFalse(mutableMinimalBullet.isValidRadius(Bullet.minBulletRadius-1));
+		assertFalse(mutableMinimalBullet.isValidRadius(Double.POSITIVE_INFINITY));
+		assertFalse(mutableMinimalBullet.isValidRadius(Double.NaN));
+	}
+	
+	@Test
+	public void setShip_LegalCase() {
+		mutableMinimalBullet.setShip(immutableShip1);
+		Ship ship = mutableMinimalBullet.getShip();
+		assertEquals(ship, immutableShip1);
+	}
+	
+	@Test
+	public void incrementCounterBoundaryCollisions_LegalCase() {
+		mutableMinimalBullet.incrementCounterBoundaryCollisions();
+		int boundaryCollisions = mutableMinimalBullet.getCounterBoundaryCollisions();
+		assertEquals(1, boundaryCollisions);
+	}
+	
+	@Test
+	public void collidesWithBoundary_LegalCase() {
+		world1000x1000.addEntity(mutableMinimalBullet);
+		mutableMinimalBullet.collidesWithBoundary(world1000x1000);
+		assertEquals(mutableMinimalBullet.getCounterBoundaryCollisions(), 1);
+		assertEquals(mutableMinimalBullet.getVelocityX(), 10, EPSILON);
+		assertEquals(mutableMinimalBullet.getVelocityY(), 10, EPSILON);
+
+	}
+	
+	@Test
+	public void collidesWithBoundary_maxCollisions() {
+		world1000x1000.addEntity(mutableMinimalBullet);
+		mutableMinimalBullet.collidesWithBoundary(world1000x1000);
+		mutableMinimalBullet.collidesWithBoundary(world1000x1000);
+		mutableMinimalBullet.collidesWithBoundary(world1000x1000);
+		assertTrue(mutableMinimalBullet.isTerminated());
+	}
+	
+	@Test
+	public void cancelsOut_LegalCase() {
+		mutableMinimalBullet.cancelsOut(mutableBullet1);
+		assertTrue(mutableMinimalBullet.isTerminated());
+		assertTrue(mutableBullet1.isTerminated());
 	}
 	
 }
