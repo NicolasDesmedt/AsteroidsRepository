@@ -261,7 +261,7 @@ public class Ship extends Entity{
 		}
 	}
 
-	public final static double defaultThrusterForce = 2.1E21;
+	public final static double defaultThrusterForce = 1.1E21;
 	
 	public void setThrusterForce(double newThrusterforce){
 		if ( (newThrusterforce>=0) && (!Double.isInfinite(newThrusterforce)) && (!Double.isNaN(newThrusterforce))){
