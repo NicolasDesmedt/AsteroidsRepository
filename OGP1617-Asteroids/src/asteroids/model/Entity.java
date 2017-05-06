@@ -23,19 +23,18 @@ import be.kuleuven.cs.som.annotate.*;
  */
 public abstract class Entity {
 	
-	protected Entity(double x, double y, double xVelocity, double yVelocity, double radius, double mass)
+	protected Entity(double x, double y, double xVelocity, double yVelocity, double radius)
 			throws IllegalArgumentException{
-			this(x, y, xVelocity, yVelocity, radius, mass, SPEED_OF_LIGHT);
+			this(x, y, xVelocity, yVelocity, radius, SPEED_OF_LIGHT);
 		}
 	
-	protected Entity(double x, double y, double xVelocity, double yVelocity, double radius, double mass, double maxSpeed)
+	protected Entity(double x, double y, double xVelocity, double yVelocity, double radius, double maxSpeed)
 		throws IllegalArgumentException{
 		this.setMaxSpeed(maxSpeed);
 		this.setPosition(x,y);
 		this.setVelocity(xVelocity, yVelocity);
 		if (!isValidRadius(radius)) throw new IllegalArgumentException("The given radius isn't a valid one");
 		this.radius = radius;
-		this.setMass(mass);
 	}
 	
 	/**
@@ -266,7 +265,7 @@ public abstract class Entity {
 	/**
 	 * Variable registering the radius of this entity.
 	 */
-	private final double radius;
+	protected double radius;
 	
 	/**
 	 * Return the maximum speed for each entity.
@@ -584,65 +583,9 @@ public abstract class Entity {
 	}
 	
 	/**
-	 * Return a boolean indicating whether or not the given
-	 * 	mass is a valid one for this entity.
-	 * @param 	mass
-	 * 			The given mass.
-	 */
-	abstract boolean isValidMass(double mass);
-	
-	/**
-	 * Set the mass of this entity to the given mass.
-	 * 
-	 * @param 	mass
-	 * 			The given mass.
-	 * @post	If the given mass is a valid mass, then 
-	 * 			the mass of this entity is equal to the given mass.
-	 * 			| if isValidMass(mass)
-	 * 			|	then (new entity).getMass() == mass;
-	 * @post	If the given mass is not a valid mass, then
-	 * 			if the original mass is a valid mass, the mass of this entity 
-	 * 			stays the same, otherwise the mass of this entity is equal to
-	 * 			the minimal mass of an entity.
-	 * 			| if !isValidMass(mass)
-	 * 			|	then if isValidMass((old entity).getMass())
-	 * 			| 		(new entity).getMass() == (old entity).getMass()
-	 * 			|	else (new entity).getMass() == this.calculateMinimalMass()
-	 */
-	@Raw
-	public void setMass(double mass){
-		if (!isValidMass(mass)){
-			if (isValidMass(this.getMass())){
-				return;
-			}else{
-				this.mass = this.calculateMinimalMass();
-			}
-		}else{
-			this.mass = mass;
-		}
-	}
-	
-	/**
 	 * Variable registering the mass of this entity.
 	 */
 	public double mass;
-	
-	/**
-	 * Return the minimal mass of this entity.
-	 */
-	abstract double calculateMinimalMass();
-	
-	/**
-	 * Return the density of this entity with given mass.
-	 * 
-	 * @param 	mass
-	 * 			The given mass.
-	 */
-	@Basic
-	public double getDensity(double mass) {
-		double density = ((mass*3)/(4*(Math.PI)*Math.pow(this.getRadius(),3)));
-		return density;
-	}
 	
 	/**
 	 * Resolves the collision between this entity and
@@ -651,7 +594,13 @@ public abstract class Entity {
 	 * @param 	world
 	 * 			The given world.
 	 */
-	abstract void collidesWithBoundary(World world);
+	public void collidesWithBoundary(World world){
+		if (world.getDistanceToNearestHorizontalBoundary(this) <
+				world.getDistanceToNearestVerticalBoundary(this) )
+			this.setVelocity(getVelocityX(), -getVelocityY());
+		else
+			this.setVelocity(-getVelocityX(), getVelocityY());
+	}
 
 	/**
 	 * Return the world this entity belongs to.
@@ -736,6 +685,30 @@ public abstract class Entity {
 	 * Variable registering whether or not this entity is terminated.
 	 */
 	private boolean isTerminated = false;
+	
+	/**
+	 * Resolve a collision between 2 ships or 2 minor planets.
+	 * 
+	 * @param other
+	 */
+	public void bouncesOff(Entity other) {
+		double diffX = other.getPositionX() - this.getPositionX();
+		double diffY = other.getPositionY() - this.getPositionY();
+		double diffVX = other.getVelocityX() - this.getVelocityX();
+		double diffVY = other.getVelocityY() - this.getVelocityY();
+		double sumRadii = this.getRadius() + other.getRadius();
+		double massThis = this.getMass();
+		double massOther = other.getMass();
+		double J = (2*massThis*massOther*(diffVX*diffX + diffVY*diffY))/(sumRadii*(massThis+massOther));
+		double Jx = (J*diffX)/sumRadii;
+		double Jy = (J*diffY)/sumRadii;
+		double newXVelocityThis = this.getVelocityX() + Jx/massThis;
+		double newYVelocityThis = this.getVelocityY() + Jy/massThis;
+		double newXVelocityOther = other.getVelocityX() - Jx/massOther;
+		double newYVelocityOther = other.getVelocityY() - Jy/massOther;
+		this.setVelocity(newXVelocityThis, newYVelocityThis);
+		other.setVelocity(newXVelocityOther, newYVelocityOther);
+	}
 	
 }	
 

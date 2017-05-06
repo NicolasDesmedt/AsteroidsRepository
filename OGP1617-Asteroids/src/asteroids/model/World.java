@@ -392,6 +392,22 @@ public class World{
 	}
 	
 	/**
+	 * Return a set of all the minor planets that are in this world.
+	 * 
+	 * @return	...
+	 * 			| for each entity in allEntities:
+	 * 			|	if (entity instanceof MinorPlanet)
+	 * 			|		then result.contains(entity)
+	 */
+	public Set<MinorPlanet> getAllMinorPlanets() {
+		Set<MinorPlanet> allMinorPlanets = new HashSet<MinorPlanet>();
+		for (Entity entity : allEntities)
+			if (entity instanceof MinorPlanet)
+				allMinorPlanets.add((MinorPlanet)entity);
+		return allMinorPlanets;
+	}
+	
+	/**
 	 * A variable set registering all the entities in this world.
 	 * 
 	 * @invar   The set is effective.
@@ -718,16 +734,22 @@ public class World{
 		if (entity2 == null){
 			(entity1).collidesWithBoundary(this);
 		}else{
-			if ( (entity1 instanceof Ship) && (entity2 instanceof Ship) ){
-				((Ship)entity1).collidesWithShip((Ship)entity2);
+			if ( ((entity1 instanceof Ship) && (entity2 instanceof Ship)) ||  ((entity1 instanceof MinorPlanet) && (entity2 instanceof MinorPlanet))){
+				(entity1).bouncesOff(entity2);
 			}
-			else if ( (entity1 instanceof Ship) && (entity2 instanceof Bullet) ){
-				((Ship)entity1).getsHitBy((Bullet)entity2);
+			else if ( (entity1 instanceof Bullet) ){
+				((Bullet)entity1).hits(entity2);
 			}
-			else if ( (entity1 instanceof Bullet) && (entity2 instanceof Ship) ){
-				((Ship)entity2).getsHitBy((Bullet)entity1);
-			}else{
-				((Bullet)entity1).cancelsOut((Bullet)entity2);
+			else if ( (entity2 instanceof Bullet) ){
+				((Bullet)entity2).hits(entity1);
+			}else if( ((entity1 instanceof Ship) && (entity2 instanceof Asteroid)) ){
+				((Ship)entity1).collidesWithAsteroid((Asteroid)entity2);
+			}else if( ((entity1 instanceof Asteroid) && (entity2 instanceof Ship)) ){
+				((Ship)entity2).collidesWithAsteroid((Asteroid)entity1);
+			}else if( ((entity1 instanceof Ship) && (entity2 instanceof Planetoid)) ){
+				((Ship)entity1).collidesWithPlanetoid((Planetoid)entity2);
+			}else if( ((entity1 instanceof Planetoid) && (entity2 instanceof Ship)) ){
+				((Ship)entity2).collidesWithPlanetoid((Planetoid)entity1);
 			}
 		}
 	}
