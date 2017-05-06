@@ -4,8 +4,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import be.kuleuven.cs.som.annotate.*;
-//import be.kuleuven.cs.som.taglet.*;
-
 /**
  * A class for flying a ship in space involving the mass, radius
  * and orientation of the ship. With facilities to accelerate the ship by thrusting,
@@ -74,8 +72,9 @@ public class Ship extends Entity{
 	
 	public Ship(double x, double y, double xVelocity, double yVelocity, double radius, double orientation, double mass, double maxSpeed) 
 			throws IllegalArgumentException{
-		super(x, y, xVelocity, yVelocity, radius, mass, maxSpeed);
+		super(x, y, xVelocity, yVelocity, radius, maxSpeed);
 		this.setOrientation(orientation);
+		this.setMass(mass);
 		this.thrusterForce = defaultThrusterForce;	
 		
 	}
@@ -95,6 +94,7 @@ public class Ship extends Entity{
 		
 	}
 	
+	@Override
 	public void terminate(){
 		for(Bullet bullet: bullets){
 			bullet.terminate();
@@ -107,6 +107,37 @@ public class Ship extends Entity{
 	public double calculateMinimalMass(){
 		return ((4*Math.PI*Math.pow(this.getRadius(), 3)*MIN_DENSITY)/3);
 	}
+	
+	/**
+	 * Set the mass of this entity to the given mass.
+	 * 
+	 * @param 	mass
+	 * 			The given mass.
+	 * @post	If the given mass is a valid mass, then 
+	 * 			the mass of this entity is equal to the given mass.
+	 * 			| if isValidMass(mass)
+	 * 			|	then (new entity).getMass() == mass;
+	 * @post	If the given mass is not a valid mass, then
+	 * 			if the original mass is a valid mass, the mass of this entity 
+	 * 			stays the same, otherwise the mass of this entity is equal to
+	 * 			the minimal mass of an entity.
+	 * 			| if !isValidMass(mass)
+	 * 			|	then if isValidMass((old entity).getMass())
+	 * 			| 		(new entity).getMass() == (old entity).getMass()
+	 * 			|	else (new entity).getMass() == this.calculateMinimalMass()
+	 */
+	@Raw
+	public void setMass(double mass){
+		if (!isValidMass(mass)){
+			if (isValidMass(this.getMass())){
+				return;
+			}else{
+				this.mass = this.calculateMinimalMass();
+			}
+		}else{
+			this.mass = mass;
+		}
+	}
 		
 	public boolean isValidMass(double mass){
 		if ((getDensity(mass) >= MIN_DENSITY) && (mass < Double.MAX_VALUE) && (!Double.isNaN(mass))){
@@ -114,6 +145,18 @@ public class Ship extends Entity{
 		}else{
 			return false;
 		}
+	}
+	
+	/**
+	 * Return the density of this ship with given mass.
+	 * 
+	 * @param 	mass
+	 * 			The given mass.
+	 */
+	@Basic
+	public double getDensity(double mass) {
+		double density = ((mass*3)/(4*(Math.PI)*Math.pow(this.getRadius(),3)));
+		return density;
 	}
 	
 	public static final double MIN_DENSITY = 1.42E12;
@@ -386,8 +429,10 @@ public class Ship extends Entity{
         if(this.isShipThrusterActive()){
 			this.thrust(duration);
 		}
+        double positionX = this.getPositionX();
+        double positionY = this.getPositionY();
         for (Bullet bullet: this.bullets) {
-            bullet.setPosition(this.getPositionX(), this.getPositionY());
+            bullet.setPosition(positionX, positionY);
         }
     }
 	
@@ -446,59 +491,28 @@ public class Ship extends Entity{
 	}
 	
 	/**
-	 * Resolve the collision between this ship and a boundary of the given world.
-	 * 
-	 */
-	public void collidesWithBoundary(World world) {
-		if (world.getDistanceToNearestHorizontalBoundary(this) <
-				world.getDistanceToNearestVerticalBoundary(this) )
-			this.setVelocity(getVelocityX(), -getVelocityY());
-		else
-			this.setVelocity(-getVelocityX(), getVelocityY());
-	}
-	
-	/**
-	 * Resolve a collision between this ship and a given ship.
-	 * 
-	 * @param other
-	 */
-	public void collidesWithShip(Ship other) {
-		double diffX = other.getPositionX() - this.getPositionX();
-		double diffY = other.getPositionY() - this.getPositionY();
-		double diffVX = other.getVelocityX() - this.getVelocityX();
-		double diffVY = other.getVelocityY() - this.getVelocityY();
-		double sumRadii = this.getRadius() + other.getRadius();
-		double massThis = this.getMass();
-		double massOther = other.getMass();
-		double J = (2*massThis*massOther*(diffVX*diffX + diffVY*diffY))/(sumRadii*(massThis+massOther));
-		double Jx = (J*diffX)/sumRadii;
-		double Jy = (J*diffY)/sumRadii;
-		double newXVelocityThis = this.getVelocityX() + Jx/massThis;
-		double newYVelocityThis = this.getVelocityY() + Jy/massThis;
-		double newXVelocityOther = other.getVelocityX() - Jx/massOther;
-		double newYVelocityOther = other.getVelocityY() - Jy/massOther;
-		this.setVelocity(newXVelocityThis, newYVelocityThis);
-		other.setVelocity(newXVelocityOther, newYVelocityOther);
-	}
-	
-	/**
-	 * Resolve a collision between this ship and a given bullet.
-	 * 
-	 * @param other
-	 */
-	public void getsHitBy(Bullet other) {
-		if (other.getSource() == this){
-			this.loadBulletOnShip(other);
-		}else{
-			this.terminate();
-			other.terminate();
-		}
-	}
-	
-	/**
 	 * A variable registering the bullet speed of any bullet of any ship.
 	 */
 	public static double bulletSpeed = 250;
 	
-
+	/**
+	 * Resolve the collision between this ship and an asteroid.
+	 * 
+	 */
+	public void collidesWithAsteroid(Asteroid asteroid) {
+		this.terminate();
+	}
+	
+	/**
+	 * Resolve the collision between this ship and a planetoid.
+	 * 
+	 */
+	public void collidesWithPlanetoid(Planetoid planetoid) {
+		World world = getWorld();
+		double newPositionX = Math.random()*world.getWorldWidth();
+		double newPositionY = Math.random()*world.getWorldHeight();
+		this.setPosition(newPositionX, newPositionY);
+		world.evolve(0, null);  //niet zeker of dit juist is
+	}
+	
 }

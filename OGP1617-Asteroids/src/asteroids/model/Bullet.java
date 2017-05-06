@@ -57,18 +57,13 @@ public class Bullet extends Entity{
 	 */
 	public Bullet(double x, double y, double xVelocity, double yVelocity, double radius) 
 			throws IllegalArgumentException{
-		this(x, y, xVelocity, yVelocity, radius, calculateMassBullet(minBulletRadius), SPEED_OF_LIGHT);
+		this(x, y, xVelocity, yVelocity, radius, SPEED_OF_LIGHT);
 		
 	}
 	
-	public Bullet(double x, double y, double xVelocity, double yVelocity, double radius, double mass) 
-			throws IllegalArgumentException{
-		this(x, y, xVelocity, yVelocity, radius, mass, SPEED_OF_LIGHT);
-		
-	}
-	
-	public Bullet(double x, double y, double xVelocity, double yVelocity, double radius, double mass, double maxSpeed){
-		super(x, y, xVelocity, yVelocity, radius, mass, maxSpeed);
+	public Bullet(double x, double y, double xVelocity, double yVelocity, double radius, double maxSpeed){
+		super(x, y, xVelocity, yVelocity, radius, maxSpeed);
+		this.setMassBullet();
 	}
 	
 	/**
@@ -93,7 +88,7 @@ public class Bullet extends Entity{
 	 * @post If the given bullet belongs to a ship, ship is set to null
 	 * 		 | @see implementation
 	 */
-	@Basic @Raw
+	@Basic @Raw @Override
 	public void terminate() {
 		if (this.hasShip()){
 			 this.setShip(null);
@@ -108,24 +103,15 @@ public class Bullet extends Entity{
 	 */
 	@Raw
 	public double calculateMinimalMass(){
-		return ((4*Math.PI*Math.pow(this.getRadius(), 3)*minBulletDensity)/3);
+		return ((4*Math.PI*Math.pow(this.getRadius(), 3)*bulletDensity)/3);
 	}
 	
 	/**
-     * Checks if this bullet can have the given mass as its mass.
-     *
-     * @param  mass
-     *         The mass to check.
-     * @return The mass must be smaller than the MAX_VALUE for a double, bigger or equal than the 
-     * 			minimal density and not be NaN.
-     *       	| @see implementation
-     */
-	public boolean isValidMass(double mass){
-		if ((getDensity(mass) >= minBulletDensity) && (mass < Double.MAX_VALUE) && (!Double.isNaN(mass))){
-			return true;
-		}else{
-			return false;
-		}
+	 * 
+	 */
+	@Raw
+	public void setMassBullet(){
+			this.mass = calculateMinimalMass();
 	}
 	
 	/**
@@ -135,17 +121,17 @@ public class Bullet extends Entity{
 	public final static double minBulletRadius = 1;
 	
 	/**
-     * Variable registering the minimal density of all bullets.
+     * Variable registering the density of all bullets.
      */
-	public final static double minBulletDensity = 7.8E12;
+	public final static double bulletDensity = 7.8E12;
 	
 	/**
 	 * Returns the mass for the given bullet assuming it has the minimal bullet density.
-	 * @return Returns the mass assuming it has minBulletDensity
+	 * @return Returns the mass assuming it has bulletDensity
 	 *         | @see implementation
 	 */
 	public static double calculateMassBullet(double radius){
-		return ((4*Math.PI*Math.pow(radius, 3)*minBulletDensity)/3);
+		return ((4*Math.PI*Math.pow(radius, 3)*bulletDensity)/3);
 	}
 	
 	/**
@@ -277,21 +263,14 @@ public class Bullet extends Entity{
 	 * collision with a boundary, else if the bullet has collided maxBoundaryCollisions
 	 * times with the boundaries, it is terminated.
 	 */
-	
+	@Override
 	public void collidesWithBoundary(World world) {
-		if (!this.getWorld().withinBoundaries(this)) {
-			this.terminate();
+		this.incrementCounterBoundaryCollisions();
+		if (getCounterBoundaryCollisions() == getMaxBoundaryCollisions()) {
+				this.terminate();
+				return;
 		}else {
-			this.incrementCounterBoundaryCollisions();
-			if (getCounterBoundaryCollisions() == getMaxBoundaryCollisions()) {
-					this.terminate();
-					return;
-			}
-			else if (world.getDistanceToNearestHorizontalBoundary(this) <
-					world.getDistanceToNearestVerticalBoundary(this) )
-				this.setVelocity(getVelocityX(), -getVelocityY());
-			else
-				this.setVelocity(-getVelocityX(), getVelocityY());
+			super.collidesWithBoundary(world);
 		}
 	}
 	
@@ -325,11 +304,16 @@ public class Bullet extends Entity{
 	public Ship source = null;
 	
 	/**
-	 * Terminates both bullets
+	 * Resolve a collision between this bullet and a given entity.
+	 * 
+	 * @param other
 	 */
-	
-	public void cancelsOut(Bullet other) {
-		this.terminate();
-		other.terminate();
-	}	
+	public void hits(Entity other) {
+		if (this.getSource() == other){
+			((Ship)other).loadBulletOnShip(this);
+		}else{
+			this.terminate();
+			other.terminate();
+		}
+	}
 }
