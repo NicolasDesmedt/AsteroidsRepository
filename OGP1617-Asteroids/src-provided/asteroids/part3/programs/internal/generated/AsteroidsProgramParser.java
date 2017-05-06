@@ -2,6 +2,7 @@
 
     package asteroids.part3.programs.internal.generated;
 
+import org.antlr.v4.*;
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
 import org.antlr.v4.runtime.*;
