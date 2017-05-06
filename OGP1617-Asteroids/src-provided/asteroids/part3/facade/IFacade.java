@@ -93,6 +93,7 @@ public interface IFacade extends asteroids.part2.facade.IFacade {
 	 * @return 1 or 2
 	 */
 	public int getNbStudentsInTeam();
+	
 
 	/**************
 	 * WORLD: Asteroids and planetoids

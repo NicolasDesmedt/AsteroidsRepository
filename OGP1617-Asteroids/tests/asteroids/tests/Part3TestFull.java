@@ -16,7 +16,6 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 
-import asteroids.facade.*;
 import asteroids.model.Asteroid;
 import asteroids.model.Bullet;
 import asteroids.model.Planetoid;
@@ -37,6 +36,7 @@ public class Part3TestFull {
 
   static int nbStudentsInTeam;
   IFacade facade;
+  // TODO : comments weghalen
   //IProgramFactory<?, ?, ?, Program> programFactory = new ProgramFactoryImplementer();
   World filledWorld;
   Ship ship1, ship2, ship3;
@@ -82,6 +82,7 @@ public class Part3TestFull {
     assertFalse(facade.isShipThrusterActive(ship));
     assertEquals(0, facade.getShipAcceleration(ship), EPSILON);
     assertEquals(0, facade.getNbBulletsOnShip(ship));
+    // TODO : comments weghalen
     //assertNull(facade.getShipProgram(ship));
     assertFalse(facade.isTerminatedShip(ship));
     score += 12;
@@ -217,6 +218,7 @@ public class Part3TestFull {
     score += 2;
   }
 
+  // TODO : comments weghalen
   /**
   @Test
   public void testLoadProgram() throws ModelException {
@@ -1330,6 +1332,7 @@ public class Part3TestFull {
   }
 
   // Assignment Statement
+  // TODO : comments weghalen
 /**
   @Test
   public void testAssignmentStatement_NewGlobalVariable() throws ModelException {

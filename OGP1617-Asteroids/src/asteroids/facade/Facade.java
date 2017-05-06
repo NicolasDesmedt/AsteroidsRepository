@@ -9,7 +9,7 @@ import asteroids.model.Asteroid;
 import asteroids.model.Bullet;
 import asteroids.model.Entity;
 import asteroids.model.Planetoid;
-import asteroids.model.Program;
+import asteroids.model.program.*;
 import asteroids.model.Ship;
 import asteroids.model.World;
 import asteroids.part2.CollisionListener;
@@ -353,8 +353,7 @@ public class Facade implements asteroids.part3.facade.IFacade {
 
 	@Override
 	public int getNbStudentsInTeam() {
-		// TODO Auto-generated method stub
-		return 0;
+		return 2;
 	}
 
 	@Override
