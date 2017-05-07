@@ -22,7 +22,7 @@ public class Program {
 	
 	private final Statement main;
 	
-	public void execute(Ship ship) {
+	public void execute(Ship ship, double dt) {
 		
 	}
 }

@@ -408,6 +408,38 @@ public class World{
 	}
 	
 	/**
+	 * Return a set of all the asteroids that are in this world.
+	 * 
+	 * @return	...
+	 * 			| for each entity in allEntities:
+	 * 			|	if (entity instanceof Asteroid)
+	 * 			|		then result.contains(entity)
+	 */
+	public Set<Asteroid> getAllAsteroids() {
+		Set<Asteroid> allAsteroids = new HashSet<Asteroid>();
+		for (Entity entity : allEntities)
+			if (entity instanceof Asteroid)
+				allAsteroids.add((Asteroid)entity);
+		return allAsteroids;
+	}
+	
+	/**
+	 * Return a set of all the Planetoids that are in this world.
+	 * 
+	 * @return	...
+	 * 			| for each entity in allEntities:
+	 * 			|	if (entity instanceof Planetoid)
+	 * 			|		then result.contains(entity)
+	 */
+	public Set<Planetoid> getAllPlanetoids() {
+		Set<Planetoid> allPlanetoids = new HashSet<Planetoid>();
+		for (Entity entity : allEntities)
+			if (entity instanceof Planetoid)
+				allPlanetoids.add((Planetoid)entity);
+		return allPlanetoids;
+	}
+	
+	/**
 	 * A variable set registering all the entities in this world.
 	 * 
 	 * @invar   The set is effective.
