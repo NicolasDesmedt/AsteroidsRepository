@@ -4,14 +4,15 @@ import be.kuleuven.cs.som.annotate.*;
 
 public class Planetoid extends MinorPlanet{
 	
-	public Planetoid(double x, double y, double xVelocity, double yVelocity, double radius) 
+	public Planetoid(double x, double y, double xVelocity, double yVelocity, double radius, double totalTraveledDistance) 
 			throws IllegalArgumentException{
-		this(x, y, xVelocity, yVelocity, radius, SPEED_OF_LIGHT);
+		this(x, y, xVelocity, yVelocity, radius, totalTraveledDistance, SPEED_OF_LIGHT);
 		
 	}
 	
-	public Planetoid(double x, double y, double xVelocity, double yVelocity, double radius, double maxSpeed){
+	public Planetoid(double x, double y, double xVelocity, double yVelocity, double radius, double totalTraveledDistance, double maxSpeed){
 		super(x, y, xVelocity, yVelocity, radius, maxSpeed);
+		setTraveledDistance(totalTraveledDistance);
 	}
 	
 	/**
@@ -67,6 +68,14 @@ public class Planetoid extends MinorPlanet{
         	terminate();
         }
     }
+	
+	public void setTraveledDistance(double traveledDistance){
+		distanceTraveled = traveledDistance;
+	}
+	
+	public double getTraveledDistance(){
+		return distanceTraveled;
+	}
 	
 	public double calculateDistanceTraveled(double duration){
 		double distanceTraveled = duration*Math.sqrt(Math.pow(this.getVelocityX(), 2) + Math.pow(this.getVelocityY(), 2));

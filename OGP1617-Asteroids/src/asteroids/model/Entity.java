@@ -665,7 +665,7 @@ public abstract class Entity {
 	 * 			the entity anymore.
 	 * 			| !(old entity).getWorld().getAllEntities().contains(this)
 	 */
-	protected void terminate() {
+	public void terminate() {
 		if (!this.isTerminated) {
 			if (this.getWorld() != null)
 				this.getWorld().removeEntity(this);
