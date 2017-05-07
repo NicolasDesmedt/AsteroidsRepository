@@ -37,8 +37,7 @@ public class Part3TestFull {
 
   static int nbStudentsInTeam;
   IFacade facade;
-  // TODO : comments weghalen
-  //IProgramFactory<?, ?, ?, Program> programFactory = new ProgramFactoryImplementer();
+  IProgramFactory<?, ?, ?, Program> programFactory = new ProgramFactory();
   World filledWorld;
   Ship ship1, ship2, ship3;
   Bullet bullet1;
@@ -84,7 +83,7 @@ public class Part3TestFull {
     assertEquals(0, facade.getShipAcceleration(ship), EPSILON);
     assertEquals(0, facade.getNbBulletsOnShip(ship));
     // TODO : comments weghalen
-    //assertNull(facade.getShipProgram(ship));
+    assertNull(facade.getShipProgram(ship));
     assertFalse(facade.isTerminatedShip(ship));
     score += 12;
   }

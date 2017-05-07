@@ -1,6 +1,6 @@
 package asteroids.model.program.statements;
 
-import statements.statement;
+import asteroids.part3.programs.SourceLocation;
 
 /**
  * A class of statements.
@@ -8,6 +8,16 @@ import statements.statement;
  * @author Nicolas Desmedt & Lucas Desard
  */
 public abstract class Statement implements Cloneable {
+	
+	protected Statement(SourceLocation sourceLocation) {
+		this.sourceLocation = sourceLocation;
+	}
+	
+	public SourceLocation getSourceLocation() {
+		return this.sourceLocation;
+	}
+	
+	private final SourceLocation sourceLocation;
 	
 	/**
 	 * Check whether the state of this statement can be changed.
