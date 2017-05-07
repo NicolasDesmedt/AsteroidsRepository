@@ -1,6 +1,6 @@
 package asteroids.model.program.statements;
 
-import expressions.Expression;
+import statements.statement;
 
 /**
  * A class of statements.
@@ -10,24 +10,24 @@ import expressions.Expression;
 public abstract class Statement implements Cloneable {
 	
 	/**
-	 * Check whether the state of this expression can be changed.
+	 * Check whether the state of this statement can be changed.
 	 * 
 	 * @note   This inspector is best avoided in languages fully supporting
-	 *         multiple inheritance. Then, mutable expression will inherit
-	 *         from an abstract class of mutable expressions introducing a.o.
+	 *         multiple inheritance. Then, mutable statement will inherit
+	 *         from an abstract class of mutable statements introducing a.o.
 	 *         a method setValue, and a preliminary definition of cloning.
-	 *         An abstract class of immutable expressions might also be defined
+	 *         An abstract class of immutable statements might also be defined
 	 *         then, introducing a final version of cloning.
 	 */
 	public abstract boolean isMutable();
 	
 	/**
-	 * Return a clone of this expression.
+	 * Return a clone of this statement.
 	 * 
-	 * @return The resulting expression is identical to this expression.
+	 * @return The resulting statement is identical to this statement.
 	 *       | result.isIdenticalTo(this)
-	 * @return The resulting expression is the same as this expression
-	 *         if and only if this expression is immutable.
+	 * @return The resulting statement is the same as this statement
+	 *         if and only if this statement is immutable.
 	 *       | (result == this) == (! this.isMutable())
 	 */
 	@Override

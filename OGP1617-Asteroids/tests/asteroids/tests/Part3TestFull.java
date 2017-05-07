@@ -23,7 +23,7 @@ import asteroids.model.Planetoid;
 import asteroids.model.Ship;
 import asteroids.model.World;
 import asteroids.model.program.Program;
-import asteroids.model.program.ProgramFactoryImplementer;
+import asteroids.model.program.ProgramFactory;
 import asteroids.part3.facade.IFacade;
 import asteroids.part3.programs.IProgramFactory;
 import asteroids.part3.programs.internal.ProgramParser;
