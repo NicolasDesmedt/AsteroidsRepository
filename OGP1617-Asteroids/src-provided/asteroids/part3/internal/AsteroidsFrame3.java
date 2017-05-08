@@ -11,7 +11,7 @@ import java.util.Set;
 import asteroids.model.Asteroid;
 import asteroids.model.Bullet;
 import asteroids.model.Planetoid;
-import asteroids.model.Program;
+import asteroids.model.program.Program;
 import asteroids.model.Ship;
 import asteroids.model.World;
 import asteroids.part2.internal.AsteroidsFrame2;
