@@ -78,22 +78,6 @@ public class BulletTest {
 	
 	/*
 	 * Test number 1 tests a legal case.
-	 * Test number 2 tests the minimal possible mass for a given bullet.
-	 * Test number 3 tests a value just under the minimal possible mass for a given bullet.
-	 * Test number 4 tests in case the MAX_VALUE for double is provided.
-	 * Test number 5 tests in case NaN is provided.
-	 */
-	@Test
-	public void isValidMass_Tests() {
-		assertTrue(mutableBullet1.isValidMass(mutableBullet1.calculateMinimalMass()+20));
-		assertTrue(mutableBullet1.isValidMass(mutableBullet1.calculateMinimalMass()));
-		assertFalse(mutableBullet1.isValidMass(mutableBullet1.calculateMinimalMass()-1));
-		assertFalse(mutableBullet1.isValidMass(Double.MAX_VALUE));
-		assertFalse(mutableBullet1.isValidMass(Double.NaN));
-	}
-	
-	/*
-	 * Test number 1 tests a legal case.
 	 * Test number 2 tests the minimal possible radius for a given ship.
 	 * Test number 3 tests a value just under the minimal possible radius for a given ship.
 	 * Test number 4 tests in case the POSITIVE_INFINITY for double is provided.
@@ -143,7 +127,7 @@ public class BulletTest {
 	
 	@Test
 	public void cancelsOut_LegalCase() {
-		mutableMinimalBullet.cancelsOut(mutableBullet1);
+		mutableMinimalBullet.hits(mutableBullet1);
 		assertTrue(mutableMinimalBullet.isTerminated());
 		assertTrue(mutableBullet1.isTerminated());
 	}

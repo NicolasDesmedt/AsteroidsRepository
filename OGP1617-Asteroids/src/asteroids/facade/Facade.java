@@ -322,7 +322,7 @@ public class Facade implements asteroids.part3.facade.IFacade {
 		if ((entity1 instanceof Entity) && (entity2 instanceof Entity))
 			return ((Entity)entity1).getCollisionPosition((Entity)entity2);
 		else
-			throw new IllegalArgumentException("The arguments must be of type Entity");
+			throw new ModelException("The arguments must be of type Entity");
 	}
 
 	@Override
@@ -337,8 +337,12 @@ public class Facade implements asteroids.part3.facade.IFacade {
 
 	@Override
 	public void evolve(World world, double dt, CollisionListener collisionListener) throws ModelException {
-		world.evolve(dt, collisionListener);
-		return;
+		try {
+			world.evolve(dt, collisionListener);
+		} catch (IllegalArgumentException e){
+			throw new ModelException("Dt must be a positive Double.");
+		}
+		
 	}
 
 	@Override

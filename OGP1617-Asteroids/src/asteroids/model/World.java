@@ -696,14 +696,14 @@ public class World{
 		}
 		return overlappingEntities;
 	}
-		
+	
 	/**
 	 * Evolve the state of this world a given amount of time and 
 	 * update the collisionListener on any collisions occurring.
 	 */
 	@Raw
 	public void evolve(double dt, CollisionListener collisionListener) throws IllegalArgumentException {
-		if (dt < 0) {
+		if ((dt < 0) || (Double.isNaN(dt))) {
 			throw new IllegalArgumentException("The given amount of time must be positive");
 		}
 		try {
