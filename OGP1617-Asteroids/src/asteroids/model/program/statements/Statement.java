@@ -1,5 +1,6 @@
 package asteroids.model.program.statements;
 
+import asteroids.model.Ship;
 import asteroids.part3.programs.SourceLocation;
 
 /**
@@ -51,5 +52,12 @@ public abstract class Statement implements Cloneable {
 			throw new AssertionError(exc);
 		}
 	}
+	
+	public void execute(Ship ship) {
+		
+	}
+	
+	@Override
+	public abstract String toString();
 
 }
