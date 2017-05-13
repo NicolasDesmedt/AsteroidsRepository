@@ -57,6 +57,8 @@ public abstract class Statement implements Cloneable {
 		
 	}
 	
+	public abstract Boolean canBeTimedOut();
+	
 	@Override
 	public abstract String toString();
 

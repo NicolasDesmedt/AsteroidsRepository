@@ -3,7 +3,7 @@ package asteroids.model.program.statements;
 import asteroids.model.Ship;
 import asteroids.part3.programs.SourceLocation;
 
-public class Fire extends Statement{
+public class Fire extends ActionStatement {
 	
 	public Fire(SourceLocation sourceLocation) {
 		super(sourceLocation);
