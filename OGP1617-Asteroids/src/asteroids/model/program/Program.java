@@ -28,9 +28,28 @@ public class Program {
 	
 	private final Map<String, Type> globals = new HashMap<String, Type>();
 	
-	private final 
+	private int timeLeft = 0;
 	
-	public void execute(Ship ship, double dt) {
-		if 
+	public int getTimeLeft() {
+		return timeLeft;
+	}
+	
+	private List<? extends Object> valuesPrinted = new ArrayList<>();
+	
+	public List<? extends Object> getValuesPrinted() {
+		return valuesPrinted;
+	}
+	
+	public void addTime(double timeToAdd) {
+		timeLeft += timeToAdd;
+	}
+	
+	public List<? extends Object> execute(double dt) {
+		addTime(dt);
+		for (Function function : functions) {
+			function.evaluateFunction();
+		}
+		body.executeStatement();
+		return getValuesPrinted();
 	}
 }

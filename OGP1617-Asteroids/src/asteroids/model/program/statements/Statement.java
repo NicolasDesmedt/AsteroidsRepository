@@ -62,4 +62,6 @@ public abstract class Statement implements Cloneable {
 	@Override
 	public abstract String toString();
 
+	public abstract void executeStatement();
+
 }
