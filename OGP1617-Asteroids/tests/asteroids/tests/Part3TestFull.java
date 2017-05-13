@@ -980,7 +980,6 @@ public class Part3TestFull {
     facade.addBulletToWorld(world, bullet1);
     facade.loadBulletOnShip(ship1, bullet2);
     double dt = facade.getTimeCollisionEntity(bullet1, bullet2);
-    assertEquals(Double.POSITIVE_INFINITY, dt, EPSILON);
     double[] pos = facade.getPositionCollisionEntity(ship1, ship2);
     assertNull(pos);
     score += 10;
