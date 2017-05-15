@@ -32,5 +32,11 @@ public class Assignement extends NoActionStatement {
 	public String toString() {
 		return this.getVar() + " := " + this.getValue();
 	}
+
+	@Override
+	public void executeStatement() {
+		// TODO Auto-generated method stub
+		
+	}
 	
 }
