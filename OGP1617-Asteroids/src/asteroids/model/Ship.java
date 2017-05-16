@@ -3,6 +3,7 @@ package asteroids.model;
 import java.util.HashSet;
 import java.util.Set;
 
+import asteroids.model.programs.Program;
 import be.kuleuven.cs.som.annotate.*;
 /**
  * A class for flying a ship in space involving the mass, radius
@@ -514,5 +515,16 @@ public class Ship extends Entity{
 		this.setPosition(newPositionX, newPositionY);
 		world.evolve(0, null);  //niet zeker of dit juist is
 	}
+	
+	public void loadProgramOnShip(Program program) {
+		this.program = program;
+		program.setShip(this);
+	}
+	
+	public Program getProgram() {
+		return this.program;
+	}
+	
+	private Program program;
 	
 }

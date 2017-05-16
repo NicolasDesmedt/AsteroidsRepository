@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Set;
 
 import asteroids.model.*;
-import asteroids.model.program.Program;
+import asteroids.model.programs.Program;
 import asteroids.part3.programs.IProgramFactory;
 import asteroids.util.ModelException;
 

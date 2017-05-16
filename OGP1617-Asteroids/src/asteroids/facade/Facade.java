@@ -9,9 +9,9 @@ import asteroids.model.Asteroid;
 import asteroids.model.Bullet;
 import asteroids.model.Entity;
 import asteroids.model.Planetoid;
-import asteroids.model.program.*;
 import asteroids.model.Ship;
 import asteroids.model.World;
+import asteroids.model.programs.*;
 import asteroids.part2.CollisionListener;
 import asteroids.part3.programs.IProgramFactory;
 import asteroids.util.ModelException;
@@ -509,26 +509,23 @@ public class Facade implements asteroids.part3.facade.IFacade {
 
 	@Override
 	public Program getShipProgram(Ship ship) throws ModelException {
-		// TODO Auto-generated method stub
-		return null;
+		return ship.getProgram();
 	}
 
 	@Override
 	public void loadProgramOnShip(Ship ship, Program program) throws ModelException {
-		// TODO Auto-generated method stub
-		
+		ship.loadProgramOnShip(program);
+		return;
 	}
 
 	@Override
 	public List<Object> executeProgram(Ship ship, double dt) throws ModelException {
-		// TODO Auto-generated method stub
-		return null;
+		return ship.getProgram().execute(dt);
 	}
 
 	@Override
 	public IProgramFactory<?, ?, ?, ? extends Program> createProgramFactory() throws ModelException {
-		// TODO Auto-generated method stub
-		return null;
+		return new ProgramFactory();
 	}
 
 }

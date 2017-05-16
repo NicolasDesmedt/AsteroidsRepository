@@ -21,8 +21,8 @@ import asteroids.model.Bullet;
 import asteroids.model.Planetoid;
 import asteroids.model.Ship;
 import asteroids.model.World;
+import asteroids.model.programs.Program;
 import asteroids.part3.facade.IFacade;
-import asteroids.model.program.Program;
 import asteroids.part3.programs.IProgramFactory;
 import asteroids.part3.programs.internal.ProgramParser;
 import asteroids.util.ModelException;
@@ -221,8 +221,6 @@ public class Part3TestFull {
     score += 2;
   }
 
-  // TODO: comments weghalen
-  /**
   @Test
   public void testLoadProgram() throws ModelException {
     max_score += 2;
@@ -233,7 +231,6 @@ public class Part3TestFull {
     assertEquals(program, facade.getShipProgram(ship));
     score += 2;
   }
-  **/
 
   @Test
   public void testCreateBullet() throws ModelException {
