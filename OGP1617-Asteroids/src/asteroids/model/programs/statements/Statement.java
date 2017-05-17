@@ -35,8 +35,6 @@ public abstract class Statement implements Cloneable {
 		return this.getProgram().getShip();
 	}
 	
-	public abstract Boolean canBeExecuted();
-	
 	@Override
 	public abstract String toString();
 

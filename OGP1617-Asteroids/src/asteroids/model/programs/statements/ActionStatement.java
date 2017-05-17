@@ -14,7 +14,6 @@ public abstract class ActionStatement extends Statement {
 	
 	private double timeActionStatement = 0.2;
 	
-	@Override
 	public Boolean canBeExecuted() {
 		double timeLeft = this.getProgram().getTimeLeft();
 		return this.getTimeActionStatement() <= timeLeft;

@@ -50,6 +50,10 @@ public class Program {
 		toDoList.add(statement);
 	}
 	
+	public void addToToDoListInFront(Statement statement) {
+		toDoList.add(0, statement);
+	}
+	
 	private List<Statement> toDoList = new ArrayList<Statement>();
 	
 	private List<Object> valuesPrdoubleed = new ArrayList<>();
