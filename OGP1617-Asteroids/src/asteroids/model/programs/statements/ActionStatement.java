@@ -1,5 +1,8 @@
 package asteroids.model.programs.statements;
 
+import java.util.Map;
+
+import asteroids.model.programs.expressions.Expression;
 import asteroids.part3.programs.SourceLocation;
 
 public abstract class ActionStatement extends Statement {
@@ -20,7 +23,7 @@ public abstract class ActionStatement extends Statement {
 	}
 	
 	@Override
-	public void executeStatement() {
+	public void executeStatement(Map<String, Expression<?>> variables) {
 		if (canBeExecuted()) {
 			this.getProgram().substractTime(this.getTimeActionStatement());
 		}

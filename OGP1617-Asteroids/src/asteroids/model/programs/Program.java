@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import asteroids.model.Ship;
+import asteroids.model.programs.expressions.Expression;
 import asteroids.model.programs.expressions.Type;
 import asteroids.model.programs.functions.*;
 import asteroids.model.programs.statements.*;
@@ -16,6 +17,17 @@ public class Program {
 	public Program(List<Function> functions, Statement body) {
 		this.functions.addAll(functions);
 		this.body = body;
+		//addToToDoList(body);
+		if (body instanceof Sequence) {
+			List<Statement> statementsList = ((Sequence)body).getStatementList();
+			for (Statement statement : statementsList) {
+				addToToDoList(statement);
+			}
+		}
+		else {
+			addToToDoList(body);
+		}
+		body.setProgram(this);
 	}
 	
 	public Statement getProgramBody() {
@@ -56,11 +68,21 @@ public class Program {
 	
 	private List<Statement> toDoList = new ArrayList<Statement>();
 	
-	private List<Object> valuesPrdoubleed = new ArrayList<>();
-	
 	public List<Object> getValuesPrinted() {
-		return valuesPrdoubleed;
+		return valuesPrinted;
 	}
+	
+	public <T> void addToValuesPrinted(T value) {
+		valuesPrinted.add(value);
+	}
+	
+	private List<Object> valuesPrinted = new ArrayList<>();
+	
+	public Map<String, Expression<?>> getVariables() {
+		return variables;
+	}
+	
+	private Map<String, Expression<?>> variables = new HashMap<>();
 	
 	public List<Object> execute(double dt) {
 		addTime(dt);
@@ -68,11 +90,13 @@ public class Program {
 		for (Function function : functions) {
 			function.evaluateFunction();
 		}
+		System.out.println("TodoLIST:" + this.getToDoList() +"stop");
 		for (Statement statement : this.getToDoList()) {
-			statement.executeStatement();
-			if (!isPutOnHold()) {
-				this.getToDoList().remove(statement);
-			}
+			System.out.println(statement);
+			statement.executeStatement(this.getVariables());
+//			if (!isPutOnHold()) {
+//				this.getToDoList().remove(statement);
+//				System.out.println("TodoLISTv2:" + this.getToDoList() +"stop");
 		}
 		return getValuesPrinted();
 	}

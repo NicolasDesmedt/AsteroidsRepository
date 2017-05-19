@@ -3,12 +3,14 @@ package asteroids.model.programs.statements;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
+import asteroids.model.programs.expressions.Expression;
 import asteroids.part3.programs.SourceLocation;
 
 public class Sequence extends Statement {
 
-	protected Sequence(List<Statement> statements, SourceLocation sourceLocation) {
+	public Sequence(List<Statement> statements, SourceLocation sourceLocation) {
 		super(sourceLocation);
 		this.statementsList = statements;
 	}
@@ -21,26 +23,26 @@ public class Sequence extends Statement {
 	
 	@Override
 	public String toString() {
-		String toPrint="";
+		String string="";
 		for (Statement statement : statementsList)
-			toPrint += statement.toString() + "\n";
-		return toPrint;
+			string += statement.toString() + "\n";
+		return string;
 	}
 	@Override
-	public void executeStatement() {
-		for (Statement statement : statementsList) {
-			if (!this.getProgram().isPutOnHold()) {
-				statement.executeStatement();
-				statementsList.remove(statement);
-			}
-		}
-		if (this.getProgram().isPutOnHold()) {
-			List<Statement> shallowCopy = statementsList.subList(0, statementsList.size());
-			Collections.reverse(shallowCopy);
-			for (Statement statement : shallowCopy)
-				this.getProgram().addToToDoListInFront(statement);
-		}
-		
+	public void executeStatement(Map<String, Expression<?>> variables) {
+//		for (Statement statement : statementsList) {
+//			if (!this.getProgram().isPutOnHold()) {
+//				statement.executeStatement(variables);
+//				statementsList.remove(statement);
+//			}
+//		}
+//		if (this.getProgram().isPutOnHold()) {
+//			List<Statement> shallowCopy = statementsList.subList(0, statementsList.size());
+//			Collections.reverse(shallowCopy);
+//			for (Statement statement : shallowCopy)
+//				this.getProgram().addToToDoListInFront(statement);
+//		}
+//		
 	}
 	
 }
