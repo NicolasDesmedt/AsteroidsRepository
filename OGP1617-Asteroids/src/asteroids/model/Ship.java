@@ -316,7 +316,7 @@ public class Ship extends Entity{
 	/**
 	 * A variable registering the default thruster force.
 	 */
-	public final static double defaultThrusterForce = 1.1E21;
+	public final static double defaultThrusterForce = 1.1E18;
 	
 	/**
 	 * Set the thruster force of this ship to a given thruster force.
@@ -352,8 +352,12 @@ public class Ship extends Entity{
 	 * @return
 	 */
 	public double getAcceleration(){
+		if (isShipThrusterActive()){
 		double acceleration = this.getThrusterForce()/this.getMass();
 		return acceleration;
+		}else{
+			return 0;
+		}
 	}
 	
 	/**
@@ -362,13 +366,28 @@ public class Ship extends Entity{
 	 * 
 	 * @param bullet
 	 */
-	public void loadBulletOnShip(Bullet bullet){
+	public void loadBulletOnShip(Bullet bullet)
+			throws IllegalArgumentException{
+		if (bullet == null) throw new IllegalArgumentException("The given bullet is invalid");
+		if (bullet.hasWorld() && bullet.source != this) throw new IllegalArgumentException("The bullet is already in the world");
+		if (!inShip(bullet)) throw new IllegalArgumentException("Bullet is out of the ship");
 		this.bullets.add(bullet);
 		this.setMass(this.getMass() + bullet.getMass());
 		bullet.removeFromWorld();
 		bullet.setShip(this);
 		bullet.setPosition(this.getPositionX(), this.getPositionY());
 		bullet.setVelocity(0, 0);
+	}
+	
+	public boolean inShip(Bullet bullet){
+		double shipPosX = getPositionX();
+		double shipPosY = getPositionY();
+		double bulletPosX = bullet.getPositionX();
+		double bulletPosY = bullet.getPositionY();
+		double reducedRadius = getRadius() - bullet.getRadius();
+		if ((bulletPosX < (shipPosX-reducedRadius)) || (bulletPosX > (shipPosX+reducedRadius)) || (bulletPosY < (shipPosY-reducedRadius)) || (bulletPosY > (shipPosY+reducedRadius))){
+			return false;
+		}else return true;
 	}
 	
 	/**
@@ -411,10 +430,12 @@ public class Ship extends Entity{
 	 * 
 	 * @param bullet
 	 */
-	public void removeBulletFromShip(Bullet bullet){
+	public void removeBulletFromShip(Bullet bullet) throws IllegalArgumentException{
 		if (this.getBulletsOnShip().contains(bullet)){
 			bullet.setShip(null);
 			this.getBulletsOnShip().remove(bullet);
+		}else{
+			 throw new IllegalArgumentException ("The given bullet is not on the ship");
 		}
 	}
 	
@@ -453,7 +474,10 @@ public class Ship extends Entity{
 			this.putInFiringPosition(bullet);
 			bullet.setVelocity(bulletSpeed*Math.cos(this.getOrientation()), bulletSpeed*Math.sin(this.getOrientation()));
 			bullet.setSource(this);
+			this.setMass(this.getMass() - bullet.getMass());
 		}
+		this.getWorld().evolve(0,null);
+        System.out.println(bullet.isTerminated());
 	}
 	
 	/**
@@ -462,21 +486,9 @@ public class Ship extends Entity{
 	 * @param 	bullet
 	 */
 	public void putInFiringPosition(Bullet bullet){
-		double[] newPosition = this.getFiringPosition(bullet);
-		bullet.setPosition(newPosition[0], newPosition[1]);
-	}
-	
-	/**
-	 * Return the firing position of this ship for the given bullet.
-	 * 
-	 * @param 	bullet
-	 * @return
-	 */
-	public double[] getFiringPosition(Bullet bullet) {
-		double newXPosition = bullet.getPositionX() + (this.getRadius() + bullet.getRadius())*Math.cos(getOrientation());
-		double newYPosition = bullet.getPositionY() + (this.getRadius() + bullet.getRadius())*Math.sin(getOrientation());
-		double[] position = {newXPosition,newYPosition};
-		return position;
+		double newXPosition = bullet.getPositionX() + (this.getRadius() + bullet.getRadius())*Math.cos(getOrientation() + 1*Math.cos(getOrientation()));
+		double newYPosition = bullet.getPositionY() + (this.getRadius() + bullet.getRadius())*Math.sin(getOrientation() + 1*Math.sin(getOrientation()));
+		bullet.setPosition(newXPosition, newYPosition);
 	}
 	
 	/**

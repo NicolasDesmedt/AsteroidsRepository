@@ -10,6 +10,6 @@
 			<attribute name="javadoc_location" value="http://www.cs.kuleuven.be/books/OOPWithJava/doc/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/Users/Nicolas/RepositoryLucasNicolas/OGP1617-Asteroids/lib/antlr-4.7-complete.jar"/>
+	<classpathentry kind="lib" path="/Users/lucas/Downloads/Asteroids-part3.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

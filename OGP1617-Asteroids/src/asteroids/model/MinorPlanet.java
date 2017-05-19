@@ -1,10 +1,10 @@
 package asteroids.model;
 
-import be.kuleuven.cs.som.annotate.*;
+//import be.kuleuven.cs.som.annotate.*;
 
 public abstract class MinorPlanet extends Entity{
 	
-	public MinorPlanet(double x, double y, double xVelocity, double yVelocity, double mass, double radius) 
+	public MinorPlanet(double x, double y, double xVelocity, double yVelocity, double radius, double mass) 
 			throws IllegalArgumentException{
 		this(x, y, xVelocity, yVelocity, radius, mass, SPEED_OF_LIGHT);
 		

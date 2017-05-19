@@ -136,7 +136,8 @@ public class Part3TestFull {
     assertTrue(velocity <= 300000 + EPSILON);
     score += 3;
   }
-
+  
+  @Test
   public void testCreateShipRadiusNan() throws ModelException {
     try {
       max_score += 1;
@@ -220,7 +221,7 @@ public class Part3TestFull {
     assertEquals(expectedAcceleration, facade.getShipAcceleration(ship), EPSILON);
     score += 2;
   }
-
+  
   @Test
   public void testLoadProgram() throws ModelException {
     max_score += 2;
@@ -231,7 +232,8 @@ public class Part3TestFull {
     assertEquals(program, facade.getShipProgram(ship));
     score += 2;
   }
-
+  
+ 
   @Test
   public void testCreateBullet() throws ModelException {
     max_score += 10;
@@ -703,7 +705,7 @@ public class Part3TestFull {
       score += 7;
     }
   }
-
+  
   @Test
   public void testLoadMultipleBulletsOnShipIllegalBullets() throws ModelException {
     if (nbStudentsInTeam > 1) {
@@ -724,6 +726,9 @@ public class Part3TestFull {
       score += 7;
     }
   }
+  
+  
+ 
 
   @Test
   public void testRemoveBulletFromShip() throws ModelException {
@@ -875,7 +880,7 @@ public class Part3TestFull {
     assertEquals(300, collisionPosition[1], EPSILON);
     score += 6;
   }
-
+  
   @Test
   public void testBoundaryCollision_FiniteTimeTopCollision() throws ModelException {
     max_score += 4;
@@ -1251,7 +1256,7 @@ public class Part3TestFull {
     assertTrue(facade.isTerminatedBullet(bullet));
     score += 12;
   }
-
+  
   @Test
   public void testEvolveShipOwnBulletCollision() throws ModelException {
     max_score += 12;
@@ -1275,7 +1280,7 @@ public class Part3TestFull {
     }
     score += 12;
   }
-
+ 
   @Test
   public void testEvolveAfterOtherShipBulletCollision() throws ModelException {
     max_score += 12;

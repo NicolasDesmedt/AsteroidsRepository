@@ -72,8 +72,7 @@ public abstract class Entity {
 	 */
 	@Raw @Model
 	public static boolean isValidPosition(double[] position){
-		if ( (!Double.isNaN(position[0])) && (!Double.isNaN(position[1])) && 
-				(!Double.isInfinite(position[0])) && (!Double.isInfinite(position[1])) && (position.length == 2) ) {
+		if ( (!Double.isNaN(position[0])) && (!Double.isNaN(position[1])) && (position.length == 2) ) {
 			return true;
 		}
 		else{
@@ -477,6 +476,9 @@ public abstract class Entity {
 			throws IllegalArgumentException, NullPointerException{
 		if (other == null) throw new NullPointerException("The other entity is not effective");
 		if (this.overlapFiltered(other)) throw new IllegalArgumentException("This method does not apply to entitys that overlap");
+		if (this.getWorld() != other.getWorld()){
+			return Double.POSITIVE_INFINITY;
+		}
 		double diffX = other.getPositionX() - this.getPositionX();
 		double diffY = other.getPositionY() - this.getPositionY();
 		double diffVX = other.getVelocityX() - this.getVelocityX();
@@ -635,15 +637,15 @@ public abstract class Entity {
 	 */
 	@Raw
 	public void setWorld(World world) throws IllegalArgumentException {
-		if ((world == null) || (this.hasWorld()))
-			throw new IllegalArgumentException ("Not a valid world for this entity");
+		if (this.hasWorld())
+			throw new IllegalArgumentException ("An entity can be a part of max 1 world at a time");
 		this.world = world;
 	}
 	
 	/**
 	 * Variable registering the world this entity belongs to.
 	 */
-	private World world = null;
+	public World world = null;
 	
 	/**
 	 * Remove this entity from its world.

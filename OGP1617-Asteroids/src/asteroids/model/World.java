@@ -286,19 +286,26 @@ public class World{
 	 * 			...
 	 * 			| (((old entity).getWorld() != null) || (!withinBoundaries(entity)) || (overlapsWithOtherEntities(entity))
 	 */
-	public void addEntity(Entity entity) throws IllegalArgumentException {
-		if (allEntities.contains(entity))
-			return;
+	public void addEntity(Entity entity){
+		if (canHaveEntity(entity)){
+			allEntities.add(entity);
+			entity.setWorld(this);
+		}
+	}	
+	
+	private boolean canHaveEntity(Entity entity) throws IllegalArgumentException{
+		if (entity == null) throw new IllegalArgumentException
+			("Cannot add null to the world.");
+		if (allEntities.contains(entity))throw new IllegalArgumentException
+			("The given entity already belongs to this world.");
 		if (entity.getWorld() != null) throw new IllegalArgumentException
 			("The given entity already belongs to a world.");
 		if (!this.withinBoundaries(entity)) throw new IllegalArgumentException
 			("This entity doesn't lie fully within the bounds of that world.");
 		if (this.overlapsWithOtherEntities(entity)) throw new IllegalArgumentException
 			("The entity overlaps with other entities that is shouldn't overlap with");
-		
-		allEntities.add(entity);
-		entity.setWorld(this);
-	}	
+		return true;
+	}
 	
 	/**
 	 * Remove the given entity from this world
@@ -450,7 +457,7 @@ public class World{
 	 * 			|	(this.withinBoundaries(entity)) &&
 	 * 			|	(!(this.overlapsWithOtherEntities(entity)))
 	 */
-	private final Set<Entity> allEntities = new HashSet<Entity>();
+	public final Set<Entity> allEntities = new HashSet<Entity>();
 	
 	/**
 	 * Return the time (in seconds) it takes for the given entity to collide
@@ -475,6 +482,7 @@ public class World{
 			}
 			return time = Math.abs(distance/entity.getVelocityX());
 		}
+
 	}
 	
 	/**
@@ -511,7 +519,7 @@ public class World{
 	 * @return	...
 	 * 			| @see implementation
 	 */
-	public double getTimeCollisionToBoundary(Entity entity) { 
+	public double getTimeCollisionToBoundary(Entity entity) {
 		double verticalTime = getTimeCollisionVerticalBoundary(entity);
 		double horizontalTime = getTimeCollisionHorizontalBoundary(entity);
 		if (verticalTime < horizontalTime)
@@ -537,7 +545,7 @@ public class World{
 		double horizontalTime = getTimeCollisionHorizontalBoundary(entity);
 		double[] position = {xPos, yPos};
 		if ( (verticalTime == Double.POSITIVE_INFINITY) && (horizontalTime == Double.POSITIVE_INFINITY) ) {
-			return position;
+			return null;
 		}
 		else if (horizontalTime < verticalTime) {
 			if (entity.getVelocityY() < 0){
@@ -545,7 +553,7 @@ public class World{
 			}else{
 				yPos = height;
 			}
-			xPos = entity.getPositionX() + entity.getVelocityX()*verticalTime;
+			xPos = entity.getPositionX() + entity.getVelocityX()*horizontalTime;
 		}
 		else {
 			if (entity.getVelocityX() < 0){

@@ -13,6 +13,7 @@ public class Planetoid extends MinorPlanet{
 	public Planetoid(double x, double y, double xVelocity, double yVelocity, double radius, double totalTraveledDistance, double maxSpeed){
 		super(x, y, xVelocity, yVelocity, radius, maxSpeed);
 		setTraveledDistance(totalTraveledDistance);
+		this.move(0);
 	}
 	
 	/**
@@ -63,11 +64,30 @@ public class Planetoid extends MinorPlanet{
         if (initialRadius == 0){
         	initialRadius = radius;
         }
-        radius = (initialRadius-(distanceTraveled*0.000001));
-        if (radius < minMinorPlanetRadius){
+        double newRadius = (initialRadius-(distanceTraveled*0.000001));
+        if (newRadius < minMinorPlanetRadius){
         	terminate();
+        }else{
+            setRadius(newRadius);
         }
     }
+	
+	/**
+	 * Set the position of this entity to the given position.
+	 * 
+	 * @param 	position
+	 * 			The new position for this entity.
+	 * @post	The position of this entity is equal to the given position.
+	 *       	| new.getPosition() == position
+	 * @throws 	IllegalArgumentException
+	 *  		The given position is not a valid position for any entity.
+	 *       	| ! isValidPosition(position)
+	 */
+	@Raw
+	public void setRadius(double radius)
+		throws IllegalArgumentException{
+		this.radius = radius;
+	}
 	
 	public void setTraveledDistance(double traveledDistance){
 		distanceTraveled = traveledDistance;

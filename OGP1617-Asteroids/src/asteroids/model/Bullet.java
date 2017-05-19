@@ -91,7 +91,7 @@ public class Bullet extends Entity{
 	@Basic @Raw @Override
 	public void terminate() {
 		if (this.hasShip()){
-			 this.setShip(null);
+			this.getShip().removeBulletFromShip(this);
 		}
 		super.terminate();
 	 }
@@ -186,39 +186,8 @@ public class Bullet extends Entity{
 	 * A newly created bullet doesn't belong to a ship.
 	 */
 	public Ship ship = null;
- 	
-	/**
-	 * Return the world this bullet belongs to.
-	 */
- 	public World getWorld(){
- 		return this.world;
- 	}
- 	
- 	/**
- 	 * Return a boolean indicating whether or not this bullet belongs to a world.
- 	 */
- 	public boolean hasWorld(){
- 		return this.world != null;
-	}
+
   	
- 	/**
- 	 * Set the world this bullet belongs to to a given world.
- 	 * A bullet can only belong to a world or a ship at the same time.
- 	 */
- 	public void setWorld(World world) throws IllegalArgumentException {
- 		if (this.hasShip())
- 			this.setShip(null);
- 		if (!hasShip() && !hasWorld()){
-			this.world = world;
-		}else{
-			throw new IllegalArgumentException();
- 		}
- 	}
-  	
- 	/**
- 	 * A variable registering the world of this bullet.
- 	 */
- 	public World world;
 	
 	/**
 	 * Returns the number of times the bullet has collided with a boundary of the world.
@@ -311,6 +280,7 @@ public class Bullet extends Entity{
 	public void hits(Entity other) {
 		if (this.getSource() == other){
 			((Ship)other).loadBulletOnShip(this);
+			this.getShip().getWorld().allEntities.remove(this);
 		}else{
 			this.terminate();
 			other.terminate();

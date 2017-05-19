@@ -88,7 +88,7 @@ public class Facade implements asteroids.part3.facade.IFacade {
 			double mass) throws ModelException {
 		try{
 			return new Ship(x, y, xVelocity, yVelocity, radius, direction, mass);
-		}catch( IllegalArgumentException e){
+		}catch(IllegalArgumentException|AssertionError e){
 			throw new ModelException(e.getMessage());
 		}
 	}
@@ -268,19 +268,29 @@ public class Facade implements asteroids.part3.facade.IFacade {
 
 	@Override
 	public void loadBulletOnShip(Ship ship, Bullet bullet) throws ModelException {
-		ship.loadBulletOnShip(bullet);
+		try{
+			ship.loadBulletOnShip(bullet);
+		}catch(IllegalArgumentException e){
+			throw new ModelException(e.getMessage());
+		}
 	}
 
 	@Override
 	public void loadBulletsOnShip(Ship ship, Collection<Bullet> bullets) throws ModelException {
-		ship.loadBulletsOnShip(bullets.toArray(new Bullet[bullets.size()]));
-		return;
+		try{
+			ship.loadBulletsOnShip(bullets.toArray(new Bullet[bullets.size()]));
+		}catch(IllegalArgumentException e){
+			throw new ModelException(e.getMessage());
+		}
 	}
 
 	@Override
 	public void removeBulletFromShip(Ship ship, Bullet bullet) throws ModelException {
-		ship.removeBulletFromShip(bullet);
-		return;
+		try{
+			ship.removeBulletFromShip(bullet);
+		}catch(IllegalArgumentException e){
+			throw new ModelException(e.getMessage());
+		}
 	}
 
 	@Override
@@ -291,7 +301,9 @@ public class Facade implements asteroids.part3.facade.IFacade {
 
 	@Override
 	public double getTimeCollisionBoundary(Object object) throws ModelException {
-		if (object instanceof Entity) { 
+		if (!((Entity)object).hasWorld()){
+			return Double.POSITIVE_INFINITY;
+		}else if (object instanceof Entity) { 
 			World world = ((Entity)object).getWorld();
 			return world.getTimeCollisionToBoundary((Entity)object);
 		}
@@ -301,7 +313,9 @@ public class Facade implements asteroids.part3.facade.IFacade {
 
 	@Override
 	public double[] getPositionCollisionBoundary(Object object) throws ModelException {
-		if (object instanceof Entity) {
+		if (!((Entity)object).hasWorld()){
+			return null;
+		}else if (object instanceof Entity) {
 			World world = ((Entity)object).getWorld();
 			return world.getPositionCollisionWithBoundary((Entity)object);
 		}
