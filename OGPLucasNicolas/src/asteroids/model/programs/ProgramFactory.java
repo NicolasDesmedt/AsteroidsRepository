@@ -4,6 +4,7 @@ import java.util.List;
 
 import asteroids.part3.programs.IProgramFactory;
 import asteroids.part3.programs.SourceLocation;
+import asteroids.util.ModelException;
 import asteroids.model.Program;
 import asteroids.model.programs.expressions.*;
 import asteroids.model.programs.functions.*;
@@ -106,9 +107,8 @@ public class ProgramFactory
 	}
 
 	@Override
-	public Expression createSelfExpression(SourceLocation location) {
-		// TODO Auto-generated method stub
-		return null;
+	public Expression<Entity> createSelfExpression(SourceLocation location) {
+		return new Self(location);
 	}
 
 	@Override

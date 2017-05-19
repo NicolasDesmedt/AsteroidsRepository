@@ -9,6 +9,7 @@ import asteroids.model.programs.expressions.Expression;
 import asteroids.model.programs.expressions.Type;
 import asteroids.model.programs.functions.*;
 import asteroids.model.programs.statements.*;
+import asteroids.util.ModelException;
 
 
 public class Program {
@@ -92,7 +93,11 @@ public class Program {
 		System.out.println("TodoLIST:" + this.getToDoList() +"stop");
 		for (Statement statement : this.getToDoList()) {
 			System.out.println(statement);
-			statement.executeStatement(this.getVariables());
+			try {
+				statement.executeStatement(this.getVariables());
+			}catch(IllegalArgumentException|AssertionError e){
+				throw new IllegalArgumentException("Illegal statement execution");
+			}
 //			if (!isPutOnHold()) {
 //				this.getToDoList().remove(statement);
 //				System.out.println("TodoLISTv2:" + this.getToDoList() +"stop");
