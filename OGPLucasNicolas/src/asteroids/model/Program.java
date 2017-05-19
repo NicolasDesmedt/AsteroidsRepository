@@ -1,11 +1,10 @@
-package asteroids.model.programs;
+package asteroids.model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import asteroids.model.Ship;
 import asteroids.model.programs.expressions.Expression;
 import asteroids.model.programs.expressions.Type;
 import asteroids.model.programs.functions.*;

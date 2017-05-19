@@ -3,8 +3,8 @@ package asteroids.model.programs.statements;
 import java.util.List;
 import java.util.Map;
 
+import asteroids.model.Program;
 import asteroids.model.Ship;
-import asteroids.model.programs.Program;
 import asteroids.model.programs.expressions.Expression;
 import asteroids.part3.programs.SourceLocation;
 

@@ -19,9 +19,9 @@ import org.junit.Test;
 import asteroids.model.Asteroid;
 import asteroids.model.Bullet;
 import asteroids.model.Planetoid;
+import asteroids.model.Program;
 import asteroids.model.Ship;
 import asteroids.model.World;
-import asteroids.model.programs.Program;
 import asteroids.part3.facade.IFacade;
 import asteroids.part3.programs.IProgramFactory;
 import asteroids.part3.programs.internal.ProgramParser;
@@ -65,7 +65,7 @@ public class Part3TestFull {
     facade.addBulletToWorld(filledWorld, bullet1);
   }
 
-  /**
+
   @Test
   public void testCreateShip() throws ModelException {
     max_score += 12;
@@ -1351,7 +1351,7 @@ public class Part3TestFull {
     assertNull(facade.getBulletWorld(bullet1));
     score += 7;
   }
-  **/
+ 
   // Assignment Statement
   // TODO: comments weghalen
   
