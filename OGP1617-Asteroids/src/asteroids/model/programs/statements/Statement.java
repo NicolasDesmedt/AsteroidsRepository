@@ -1,7 +1,11 @@
 package asteroids.model.programs.statements;
 
+import java.util.List;
+import java.util.Map;
+
 import asteroids.model.Ship;
 import asteroids.model.programs.Program;
+import asteroids.model.programs.expressions.Expression;
 import asteroids.part3.programs.SourceLocation;
 
 /**
@@ -27,6 +31,12 @@ public abstract class Statement implements Cloneable {
 	
 	public void setProgram(Program program) {
 		this.program = program;
+		if (this instanceof Sequence) {
+			List<Statement> statementsList = ((Sequence)this).getStatementList();
+			for (Statement statement : statementsList) {
+				statement.setProgram(program);
+			}
+		}
 	}
 	
 	private Program program;
@@ -38,7 +48,7 @@ public abstract class Statement implements Cloneable {
 	@Override
 	public abstract String toString();
 
-	public abstract void executeStatement();
+	public abstract void executeStatement(Map<String, Expression<?>> variables);
 	
 
 }

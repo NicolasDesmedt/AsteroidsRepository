@@ -14,8 +14,7 @@ public class ProgramFactory
 
 	@Override
 	public Program createProgram(List<Function> functions, Statement main) {
-		// TODO Auto-generated method stub
-		return null;
+		return new Program(functions, main);
 	}
 
 	@Override
@@ -26,8 +25,7 @@ public class ProgramFactory
 
 	@Override
 	public Statement createAssignmentStatement(String variableName, Expression value, SourceLocation sourceLocation) {
-		// TODO Auto-generated method stub
-		return null;
+		return new Assignment(sourceLocation, variableName, value);
 	}
 
 	@Override
@@ -57,20 +55,17 @@ public class ProgramFactory
 
 	@Override
 	public Statement createPrintStatement(Expression value, SourceLocation sourceLocation) {
-		// TODO Auto-generated method stub
-		return null;
+		return new Print(sourceLocation, value);
 	}
 
 	@Override
 	public Statement createSequenceStatement(List<Statement> statements, SourceLocation sourceLocation) {
-		// TODO Auto-generated method stub
-		return null;
+		return new Sequence(statements, sourceLocation);
 	}
 
 	@Override
-	public Expression createReadVariableExpression(String variableName, SourceLocation sourceLocation) {
-		// TODO Auto-generated method stub
-		return null;
+	public Expression<?> createReadVariableExpression(String variableName, SourceLocation sourceLocation) {
+		return new ReadVariable<>(variableName, sourceLocation);
 	}
 
 	@Override
@@ -99,9 +94,8 @@ public class ProgramFactory
 	}
 
 	@Override
-	public Expression createDoubleLiteralExpression(double value, SourceLocation location) {
-		// TODO Auto-generated method stub
-		return null;
+	public Expression<Double> createDoubleLiteralExpression(double value, SourceLocation location) {
+		return new DoubleLiteral(value, location);
 	}
 
 	@Override

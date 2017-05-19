@@ -1,5 +1,7 @@
 package asteroids.model.programs.expressions;
 
+import java.util.Map;
+
 import asteroids.part3.programs.SourceLocation;
 
 public abstract class Expression<T> implements Cloneable {
@@ -36,10 +38,10 @@ public abstract class Expression<T> implements Cloneable {
 	 *       | (result == this) == (! this.isMutable())
 	 */
 	@Override
-	public Expression<? extends Object> clone() {
+	public Expression<?> clone() {
 		try {
 			if (isMutable())
-				return (Expression<? extends Object>) super.clone();
+				return (Expression<?>) super.clone();
 			else
 				return this;
 		} catch (CloneNotSupportedException exc) {
@@ -47,5 +49,10 @@ public abstract class Expression<T> implements Cloneable {
 		}
 	}
 	
-	public abstract Type getType();
+	@Override
+	public abstract String toString();
+	
+	public abstract Type getType(Map<String, Expression<?>> variables);
+	
+	public abstract T getValue(Map<String, Expression<?>> variables);
 }
