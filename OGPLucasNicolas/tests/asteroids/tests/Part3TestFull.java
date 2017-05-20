@@ -1580,9 +1580,9 @@ public class Part3TestFull {
     }
   }
   **/
-/**
-  // Sequence Statement
 
+  // Sequence Statement
+/**
   @Test
   public void testSequenceStatement_NonNestedNonIterruptable() throws ModelException {
     max_score += 3;
@@ -1617,7 +1617,8 @@ public class Part3TestFull {
   }
 
   // Fire statement
-
+   //TODO: hier geraakt
+**/
   @Test
   public void testFireStatement_EnoughTimeLeft() throws ModelException {
     max_score += 3;
@@ -1631,7 +1632,7 @@ public class Part3TestFull {
     assertArrayEquals(expecteds, results.toArray());
     score += 3;
   }
-
+/**
   @Test
   public void testFireStatement_NotEnoughTimeLeft() throws ModelException {
     max_score += 3;
@@ -1658,7 +1659,7 @@ public class Part3TestFull {
       score += 3;
     }
   }
-
+/**
   // Turn statement
 
   @Test
