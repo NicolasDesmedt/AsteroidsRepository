@@ -65,7 +65,7 @@ public class Part3TestFull {
     facade.addBulletToWorld(filledWorld, bullet1);
   }
 
-  /**
+
   @Test
   public void testCreateShip() throws ModelException {
     max_score += 12;
@@ -1351,7 +1351,7 @@ public class Part3TestFull {
     assertNull(facade.getBulletWorld(bullet1));
     score += 7;
   }
-  **/
+
   // Assignment Statement
   /**
   @Test
@@ -1488,8 +1488,9 @@ public class Part3TestFull {
       score += 5;
     }
   }
- /**
+ 
   // If Statement
+  //TODO: hier geraakt
   
   @Test
   public void testIfStatement_ThenPartNonIterruptable() throws ModelException {
@@ -1502,7 +1503,6 @@ public class Part3TestFull {
     assertArrayEquals(expecteds, results.toArray());
     score += 3;
   }
-  
  
   @Test
   public void testIfStatement_ThenPartIterruptable() throws ModelException {
@@ -1521,7 +1521,7 @@ public class Part3TestFull {
     assertArrayEquals(expecteds, results.toArray());
     score += 8;
   }
- 
+
   @Test
   public void testIfStatement_ElsePartNonIterruptable() throws ModelException {
     max_score += 3;
@@ -1554,7 +1554,6 @@ public class Part3TestFull {
     score += 6;
   }
 
- 
   @Test
   public void testIfStatement_NoElsePart() throws ModelException {
     max_score += 3;
@@ -1579,10 +1578,9 @@ public class Part3TestFull {
       score += 5;
     }
   }
-  
 
   // Sequence Statement
-/**
+
   @Test
   public void testSequenceStatement_NonNestedNonIterruptable() throws ModelException {
     max_score += 3;
@@ -1617,9 +1615,7 @@ public class Part3TestFull {
   }
 
   // Fire statement
-   
-**/
-  /**
+
   @Test
   public void testFireStatement_EnoughTimeLeft() throws ModelException {
     max_score += 3;
@@ -1660,9 +1656,9 @@ public class Part3TestFull {
       score += 3;
     }
   }
-/**
+
   // Turn statement
- 
+
   @Test
   public void testTurnStatement_ValidAngleEnoughTimeLeft() throws ModelException {
     max_score += 3;
@@ -1709,7 +1705,7 @@ public class Part3TestFull {
       score += 5;
     }
   }
-  
+
   @Test
   public void testTurnStatement_InFunctionBody() throws ModelException {
     try {
@@ -1723,9 +1719,9 @@ public class Part3TestFull {
       score += 3;
     }
   }
-**/
+
   // Thruster ON statement
-/**
+
   @Test
   public void testThrusterOnStatement_EnoughTimeLeft() throws ModelException {
     if (nbStudentsInTeam > 1) {
@@ -1821,7 +1817,7 @@ public class Part3TestFull {
       }
     }
   }
-/**
+
   // Skip statement
 
   @Test
@@ -1846,7 +1842,7 @@ public class Part3TestFull {
     assertNull(results);
     score += 3;
   }
-/**
+
   @Test
   public void testSkipStatement_InFunctionBody() throws ModelException {
     try {
@@ -1860,10 +1856,9 @@ public class Part3TestFull {
       score += 3;
     }
   }
-/**
+
   // While Statement
-//TODO: hier geraakt
- 
+
   @Test
   public void testWhileStatement_ZeroIterations() throws ModelException {
     max_score += 5;
@@ -1874,7 +1869,6 @@ public class Part3TestFull {
     assertEquals(0, results.size());
     score += 5;
   }
-  **/
 
   @Test
   public void testWhileStatement_SeveralIterations() throws ModelException {
@@ -1887,7 +1881,7 @@ public class Part3TestFull {
     assertArrayEquals(expecteds, results.toArray());
     score += 18;
   }
-/**
+
   @Test
   public void testWhileStatement_Interruptable() throws ModelException {
     max_score += 25;
