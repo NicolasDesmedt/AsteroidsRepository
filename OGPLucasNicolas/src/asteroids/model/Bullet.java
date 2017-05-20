@@ -3,7 +3,7 @@ package asteroids.model;
 import be.kuleuven.cs.som.annotate.*;
 
 /**
- * A class of bullets involving a mass, a radius, a source, and a world.
+ * A class of bullets involving a mass, a radius, a source and a world.
  * And facilities to resolve collisions this bullet is a part of.
  * 
  * @invar	The mass of each bullet must be a valid mass for any bullet.
@@ -81,11 +81,11 @@ public class Bullet extends Entity{
 	}
 	
 	/**
-	 * Terminate this bullet.
+	 * Terminate this bullet and remove it from the ship if it belongs to one.
 	 *
 	 * @post   This bullet  is terminated.
 	 *       | new.isTerminated()
-	 * @post If the given bullet belongs to a ship, ship is set to null
+	 * @post If the given bullet belongs to a ship, remove the bullet from the ship.
 	 * 		 | @see implementation
 	 */
 	@Basic @Raw @Override
@@ -96,7 +96,14 @@ public class Bullet extends Entity{
 		super.terminate();
 	 }
 	
-	
+	/**
+	 * Terminate this bullet.
+	 *
+	 * @post   This bullet  is terminated.
+	 *       | new.isTerminated()
+	 * @post If the given bullet belongs to a ship, ship is set to null.
+	 * 		 | @see implementation
+	 */
 	public void shipTerminate() {
 		if (this.hasShip()){
 			 this.setShip(null);
@@ -115,7 +122,10 @@ public class Bullet extends Entity{
 	}
 	
 	/**
+	 * Set the mass of this bullet to the minimal mass.
 	 * 
+	 * @param 	mass
+	 * 			The given mass.
 	 */
 	@Raw
 	public void setMassBullet(){
@@ -193,9 +203,7 @@ public class Bullet extends Entity{
 	 * Variable registering the ship to which the bullet belongs.
 	 * A newly created bullet doesn't belong to a ship.
 	 */
-	public Ship ship = null;
-
-  	
+	public Ship ship = null;	
 	
 	/**
 	 * Returns the number of times the bullet has collided with a boundary of the world.
@@ -224,13 +232,11 @@ public class Bullet extends Entity{
 	/**
 	 * Variable registering the maximum number of times the bullet can collide with a boundary.
 	 */
- 
 	private final int maxBoundaryCollisions = 3;
 	
 	/**
 	 * Variable registering the number of times the bullet has collided with a boundary.
 	 */
-	
 	private int counterBoundaryCollisions = 0;
 	
 	/**
@@ -259,7 +265,6 @@ public class Bullet extends Entity{
      * @post	The source of this bullet is equal to the given ship.
 	 *       	| new.getSource() == ship
 	 */
-	
 	public void setSource(Ship ship){
 		this.source = ship;
 	}
@@ -277,13 +282,17 @@ public class Bullet extends Entity{
 	 * A variable registering the source of a bullet, if the bullet isn't fired of a ship
 	 * yet, the source is null.
 	 */
-	
 	public Ship source = null;
 	
 	/**
 	 * Resolve a collision between this bullet and a given entity.
+	 * If the bullet hits it's source ship, it is reloaded on the ship,
+	 * if hits a planetoid with a radius >= 30, the bullet is terminated
+	 * and the planetoid concieves 2 asteroids facing off in different directions,
+	 * else both the bullet and other entity are terminated.
 	 * 
-	 * @param other
+	 * @param 	other
+	 * 			The entity the bullet collides with.
 	 */
 	public void hits(Entity other) {
 		if (this.getSource() == other){
