@@ -67,11 +67,11 @@ public class ShipTest {
 	
 	@Before
 	public void setUpMutableFixture() {
-		mutableShip1 = new Ship(0,0,20,20,10,0, 5.5E20);
+		mutableShip1 = new Ship(100,100,20,20,10,0, 5.5E20);
 		mutableShip2 = new Ship(10,10,10,10,10,(Math.PI/2), 10E15);
 		
-		mutableMinimalBullet = new Bullet(0,0,0,0,Bullet.minBulletRadius);
-		mutableBullet1 = new Bullet(0,0,0,0,(Bullet.minBulletRadius+1));
+		mutableMinimalBullet = new Bullet(100,100,0,0,Bullet.minBulletRadius);
+		mutableBullet1 = new Bullet(100,100,0,0,(Bullet.minBulletRadius+1));
 	}
 	
 	/**
@@ -95,10 +95,10 @@ public class ShipTest {
 	
 	@Test
     public void terminate_LegalCase(){
-		mutableShip2.loadBulletOnShip(mutableMinimalBullet);
-		mutableShip2.loadBulletOnShip(mutableBullet1);
-		mutableShip2.terminate();
-        assertTrue(mutableShip2.isTerminated());
+		mutableShip1.loadBulletOnShip(mutableMinimalBullet);
+		mutableShip1.loadBulletOnShip(mutableBullet1);
+		mutableShip1.terminate();
+        assertTrue(mutableShip1.isTerminated());
         assertTrue(mutableMinimalBullet.isTerminated());
         assertTrue(mutableBullet1.isTerminated());
     }
@@ -188,9 +188,10 @@ public class ShipTest {
 
 	@Test
 	public void Thrust_LegalCase(){
-		mutableShip1.thrust(10);
+		mutableShip1.setThrust(true);
+		mutableShip1.thrust(10000);
 		double[] velocity = mutableShip1.getVelocity();
-		assertEquals(40, velocity[0], 0.01);
+		assertEquals(40, velocity[0], EPSILON);
 		assertEquals(20, velocity[1], EPSILON);
 	}
 	
@@ -239,86 +240,103 @@ public class ShipTest {
 	
 	@Test
 	public void loadBulletOnShip_LegalCase(){
-		double originalMass = mutableShip2.getMass();
+		double originalMass = mutableShip1.getMass();
 		double bulletMass = mutableMinimalBullet.getMass();
-		mutableShip2.loadBulletOnShip(mutableMinimalBullet);
-		assertTrue(mutableShip2.getBulletsOnShip().contains(mutableMinimalBullet));
-		double newMass = mutableShip2.getMass();
+		mutableShip1.loadBulletOnShip(mutableMinimalBullet);
+		assertTrue(mutableShip1.getBulletsOnShip().contains(mutableMinimalBullet));
+		double newMass = mutableShip1.getMass();
 		assertEquals((originalMass + bulletMass), newMass, EPSILON);
-		assertEquals(mutableMinimalBullet.getShip(), mutableShip2);
-		assertEquals(mutableMinimalBullet.getPositionX(), mutableShip2.getPositionX(), EPSILON);
-		assertEquals(mutableMinimalBullet.getPositionY(), mutableShip2.getPositionY(), EPSILON);
+		assertEquals(mutableMinimalBullet.getShip(), mutableShip1);
+		assertEquals(mutableMinimalBullet.getPositionX(), mutableShip1.getPositionX(), EPSILON);
+		assertEquals(mutableMinimalBullet.getPositionY(), mutableShip1.getPositionY(), EPSILON);
+	}
+	
+	@Test(expected = IllegalArgumentException.class)
+	public void loadBulletOnShip_BulletNotInShip(){
+		mutableShip2.loadBulletOnShip(mutableMinimalBullet);
+	}
+	
+	@Test
+	public void inShip_LegalCase(){
+		assertTrue(mutableShip1.inShip(mutableMinimalBullet));
+		
+	}
+	
+	@Test
+	public void inShip_BulletOutOfShip(){
+		assertFalse(mutableShip2.inShip(mutableMinimalBullet));
+
 	}
 	
 	@Test
 	public void loadBulletsOnShip_LegalCase(){
 		Bullet[] bullets = {mutableBullet1, mutableMinimalBullet};
-		double originalMass = mutableShip2.getMass();
+		double originalMass = mutableShip1.getMass();
 		double bulletsMass = mutableMinimalBullet.getMass() + mutableBullet1.getMass();
-		mutableShip2.loadBulletsOnShip(bullets);
-		assertTrue(mutableShip2.getBulletsOnShip().contains(mutableMinimalBullet));
-		assertTrue(mutableShip2.getBulletsOnShip().contains(mutableBullet1));
-		double newMass = mutableShip2.getMass();
+		mutableShip1.loadBulletsOnShip(bullets);
+		assertTrue(mutableShip1.getBulletsOnShip().contains(mutableMinimalBullet));
+		assertTrue(mutableShip1.getBulletsOnShip().contains(mutableBullet1));
+		double newMass = mutableShip1.getMass();
 		assertEquals((originalMass + bulletsMass), newMass, EPSILON);
-		assertEquals(mutableMinimalBullet.getShip(), mutableShip2);
-		assertEquals(mutableBullet1.getShip(), mutableShip2);
-		assertEquals(mutableMinimalBullet.getPositionX(), mutableShip2.getPositionX(), EPSILON);
-		assertEquals(mutableMinimalBullet.getPositionY(), mutableShip2.getPositionY(), EPSILON);
-		assertEquals(mutableBullet1.getPositionX(), mutableShip2.getPositionX(), EPSILON);
-		assertEquals(mutableBullet1.getPositionY(), mutableShip2.getPositionY(), EPSILON);
+		assertEquals(mutableMinimalBullet.getShip(), mutableShip1);
+		assertEquals(mutableBullet1.getShip(), mutableShip1);
+		assertEquals(mutableMinimalBullet.getPositionX(), mutableShip1.getPositionX(), EPSILON);
+		assertEquals(mutableMinimalBullet.getPositionY(), mutableShip1.getPositionY(), EPSILON);
+		assertEquals(mutableBullet1.getPositionX(), mutableShip1.getPositionX(), EPSILON);
+		assertEquals(mutableBullet1.getPositionY(), mutableShip1.getPositionY(), EPSILON);
 	}
 	
 	@Test
 	public void getNbBulletsOnShip_LegalCase(){
-		mutableShip2.loadBulletOnShip(mutableMinimalBullet);
-		mutableShip2.loadBulletOnShip(mutableBullet1);
-		int nbOfBullets = mutableShip2.getNbBulletsOnShip();
+		mutableShip1.loadBulletOnShip(mutableMinimalBullet);
+		mutableShip1.loadBulletOnShip(mutableBullet1);
+		int nbOfBullets = mutableShip1.getNbBulletsOnShip();
 		assertEquals(2, nbOfBullets, EPSILON);
 	}
 	
 	@Test
 	public void removeBulletFromShip_LegalCase(){
-		mutableShip2.loadBulletOnShip(mutableMinimalBullet);
-		mutableShip2.removeBulletFromShip(mutableMinimalBullet);
+		mutableShip1.loadBulletOnShip(mutableMinimalBullet);
+		mutableShip1.removeBulletFromShip(mutableMinimalBullet);
 		Ship ship = mutableMinimalBullet.getShip();
 		assertEquals(null, ship);
-		assertFalse(mutableShip2.getBulletsOnShip().contains(mutableMinimalBullet));
+		assertFalse(mutableShip1.getBulletsOnShip().contains(mutableMinimalBullet));
 	}
 	
 	@Test
 	public void move_LegalCase(){
-		mutableShip2.loadBulletOnShip(mutableMinimalBullet);
-		mutableShip2.loadBulletOnShip(mutableBullet1);
-		mutableShip2.move(20);
-		assertEquals(mutableMinimalBullet.getPositionX(), mutableShip2.getPositionX(), EPSILON);
-		assertEquals(mutableMinimalBullet.getPositionY(), mutableShip2.getPositionY(), EPSILON);
-		assertEquals(mutableBullet1.getPositionX(), mutableShip2.getPositionX(), EPSILON);
-		assertEquals(mutableBullet1.getPositionY(), mutableShip2.getPositionY(), EPSILON);
+		mutableShip1.loadBulletOnShip(mutableMinimalBullet);
+		mutableShip1.loadBulletOnShip(mutableBullet1);
+		mutableShip1.move(20);
+		assertEquals(mutableMinimalBullet.getPositionX(), mutableShip1.getPositionX(), EPSILON);
+		assertEquals(mutableMinimalBullet.getPositionY(), mutableShip1.getPositionY(), EPSILON);
+		assertEquals(mutableBullet1.getPositionX(), mutableShip1.getPositionX(), EPSILON);
+		assertEquals(mutableBullet1.getPositionY(), mutableShip1.getPositionY(), EPSILON);
 	}
 	
 	@Test
 	public void fireBullet_LegalCase(){
-		mutableShip2.setWorld(world1000x1000);
-		mutableShip2.loadBulletOnShip(mutableMinimalBullet);
-		mutableShip2.fireBullet();
-		assertEquals(mutableMinimalBullet.getVelocityX(), 0, EPSILON);
-		assertEquals(mutableMinimalBullet.getVelocityY(), Ship.bulletSpeed, EPSILON);
-		assertFalse(mutableShip2.getBulletsOnShip().contains(mutableMinimalBullet));
-		assertEquals(mutableMinimalBullet.getSource(), mutableShip2);
+		mutableShip1.setWorld(world1000x1000);
+		mutableShip1.loadBulletOnShip(mutableMinimalBullet);
+		mutableShip1.fireBullet();
+		assertEquals(mutableMinimalBullet.getVelocityX(), Ship.bulletSpeed, EPSILON);
+		assertEquals(mutableMinimalBullet.getVelocityY(), 0, EPSILON);
+		assertFalse(mutableShip1.getBulletsOnShip().contains(mutableMinimalBullet));
+		assertEquals(mutableMinimalBullet.getSource(), mutableShip1);
 	}
 	
 	@Test
 	public void putInFiringPosition_LegalCase(){
-		mutableShip2.loadBulletOnShip(mutableMinimalBullet);
-		mutableShip2.putInFiringPosition(mutableMinimalBullet);
-		assertEquals(mutableMinimalBullet.getPositionX(), 10, EPSILON);
-		assertEquals(mutableMinimalBullet.getPositionY(), (10+mutableShip2.getRadius()+mutableMinimalBullet.getRadius()), EPSILON);
+		mutableShip1.loadBulletOnShip(mutableMinimalBullet);
+		mutableShip1.putInFiringPosition(mutableMinimalBullet);
+		assertEquals(mutableMinimalBullet.getPositionX(), 111, EPSILON);
+		assertEquals(mutableMinimalBullet.getPositionY(), 100, EPSILON);
 	}
 	
 	@Test
 	public void selectLoadedBullet_LegalCase(){
-		mutableShip2.loadBulletOnShip(mutableMinimalBullet);
-		Bullet bullet = mutableShip2.selectLoadedBullet();
+		mutableShip1.loadBulletOnShip(mutableMinimalBullet);
+		Bullet bullet = mutableShip1.selectLoadedBullet();
 		assertEquals(bullet, mutableMinimalBullet);
 	}
 	
@@ -326,6 +344,16 @@ public class ShipTest {
 	public void selectLoadedBullet_ContainsNoBullet(){
 		Bullet bullet = mutableShip1.selectLoadedBullet();
 		assertEquals(bullet, null);
+	}
+	
+	@Test
+	public void collidesWithPlanetoid_LegalCase(){
+		world1000x1000.addEntity(mutableShip1);
+		Planetoid planetoid = new Planetoid(250, 250, 500, 0, 50, 0);
+		for(int i=0; i<1000; i++){
+			mutableShip1.collidesWithPlanetoid(planetoid);
+			assertTrue(world1000x1000.withinBoundaries(mutableShip1));
+		}
 	}
 	
 }
