@@ -19,6 +19,7 @@ public class ReadVariable<T> extends Expression<T> {
 
 	@Override
 	public T getValue(Map<String, Expression<?>> variables) {
+		//System.out.println(this.getVariableName() + ":= " + variables.get(this.getVariableName()));
 		return (T)variables.get(this.getVariableName()).getValue(variables);
 	}
 

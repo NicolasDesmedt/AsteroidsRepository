@@ -2,7 +2,11 @@ package asteroids.model.programs.statements;
 
 import java.util.Map;
 
+import asteroids.model.programs.expressions.BooleanLiteral;
+import asteroids.model.programs.expressions.DoubleLiteral;
+import asteroids.model.programs.expressions.Entity;
 import asteroids.model.programs.expressions.Expression;
+import asteroids.model.programs.expressions.Null;
 import asteroids.model.programs.expressions.Type;
 import asteroids.part3.programs.SourceLocation;
 
@@ -17,6 +21,10 @@ public class Assignment extends NoActionStatement {
 	public Expression<?> getValue() {
 		return this.value;
 	}
+	
+//	public <T> T getValue(Map<String, Expression<?>> variables) {
+//		return (T)this.getValue().getValue(variables);
+//	}
 	
 	private final Expression<?> value;
 	
@@ -33,18 +41,28 @@ public class Assignment extends NoActionStatement {
 
 	@Override
 	public void executeStatement(Map<String, Expression<?>> variables) {
-		Type typeCheck = null;
-		if (variables.containsKey(this.getVar())) {
-			Expression<?> value = variables.get(this.getVar());
-			typeCheck = value.getType(variables);
-			assert(this.getValue().getType(variables) == typeCheck); 
-			variables.remove(this.getVar());
-			variables.put(this.getVar(), this.getValue());
-		}
-		else{
-			this.getProgram().getVariables().put(this.getVar(), this.getValue());
-		}
-		System.out.println("assignement uitgevoerd" + variables);
+		Expression<?> value = null;
+
+		if(getValue().getType(variables)==Type.BOOL)
+			value=new BooleanLiteral((Boolean) getValue().getValue(variables), getValue().getSourceLocation());
+		else if(getValue().getType(variables)==Type.DOUBLE)
+			value=new DoubleLiteral((Double) getValue().getValue(variables), getValue().getSourceLocation());
+		else	value=new Null(getValue().getSourceLocation());
+		
+		variables.remove(getVar());
+		variables.put(getVar(), value);
+//		Type typeCheck = null;
+//		if (variables.containsKey(this.getVar())) {
+//			Expression<?> value = variables.get(this.getVar());
+//			typeCheck = value.getType(variables);
+//			assert(this.getValue().getType(variables) == typeCheck); 
+//			variables.put(this.getVar(), this.getValue(variables));
+//			variables.remove(this.getVar(), value);
+//		}
+//		else{
+//			this.getProgram().getVariables().put(this.getVar(), this.getValue());
+//		}
+		//System.out.println("assignement uitgevoerd" + variables);
 	}
 	
 }

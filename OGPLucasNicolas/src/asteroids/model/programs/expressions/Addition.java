@@ -22,7 +22,7 @@ public class Addition extends BinaryExpression<Double> {
 
 	@Override
 	public Double getValue(Map<String, Expression<?>> variables) {
-		System.out.println("In Addition " + (Double)this.getExpressionLhs().getValue(variables));
+		System.out.println("In Addition " + this.getExpressionLhs().getValue(variables));
 		return (Double)this.getExpressionLhs().getValue(variables) + 
 				(Double)this.getExpressionRhs().getValue(variables);
 	}

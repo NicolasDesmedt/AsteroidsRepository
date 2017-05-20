@@ -71,6 +71,10 @@ public class Program {
 		toDoList.add(1, statement);
 	}
 	
+	public void addToToDoListAtIndex(int index, Statement statement) {
+		toDoList.add(index, statement);
+	}
+	
 	public Statement getStatementToDo(List<Statement> toDoList) {
 		return toDoList.get(0);
 	}
@@ -108,9 +112,9 @@ public class Program {
 		//System.out.println("TodoLIST:" + this.getToDoList() +"stop");
 		if (!this.getToDoList().isEmpty()) {
 			try {
-				System.out.println("TIJD VOOR " + this.getTimeLeft());
+				//System.out.println("TIJD VOOR " + this.getTimeLeft());
 				this.getStatementToDo(this.getToDoList()).executeStatement(this.getVariables());
-				System.out.println("TIJD NA " + this.getTimeLeft());
+				//System.out.println("TIJD NA " + this.getTimeLeft());
 				if (!isPutOnHold()) {
 					this.getToDoList().remove(0);
 					execute(this.getTimeLeft());

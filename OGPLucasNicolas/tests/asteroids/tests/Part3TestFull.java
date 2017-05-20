@@ -65,6 +65,19 @@ public class Part3TestFull {
     facade.addBulletToWorld(filledWorld, bullet1);
   }
 
+  //EIGEN TESTS
+  /**
+  @Test
+  public void testAdditionStatement() throws ModelException {
+    String code = "a := 10; " + "  print a; " + "  a := a + 2.0; " + " print a; ";
+    Program program = ProgramParser.parseProgramFromString(code, programFactory);
+    facade.loadProgramOnShip(ship1, program);
+    List<Object> results = facade.executeProgram(ship1, 1.0);
+    Object[] expecteds = { 10.0, 12.0};
+    assertArrayEquals(expecteds, results.toArray());
+  }
+  
+  //GEGEVEN
   /**
   @Test
   public void testCreateShip() throws ModelException {
