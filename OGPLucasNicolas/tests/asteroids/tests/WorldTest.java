@@ -13,22 +13,6 @@ public class WorldTest {
 	 */
 	private static final double EPSILON = 0.0001;
 	
-	@BeforeClass
-	public static void setUpBeforeClass() throws Exception {
-	}
-
-	@AfterClass
-	public static void tearDownAfterClass() throws Exception {
-	}
-	
-	@Before
-	public void setUp() throws Exception {
-	}
-	
-	@After
-	public void tearDown() throws Exception {
-	}
-	
 	@Test
 	public void worldConstructor_LegalCase(){
 		World world=new World(20, 10);
@@ -90,14 +74,12 @@ public class WorldTest {
 		world1000x1000.addEntity(immutableOutOfBoundariesShip);
 		}
 	
-	@Test
+	@Test(expected=IllegalArgumentException.class)
 	public void addEntity_AlreadyInAWorld(){
 		World world1000x1000 = new World(1000,1000);
 		Ship immutableShip1 = new Ship(70,70,0,0,10,(Math.PI/2));
 		world1000x1000.addEntity(immutableShip1);
 		world1000x1000.addEntity(immutableShip1);
-		System.out.println(world1000x1000.getAllEntities());
-		assertTrue(world1000x1000.getAllEntities().size() == 1);
 	}
 	
 	@Test(expected=IllegalArgumentException.class)
@@ -214,15 +196,14 @@ public class WorldTest {
 	@Test
 	public void getPositionCollisionWithBoundary_Tests() {
 		World world1000x1000 = new World(1000,1000);
-		Ship immutableShip1 = new Ship(70,70,0.0,0.0,10,(Math.PI/2));
+		Ship immutableShip1 = new Ship(70,70,0,0,10,(Math.PI/2));
 		Ship mutableShip2 = new Ship(500,500,30,10,10,(Math.PI/2), 10E15);
 		
 		double[] posMutShip2 = world1000x1000.getPositionCollisionWithBoundary(mutableShip2);
 		assertEquals(world1000x1000.getWorldWidth(),posMutShip2[0],EPSILON);
 		assertEquals((490.0/30.0)*10.0+500.0,posMutShip2[1],EPSILON);
 		double[] posImShip1 = world1000x1000.getPositionCollisionWithBoundary(immutableShip1);
-		//assertEquals(Double.POSITIVE_INFINITY, posImShip1[0], EPSILON);
-		assertEquals(Double.POSITIVE_INFINITY, posImShip1[1], EPSILON);
+		assertEquals(null, posImShip1);
 	}
 	
 	/*
@@ -364,12 +345,13 @@ public class WorldTest {
 		World world1000x1000 = new World(1000,1000);
 		Ship shootingShip = new Ship(600,600,0,0,10,0,10E15);
 		Ship shipInFiringRange = new Ship(620,600,0,0,10,0,10E15);
-		Bullet bullet = new Bullet(0,0,0,0,Bullet.minBulletRadius);
+		Bullet bullet = new Bullet(600,600,0,0,9);
 		
 		world1000x1000.addEntity(shootingShip);
 		world1000x1000.addEntity(shipInFiringRange);
 		shootingShip.loadBulletOnShip(bullet);
-		shootingShip.fireBullet();
+		world1000x1000.addEntity(bullet);
+		shootingShip.putInFiringPosition(bullet);
 		
 		boolean booleanToCheck1 = ((world1000x1000.getOverlappingEntities()[0] == bullet) || 
 				(world1000x1000.getOverlappingEntities()[0] == shipInFiringRange));
@@ -394,7 +376,7 @@ public class WorldTest {
 		World world1000x1000 = new World(1000,1000);
 		Ship shootingShip = new Ship(600,600,10,0,10,0,10E15);
 		Ship shipInFiringRange = new Ship(620,600,0,0,10,0,10E15);
-		Bullet bullet = new Bullet(0,0,0,0,Bullet.minBulletRadius);
+		Bullet bullet = new Bullet(600,600,0,0,Bullet.minBulletRadius);
 		
 		world1000x1000.addEntity(shootingShip);
 		world1000x1000.addEntity(shipInFiringRange);

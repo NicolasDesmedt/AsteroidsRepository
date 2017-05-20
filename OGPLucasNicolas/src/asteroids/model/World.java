@@ -286,14 +286,7 @@ public class World{
 	 * 			...
 	 * 			| (((old entity).getWorld() != null) || (!withinBoundaries(entity)) || (overlapsWithOtherEntities(entity))
 	 */
-	public void addEntity(Entity entity){
-		if (canHaveEntity(entity)){
-			allEntities.add(entity);
-			entity.setWorld(this);
-		}
-	}	
-	
-	private boolean canHaveEntity(Entity entity) throws IllegalArgumentException{
+	public void addEntity(Entity entity) throws IllegalArgumentException{
 		if (entity == null) throw new IllegalArgumentException
 			("Cannot add null to the world.");
 		if (allEntities.contains(entity))throw new IllegalArgumentException
@@ -304,8 +297,9 @@ public class World{
 			("This entity doesn't lie fully within the bounds of that world.");
 		if (this.overlapsWithOtherEntities(entity)) throw new IllegalArgumentException
 			("The entity overlaps with other entities that is shouldn't overlap with");
-		return true;
-	}
+		allEntities.add(entity);
+		entity.setWorld(this);
+	}	
 	
 	/**
 	 * Remove the given entity from this world

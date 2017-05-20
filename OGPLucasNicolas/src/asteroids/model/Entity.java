@@ -23,6 +23,42 @@ import be.kuleuven.cs.som.annotate.*;
  */
 public abstract class Entity {
 	
+	/**
+	 * Initialize this new entity with given position, given velocity, given radius and maxSpeed.
+	 * 
+	 * @param 	x
+	 * 			The x-coordinate of the position of this new entity (in km).
+	 * @param 	y
+	 * 			The y-coordinate of the position of this new entity (in km).
+	 * @param 	xVelocity
+	 * 			The movement per unit time of this new entity in the x direction (in km/s).
+	 * @param 	yVelocity
+	 * 			The movement per unit time of this new entity in the y direction (in km/s).
+	 * @param 	radius
+	 * 			The radius of this new circle-shaped entity (in km). 
+	 * @param 	orientation
+	 * 			The direction in which this new entity is faced (in radians).
+	 * @param 	maxSpeed
+	 * 			The maximum speed of an entity.
+	 * @post	The new position of this new entity is equal to the given position.
+	 * 			| new.getPosition() == double[] {x,y}
+	 * @post	The new velocity of this new entity is equal to the given velocity.
+	 * 			| new.getVelocity() == double[] {xVelocity,yVelocity}
+	 * @post	The new radius of this new entity is equal to the given radius.
+	 * 			| new.getRadius == radius
+	 * @post	The new orientation of this new entity is equal to the given orientation.
+	 * 			| new.getOrientation == orientation
+	 * @post	The new maxSpeed of this new ship is entity to the given maxSpeed,
+	 * 			if no maxSpeed is given, it is equal to the SPEED_OF_LIGHT.
+	 * 			| new.getMaxspeed == maxSpeed 
+	 * @throws 	IllegalArgumentException
+	 * 			The given position is not a valid position for an entity.
+	 * 			| (! isValidPosition(position))
+	 * @throws 	IllegalArgumentException
+	 * 			The given radius is not a valid radius for any entity.
+	 * 			| (! isValidRadius(radius))
+	 */
+	
 	protected Entity(double x, double y, double xVelocity, double yVelocity, double radius)
 			throws IllegalArgumentException{
 			this(x, y, xVelocity, yVelocity, radius, SPEED_OF_LIGHT);
@@ -283,7 +319,6 @@ public abstract class Entity {
 	 * @return True if and only if the maximum speed consists of a double between 0 and SPEED_OF_LIGHT.
 	 *         | result == ((!Double.isNaN(maxSpeed)) && (0 < maxSpeed) && (maxSpeed< SPEED_OF_LIGHT))
 	 */
-	@Raw
 	public static boolean isValidMaxSpeed(double maxSpeed){
 		if ((!Double.isNaN(maxSpeed)) && (0 < maxSpeed) && (maxSpeed<= SPEED_OF_LIGHT)){
 			return true;
@@ -680,7 +715,7 @@ public abstract class Entity {
 	}
 	
 	/**
-	 * Return a boolean indicating whether or not this entity is terminated.
+	 * Returns a boolean indicating whether or not this entity is terminated.
 	 */
 	@Basic @Raw @Model
 	public boolean isTerminated(){
@@ -693,7 +728,7 @@ public abstract class Entity {
 	private boolean isTerminated = false;
 	
 	/**
-	 * Resolve a collision between 2 ships or 2 minor planets.
+	 * Resolves a collision between 2 ships or 2 minor planets.
 	 * 
 	 * @param other
 	 */

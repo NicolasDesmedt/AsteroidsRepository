@@ -18,8 +18,6 @@ import be.kuleuven.cs.som.annotate.*;
  * 
  * @version	1.0
  * @author 	Lucas Desard and Nicolas Desmedt
- * 
- * TODO: specification for various methods
  * 			
  * Course studies: 2nd Bachelor Engineering: Computer science/Electrical Engineering
  * Code Repository: https://github.com/NicolasDesmedt/RepositoryLucasNicolas
@@ -27,7 +25,7 @@ import be.kuleuven.cs.som.annotate.*;
 public class Ship extends Entity{
 	
 	/**
-	 * Initialize this new ship with given position, given velocity, given radius and given orientation.
+	 * Initialize this new ship with given position, velocity, radius, orientation, mass and maxSpeed.
 	 * 
 	 * @param 	x
 	 * 			The x-coordinate of the position of this new ship (in km).
@@ -42,6 +40,10 @@ public class Ship extends Entity{
 	 * 			This radius does not change during the program's execution.
 	 * @param 	orientation
 	 * 			The direction in which this new ship is faced (in radians).
+	 * @param 	mass
+	 * 			The mass of the given new ship.
+	 * @param 	maxSpeed
+	 * 			The maximum speed of a ship.
 	 * @post	The new position of this new ship is equal to the given position.
 	 * 			| new.getPosition() == double[] {x,y}
 	 * @post	The new velocity of this new ship is equal to the given velocity.
@@ -50,6 +52,11 @@ public class Ship extends Entity{
 	 * 			| new.getRadius == radius
 	 * @post	The new orientation of this new ship is equal to the given orientation.
 	 * 			| new.getOrientation == orientation
+	 * @post	The new mass of this new ship is equal to the given mass.
+	 * 			| new.getMass == mass
+	 * @post	The new maxSpeed of this new ship is equal to the given maxSpeed,
+	 * 			if no maxSpeed is given, it is equal to the SPEED_OF_LIGHT.
+	 * 			| new.getMaxspeed == maxSpeed 
 	 * @throws 	IllegalArgumentException
 	 * 			The given position is not a valid position for a ship.
 	 * 			| (! isValidPosition(position))
@@ -111,7 +118,7 @@ public class Ship extends Entity{
 	}
 	
 	/**
-	 * Set the mass of this entity to the given mass.
+	 * Set the mass of this ship to the given mass.
 	 * 
 	 * @param 	mass
 	 * 			The given mass.
