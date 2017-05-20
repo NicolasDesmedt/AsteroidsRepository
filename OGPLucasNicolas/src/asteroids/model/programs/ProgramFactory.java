@@ -225,8 +225,7 @@ public class ProgramFactory
 
 	@Override
 	public Statement createFireStatement(SourceLocation location) {
-		// TODO Auto-generated method stub
-		return null;
+		return new Fire(location);
 	}
 
 	@Override
