@@ -1365,7 +1365,7 @@ public class Part3TestFull {
     assertArrayEquals(expecteds, results.toArray());
     score += 4;
   }
-  **/
+  
   /**
   
   @Test
@@ -1394,8 +1394,8 @@ public class Part3TestFull {
     score += 12;
   }
   **/
-  /**
   
+  /**
   @Test
   public void testAssignment_ImproperType() throws ModelException {
     try {
@@ -1427,7 +1427,7 @@ public class Part3TestFull {
   }
 
   // Print Statement
-   
+  /**
   @Test
   public void testPrintStatement_LegalCase() throws ModelException {
     max_score += 2;
@@ -1439,7 +1439,7 @@ public class Part3TestFull {
     assertArrayEquals(expecteds, results.toArray());
     score += 2;
   }
-**/
+
   /**
   
   @Test
@@ -1491,6 +1491,7 @@ public class Part3TestFull {
  
   // If Statement
   //TODO: hier geraakt
+  
   @Test
   public void testIfStatement_ThenPartNonIterruptable() throws ModelException {
     max_score += 3;
