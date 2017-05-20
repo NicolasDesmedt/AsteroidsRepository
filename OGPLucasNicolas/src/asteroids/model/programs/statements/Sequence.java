@@ -30,6 +30,11 @@ public class Sequence extends Statement {
 	}
 	@Override
 	public void executeStatement(Map<String, Expression<?>> variables) {
+		List<Statement> statementsList = this.getStatementList();
+		List<Statement> shallowCopy = statementsList.subList(0, statementsList.size());
+		Collections.reverse(shallowCopy);
+		for (Statement statement : shallowCopy)
+			this.getProgram().addToToDoListInSecond(statement);
 //		for (Statement statement : statementsList) {
 //			if (!this.getProgram().isPutOnHold()) {
 //				statement.executeStatement(variables);

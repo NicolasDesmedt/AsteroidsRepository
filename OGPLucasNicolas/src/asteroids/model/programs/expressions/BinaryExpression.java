@@ -49,6 +49,17 @@ public abstract class BinaryExpression<T> extends Expression<T>{
 		return false;
 	}
 	
-
+	@Override
+	public boolean equals(Object other) {
+		System.out.println("we gebruiken equals");
+		if ((other == null) || (getClass() != other.getClass()))
+			return false;
+		BinaryExpression<?> otherExpr = (BinaryExpression<?>) other;
+		if (this.isMutable() || otherExpr.isMutable())
+			return this == other;
+		if (!getExpressionLhs().equals(getExpressionRhs()))
+			return false;
+		return true;
+	}
 
 }

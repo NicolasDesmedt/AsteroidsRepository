@@ -22,7 +22,7 @@ public class Equality extends BinaryExpression<Boolean> {
 
 	@Override
 	public Boolean getValue(Map<String, Expression<?>> variables) {
-		return (this.getExpressionLhs() == this.getExpressionRhs());
+		return (this.getExpressionLhs().getValue(variables) == this.getExpressionRhs().getValue(variables));
 	}
 
 }

@@ -237,8 +237,7 @@ public class ProgramFactory
 
 	@Override
 	public Statement createSkipStatement(SourceLocation location) {
-		// TODO Auto-generated method stub
-		return null;
+		return new Skip(location);
 	};
 
 }

@@ -1,11 +1,14 @@
 package asteroids.model;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import asteroids.model.programs.expressions.Expression;
+import asteroids.model.programs.expressions.Null;
 import asteroids.model.programs.expressions.Type;
 import asteroids.model.programs.functions.*;
 import asteroids.model.programs.statements.*;
@@ -17,17 +20,18 @@ public class Program {
 	public Program(List<Function> functions, Statement body) {
 		this.functions.addAll(functions);
 		this.body = body;
-		//addToToDoList(body);
-		if (body instanceof Sequence) {
-			List<Statement> statementsList = ((Sequence)body).getStatementList();
-			for (Statement statement : statementsList) {
-				addToToDoList(statement);
-			}
-		}
-		else {
-			addToToDoList(body);
-		}
-		body.setProgram(this);
+		this.body.setProgram(this);
+		addToToDoList(body);
+		getVariables().put("self", new Null(null));
+//		if (body instanceof Sequence) {
+//			List<Statement> statementsList = ((Sequence)body).getStatementList();
+//			for (Statement statement : statementsList) {
+//				addToToDoList(statement);
+//			}
+//		}
+//		else {
+//			addToToDoList(body);
+//		}
 	}
 	
 	public Statement getProgramBody() {
@@ -41,6 +45,7 @@ public class Program {
 	private final Map<String, Type> globals = new HashMap<String, Type>();
 	
 	public double getTimeLeft() {
+		//return round(timeLeft,5);
 		return timeLeft;
 	}
 	
@@ -62,8 +67,8 @@ public class Program {
 		toDoList.add(statement);
 	}
 	
-	public void addToToDoListInFront(Statement statement) {
-		toDoList.add(0, statement);
+	public void addToToDoListInSecond(Statement statement) {
+		toDoList.add(1, statement);
 	}
 	
 	public Statement getStatementToDo(List<Statement> toDoList) {
@@ -88,16 +93,24 @@ public class Program {
 	
 	private Map<String, Expression<?>> variables = new HashMap<>();
 	
+	public static double round(double value, int places) {
+	    if (places < 0) throw new IllegalArgumentException();
+
+	    BigDecimal bd = new BigDecimal(value);
+	    bd = bd.setScale(places, RoundingMode.HALF_UP);
+	    return bd.doubleValue();
+	}
+	
 	public List<Object> execute(double dt) {
-		addTime(dt);
-		putOnHold(false);
 		for (Function function : functions) {
 			function.evaluateFunction();
 		}
-		System.out.println("TodoLIST:" + this.getToDoList() +"stop");
+		//System.out.println("TodoLIST:" + this.getToDoList() +"stop");
 		if (!this.getToDoList().isEmpty()) {
 			try {
+				System.out.println("TIJD VOOR " + this.getTimeLeft());
 				this.getStatementToDo(this.getToDoList()).executeStatement(this.getVariables());
+				System.out.println("TIJD NA " + this.getTimeLeft());
 				if (!isPutOnHold()) {
 					this.getToDoList().remove(0);
 					execute(this.getTimeLeft());
@@ -117,7 +130,11 @@ public class Program {
 //				this.getToDoList().remove(statement);
 //				System.out.println("TodoLISTv2:" + this.getToDoList() +"stop");
 //		}
-		return getValuesPrinted();
+		List<Object> toReturn = null;
+		if (this.getToDoList().isEmpty()) {
+			toReturn = this.getValuesPrinted();
+		}
+		return toReturn;
 	}
 
 	public Ship getShip() {
@@ -143,4 +160,10 @@ public class Program {
 	}
 	
 	private boolean putOnHold;
+
+	public List<Object> executeProgram(double dt) {
+		putOnHold(false);
+		this.addTime(dt);
+		return this.execute(this.getTimeLeft());
+	}
 }

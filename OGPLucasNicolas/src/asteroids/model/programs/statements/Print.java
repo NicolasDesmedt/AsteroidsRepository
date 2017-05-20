@@ -21,14 +21,11 @@ public class Print extends NoActionStatement {
 	
 	@Override
 	public String toString() {
-		System.out.println(getExpression());
-		//return "print ";
 		return "print " + getExpression().toString() + ";";
 	}
 
 	@Override
 	public void executeStatement(Map<String, Expression<?>> variables) {
-		System.out.println("We zijn in de print");
 		if (this.getExpression().getType(variables) == (Type.BOOL) || 
 				this.getExpression().getType(variables) == (Type.DOUBLE) )  {
 			System.out.println(this.getExpression().getValue(variables));

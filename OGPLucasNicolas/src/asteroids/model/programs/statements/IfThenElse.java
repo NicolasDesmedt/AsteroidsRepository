@@ -3,9 +3,10 @@ package asteroids.model.programs.statements;
 import java.util.Map;
 
 import asteroids.model.programs.expressions.Expression;
+import asteroids.model.programs.expressions.Type;
 import asteroids.part3.programs.SourceLocation;
 
-public class IfThenElse extends Statement{
+public class IfThenElse extends NoActionStatement{
 
 	public IfThenElse(Expression<?> condition, Statement ifBody, Statement elseBody, SourceLocation sourceLocation) {
 		super(sourceLocation);
@@ -45,7 +46,17 @@ public class IfThenElse extends Statement{
 
 	@Override
 	public void executeStatement(Map<String, Expression<?>> variables) {
-		// TODO Auto-generated method stub
+		assert this.getCondition().getType(variables) == Type.BOOL;
+		this.getIfBody().setProgram(this.getProgram());
+		if (this.getElseBody() != null)
+			this.getElseBody().setProgram(this.getProgram());
+		
+		if ((Boolean)this.getCondition().getValue(variables)) {
+			this.getProgram().addToToDoListInSecond(this.getIfBody());
+		}else{
+			if (this.getElseBody() != null)
+				this.getProgram().addToToDoListInSecond(this.getElseBody());
+		}
 		
 	}
 
