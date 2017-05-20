@@ -65,7 +65,7 @@ public class Part3TestFull {
     facade.addBulletToWorld(filledWorld, bullet1);
   }
 
-  /**
+
   @Test
   public void testCreateShip() throws ModelException {
     max_score += 12;
@@ -1351,7 +1351,7 @@ public class Part3TestFull {
     assertNull(facade.getBulletWorld(bullet1));
     score += 7;
   }
- **/
+
   // Assignment Statement
   /**
   @Test
@@ -1488,7 +1488,7 @@ public class Part3TestFull {
       score += 5;
     }
   }
-  **/
+ 
   // If Statement
   //TODO: hier geraakt
   @Test
@@ -1502,7 +1502,7 @@ public class Part3TestFull {
     assertArrayEquals(expecteds, results.toArray());
     score += 3;
   }
-  /**
+ 
   @Test
   public void testIfStatement_ThenPartIterruptable() throws ModelException {
     max_score += 12;

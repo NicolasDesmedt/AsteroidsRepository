@@ -13,7 +13,11 @@ public class Planetoid extends MinorPlanet{
 	public Planetoid(double x, double y, double xVelocity, double yVelocity, double radius, double totalTraveledDistance, double maxSpeed){
 		super(x, y, xVelocity, yVelocity, radius, maxSpeed);
 		setTraveledDistance(totalTraveledDistance);
+		setInitialRadius(radius);
 		this.move(0);
+		if (radius-totalTraveledDistance*0.000001<minMinorPlanetRadius) {
+			terminate();
+		}
 	}
 	
 	/**
@@ -49,7 +53,15 @@ public class Planetoid extends MinorPlanet{
      * Variable registering the initial radius of the planetoid.
      */
 	
-	public double initialRadius = 0;
+	public double initialRadius;
+	
+	public void setInitialRadius(double radius){
+		initialRadius = radius;
+	}
+	
+	public double getInitialRadius(){
+		return initialRadius;
+	}
 	
 	/**
 	 * Move this ship a given amount of time, taking the state of the thruster
@@ -61,15 +73,8 @@ public class Planetoid extends MinorPlanet{
     public void move(double duration){
         super.move(duration);
         distanceTraveled += calculateDistanceTraveled(duration);
-        if (initialRadius == 0){
-        	initialRadius = radius;
-        }
         double newRadius = (initialRadius-(distanceTraveled*0.000001));
-        if (newRadius < minMinorPlanetRadius){
-        	terminate();
-        }else{
-            setRadius(newRadius);
-        }
+        setRadius(newRadius);
     }
 	
 	/**
@@ -102,10 +107,13 @@ public class Planetoid extends MinorPlanet{
 		return distanceTraveled;
 	}
 	
-	@Override
-	public void terminate(){
-		if (hasWorld() && getRadius() >= 30){
-			double radiusAsteroids = (getRadius()/2);
+	public void gotHitByBullet(){
+		double planetoidRadius = getRadius();
+		boolean hasWorld = hasWorld();
+		World world = getWorld();
+		super.terminate();
+		if (hasWorld && planetoidRadius >= 30){
+			double radiusAsteroids = (planetoidRadius/2);
 			double directionAsteroid1 = (Math.random()*2*Math.PI);
 			double speedAsteroids = (getSpeed(getVelocityX(), getVelocityY())*1.5);
 			double planetoidPositionX = getPositionX();
@@ -114,14 +122,11 @@ public class Planetoid extends MinorPlanet{
 			double differenceY = (Math.sin(directionAsteroid1)*radiusAsteroids);
 			double velocityXAsteroid1 = (Math.cos(directionAsteroid1)*speedAsteroids);
 			double velocityYAsteroid1 = (Math.sin(directionAsteroid1)*speedAsteroids);
-			Asteroid Asteroid1 = new Asteroid((planetoidPositionX+differenceX), (planetoidPositionY+differenceY), velocityXAsteroid1, velocityYAsteroid1, radiusAsteroids);
-			Asteroid Asteroid2 = new Asteroid((planetoidPositionX-differenceX), (planetoidPositionY-differenceY), -velocityXAsteroid1, -velocityYAsteroid1, radiusAsteroids);
-			getWorld().addEntity(Asteroid1);
-			getWorld().addEntity(Asteroid2);
-
+			Asteroid asteroid1 = new Asteroid((planetoidPositionX+differenceX), (planetoidPositionY+differenceY), velocityXAsteroid1, velocityYAsteroid1, radiusAsteroids);
+			Asteroid asteroid2 = new Asteroid((planetoidPositionX-differenceX), (planetoidPositionY-differenceY), -velocityXAsteroid1, -velocityYAsteroid1, radiusAsteroids);
+			world.addEntity(asteroid1);
+			world.addEntity(asteroid2);
 		}
-		super.terminate();
-		
 	}
 	
 }

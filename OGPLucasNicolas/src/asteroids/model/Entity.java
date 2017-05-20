@@ -436,7 +436,7 @@ public abstract class Entity {
 	 * 			| other == null
 	 */
 	@Model
-	public boolean overlapFiltered(Entity other) throws NullPointerException {
+	public boolean overlapFiltered(Entity other){
 		if (this == other) {
 			return false;
 		} else if ((this instanceof Ship) && (other instanceof Bullet) && (((Bullet)other).getShip() == this)){
@@ -602,6 +602,10 @@ public abstract class Entity {
 			this.setVelocity(getVelocityX(), -getVelocityY());
 		else
 			this.setVelocity(-getVelocityX(), getVelocityY());
+	}
+	
+	public void collidesWithCorner(World world){
+		this.setVelocity(-getVelocityX(), -getVelocityY());
 	}
 
 	/**

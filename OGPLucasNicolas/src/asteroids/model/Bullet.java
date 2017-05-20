@@ -91,7 +91,15 @@ public class Bullet extends Entity{
 	@Basic @Raw @Override
 	public void terminate() {
 		if (this.hasShip()){
-			this.getShip().removeBulletFromShip(this);
+			 this.getShip().removeBulletFromShip(this);
+		}
+		super.terminate();
+	 }
+	
+	
+	public void shipTerminate() {
+		if (this.hasShip()){
+			 this.setShip(null);
 		}
 		super.terminate();
 	 }
@@ -279,8 +287,11 @@ public class Bullet extends Entity{
 	 */
 	public void hits(Entity other) {
 		if (this.getSource() == other){
+			this.getSource().getWorld().allEntities.remove(this);
 			((Ship)other).loadBulletOnShip(this);
-			this.getShip().getWorld().allEntities.remove(this);
+		}else if (other instanceof Planetoid && other.getRadius() >= 30){
+			this.terminate();
+			((Planetoid)other).gotHitByBullet();
 		}else{
 			this.terminate();
 			other.terminate();

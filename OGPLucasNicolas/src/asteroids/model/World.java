@@ -749,12 +749,16 @@ public class World{
 	 */
 	public void advanceAllEntities (double dt) {
 		assert this.getTimeToNextCollision() >= dt;
+		Set<Planetoid> smallPlanetoids = new HashSet<Planetoid>();
 		for (Entity entity : allEntities) {
 			entity.move(dt);
-			if (entity instanceof Ship && ((Ship)entity).isShipThrusterActive()) {
-				//TODO
+			if (entity instanceof Planetoid && entity.getRadius()<MinorPlanet.minMinorPlanetRadius) {
+				smallPlanetoids.add((Planetoid)entity);
 			}
 		}
+		Planetoid[] smallPlanetoidsArray = smallPlanetoids.toArray(new Planetoid[smallPlanetoids.size()]);
+		for(int i=0; i<smallPlanetoidsArray.length; i++)
+		   smallPlanetoidsArray[i].terminate();
 	}
 	
 	/**
@@ -772,7 +776,9 @@ public class World{
 		Entity entity1 = firstCollidingEntities[0];
 		Entity entity2 = firstCollidingEntities[1];
 		if (entity2 == null){
-			(entity1).collidesWithBoundary(this);
+			if (getTimeCollisionVerticalBoundary(entity1) == getTimeCollisionHorizontalBoundary(entity1)){
+				(entity1).collidesWithCorner(this);
+			}else (entity1).collidesWithBoundary(this);
 		}else{
 			if ( ((entity1 instanceof Ship) && (entity2 instanceof Ship)) ||  ((entity1 instanceof MinorPlanet) && (entity2 instanceof MinorPlanet))){
 				(entity1).bouncesOff(entity2);

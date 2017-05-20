@@ -96,13 +96,15 @@ public class Ship extends Entity{
 	
 	@Override
 	public void terminate(){
+		Set<Bullet> toRemove = new HashSet<Bullet>();
 		for(Bullet bullet: bullets){
-			bullet.terminate();
+			toRemove.add(bullet);
+			bullet.shipTerminate();
 		}
+		bullets.removeAll(toRemove);
 		super.terminate();
 		
 	}
-	
 	
 	public double calculateMinimalMass(){
 		return ((4*Math.PI*Math.pow(this.getRadius(), 3)*MIN_DENSITY)/3);
@@ -352,8 +354,8 @@ public class Ship extends Entity{
 	 */
 	public double getAcceleration(){
 		if (isShipThrusterActive()){
-		double acceleration = this.getThrusterForce()/this.getMass();
-		return acceleration;
+			double acceleration = this.getThrusterForce()/this.getMass();
+			return acceleration;
 		}else{
 			return 0;
 		}
@@ -369,7 +371,7 @@ public class Ship extends Entity{
 			throws IllegalArgumentException{
 		if (bullet == null) throw new IllegalArgumentException("The given bullet is invalid");
 		if (bullet.hasWorld() && bullet.source != this) throw new IllegalArgumentException("The bullet is already in the world");
-		if (!inShip(bullet)) throw new IllegalArgumentException("Bullet is out of the ship");
+		if (!inShip(bullet) && bullet.getSource() != this) throw new IllegalArgumentException("Bullet is out of the ship");
 		this.bullets.add(bullet);
 		this.setMass(this.getMass() + bullet.getMass());
 		bullet.removeFromWorld();
@@ -467,7 +469,7 @@ public class Ship extends Entity{
 			return;
 		}
 		Bullet bullet = this.selectLoadedBullet();
-		if (!bullet.isTerminated()){
+		if(!bullet.isTerminated()){
 			this.getWorld().addEntity(bullet);
 			this.removeBulletFromShip(bullet);
 			this.putInFiringPosition(bullet);
@@ -475,8 +477,10 @@ public class Ship extends Entity{
 			bullet.setSource(this);
 			this.setMass(this.getMass() - bullet.getMass());
 		}
+		if (!this.getWorld().withinBoundaries(bullet)){
+			bullet.terminate();
+		}
 		this.getWorld().evolve(0,null);
-        System.out.println(bullet.isTerminated());
 	}
 	
 	/**
@@ -485,8 +489,8 @@ public class Ship extends Entity{
 	 * @param 	bullet
 	 */
 	public void putInFiringPosition(Bullet bullet){
-		double newXPosition = bullet.getPositionX() + (this.getRadius() + bullet.getRadius())*Math.cos(getOrientation() + 1*Math.cos(getOrientation()));
-		double newYPosition = bullet.getPositionY() + (this.getRadius() + bullet.getRadius())*Math.sin(getOrientation() + 1*Math.sin(getOrientation()));
+		double newXPosition = bullet.getPositionX() + (this.getRadius() + bullet.getRadius())*Math.cos(getOrientation());
+		double newYPosition = bullet.getPositionY() + (this.getRadius() + bullet.getRadius())*Math.sin(getOrientation());
 		bullet.setPosition(newXPosition, newYPosition);
 	}
 	
@@ -521,10 +525,11 @@ public class Ship extends Entity{
 	 */
 	public void collidesWithPlanetoid(Planetoid planetoid) {
 		World world = getWorld();
-		double newPositionX = Math.random()*world.getWorldWidth();
-		double newPositionY = Math.random()*world.getWorldHeight();
+		double shipRadius = getRadius();
+		double newPositionX = Math.random()*(world.getWorldWidth()-2*shipRadius) + shipRadius;
+		double newPositionY = Math.random()*(world.getWorldHeight()-2*shipRadius) + shipRadius;
 		this.setPosition(newPositionX, newPositionY);
-		world.evolve(0, null);  //niet zeker of dit juist is
+		world.evolve(0, null);
 	}
 	
 	public void loadProgramOnShip(Program program) {
