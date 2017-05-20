@@ -51,8 +51,25 @@ public class While extends NoActionStatement{
 		Statement originalBody = this.getBody();
 		if ((Boolean)this.getCondition().getValue(variables)){
 			this.getProgram().addToToDoListAtIndex(0,null);
+			if (this.getFirstTime()) {
+				this.getProgram().addToToDoListInSecond(this.getBody());
+				setFirstTime(false);
+			}else{
+				if (this.getBody() instanceof Sequence) {
+					List<Statement> statementsList = ((Sequence)this.getBody()).getStatementList();
+					List<Statement> shallowCopy = statementsList.subList(0, statementsList.size());
+					Collections.reverse(shallowCopy);
+					for (Statement statement : shallowCopy)
+						this.getProgram().addToToDoListInSecond(statement);
+				}else{ 
+					this.getProgram().addToToDoListInSecond(this.getBody());
+				}
+			}
+		}
+	}
+			
 			//for (Statement statement : ((Sequence)this.getBody()).getStatementList())
-			this.getProgram().addToToDoListInSecond(this.getBody());
+			
 			//this.getProgram().addToToDoListInSecond(originalBody);
 //			if (this.getBody() instanceof Sequence) {
 //				int nbStatements = ((Sequence)this.getBody()).getStatementList().size();
@@ -83,10 +100,6 @@ public class While extends NoActionStatement{
 //			}else{
 //				this.getProgram().addToToDoListInSecond(this.getBody());
 //			}
-		}else{
-			
-		}
 	//System.out.println(this.getProgram().getToDoList());
-	}
 	
 }
