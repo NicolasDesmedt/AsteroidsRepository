@@ -4,7 +4,7 @@ import be.kuleuven.cs.som.annotate.*;
 
 /**
  * A class for an asteroid in space involving the mass, all the additional
- * properties are defined by the superclasses.
+ * properties are defined by the superclass.
  * 
  * @version	1.0
  * @author 	Lucas Desard and Nicolas Desmedt
@@ -15,7 +15,7 @@ import be.kuleuven.cs.som.annotate.*;
 public class Asteroid extends MinorPlanet{
 	
 	/**
-	 * Initialize this new asteroid with given position, velocity and radius
+	 * Initialize this new asteroid with given position, velocity, radius and maxSpeed.
 	 * 
 	 * @param 	x
 	 * 			The x-coordinate of the position of this new asteroid (in km).
