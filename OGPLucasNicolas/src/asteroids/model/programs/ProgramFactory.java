@@ -213,14 +213,12 @@ public class ProgramFactory
 
 	@Override
 	public Statement createThrustOnStatement(SourceLocation location) {
-		// TODO Auto-generated method stub
-		return null;
+		return new ThrustOn(location);
 	}
 
 	@Override
 	public Statement createThrustOffStatement(SourceLocation location) {
-		// TODO Auto-generated method stub
-		return null;
+		return new ThrustOff(location);
 	}
 
 	@Override
@@ -230,8 +228,7 @@ public class ProgramFactory
 
 	@Override
 	public Statement createTurnStatement(Expression angle, SourceLocation location) {
-		// TODO Auto-generated method stub
-		return null;
+		return new Turn(angle, location);
 	}
 
 	@Override

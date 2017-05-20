@@ -7,7 +7,7 @@ import asteroids.part3.programs.SourceLocation;
 
 public class ThrustOn extends ActionStatement {
 
-	protected ThrustOn(SourceLocation sourceLocation) {
+	public ThrustOn(SourceLocation sourceLocation) {
 		super(sourceLocation);
 	}
 

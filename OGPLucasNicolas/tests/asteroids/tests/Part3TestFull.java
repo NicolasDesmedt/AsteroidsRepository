@@ -1617,7 +1617,7 @@ public class Part3TestFull {
   }
 
   // Fire statement
-   //TODO: hier geraakt
+   
 **/
   /**
   @Test
@@ -1662,7 +1662,7 @@ public class Part3TestFull {
   }
 /**
   // Turn statement
-
+ 
   @Test
   public void testTurnStatement_ValidAngleEnoughTimeLeft() throws ModelException {
     max_score += 3;
@@ -1709,7 +1709,7 @@ public class Part3TestFull {
       score += 5;
     }
   }
-
+/**
   @Test
   public void testTurnStatement_InFunctionBody() throws ModelException {
     try {
@@ -1723,9 +1723,9 @@ public class Part3TestFull {
       score += 3;
     }
   }
-
+**/
   // Thruster ON statement
-
+/**
   @Test
   public void testThrusterOnStatement_EnoughTimeLeft() throws ModelException {
     if (nbStudentsInTeam > 1) {
@@ -1821,7 +1821,7 @@ public class Part3TestFull {
       }
     }
   }
-
+/**
   // Skip statement
 
   @Test
@@ -1846,7 +1846,7 @@ public class Part3TestFull {
     assertNull(results);
     score += 3;
   }
-
+/**
   @Test
   public void testSkipStatement_InFunctionBody() throws ModelException {
     try {
@@ -1860,9 +1860,10 @@ public class Part3TestFull {
       score += 3;
     }
   }
-
+/**
   // While Statement
-
+//TODO: hier geraakt
+ * **/
   @Test
   public void testWhileStatement_ZeroIterations() throws ModelException {
     max_score += 5;
@@ -1873,7 +1874,7 @@ public class Part3TestFull {
     assertEquals(0, results.size());
     score += 5;
   }
-
+/**
   @Test
   public void testWhileStatement_SeveralIterations() throws ModelException {
     max_score += 18;
