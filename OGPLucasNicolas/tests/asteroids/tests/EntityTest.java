@@ -24,10 +24,25 @@ public class EntityTest {
 	/**
 	 * Variable of a ship referencing ship with position [0,0], 
 	 * velocity[20,20], radius 10, orientation facing right (0) and mass 5.5E20.
-	 * respectively a ship with position [10,10], 
+	 * respectively a ship with position [11,11], 
 	 * velocity[10,10], radius 10, orientation facing up (PI/2) and mass 10E15.
+	 * respectively a ship with position [11,11], 
+	 * velocity[0,10], radius 10, orientation facing up (PI/2) and mass 10E15.
 	 */
-	private static Ship mutableShip1, mutableShip2;
+	private static Ship mutableShip1, mutableShip2, mutableShip3;
+	
+	/**
+	 * Variable of a bullet referencing bullet with position [0,0], 
+	 * velocity[20,20] and radius 10.
+	 */
+	
+	private static Bullet mutableBullet1;
+	
+	/**
+	 * Variable of a world referencing a world with height and width 1000.
+	 */
+	
+	private static World world1000x1000;
 	
 	/**
 	 * Variable of a ship referencing ship with position [100,-100], 
@@ -43,17 +58,26 @@ public class EntityTest {
 	/**
 	 * Set up a mutable test fixture.
 	 * 
-	 * @post The variable ship1 references a new ship with position [0,0], 
+	 * @post The variable mutableShip1 references a new ship with position [0,0], 
 	 * velocity[20,20], radius 10, orientation facing right (0) and mass 5.5E20.
 	 * 
-	 * @post The variable ship2 references a new ship with position [0,0], 
-	 * velocity[0,0], radius 10, orientation facing right (PI/2) and mass 10E15.
+	 * @post The variable mutableShip2 references a new ship with position [11,11], 
+	 * velocity[10,10], radius 9, orientation facing right (PI/2) and mass 10E15.
+	 * 
+	 * @post The variable mutableShip2 references a new ship with position [11,11], 
+	 * velocity[0,10], radius 9, orientation facing right (PI/2) and mass 10E15.
+	 * 
+	 * @post The variable mutableBullet1 references a new bullet with position [0,0], 
+	 * velocity[20,20] and radius 5.
 	 */
 	
 	@Before
 	public void setUpMutableFixture() {
 		mutableShip1 = new Ship(0,0,20,20,10,0, 5.5E20);
-		mutableShip2 = new Ship(10,10,10,10,10,(Math.PI/2), 10E15);
+		mutableShip2 = new Ship(11,11,10,10,10,(Math.PI/2), 10E15);
+		mutableShip3 = new Ship(11,11,0,10,10,(Math.PI/2), 10E15);
+		mutableBullet1 = new Bullet(0,0,20,20,5);
+		world1000x1000 = new World (1000,1000);
 	}
 	
 	/**
@@ -99,9 +123,9 @@ public class EntityTest {
 		assertFalse(Entity.isValidPosition(new double[] {Double.NaN, 0.0}));
 		assertFalse(Entity.isValidPosition(new double[] {0.0, Double.NaN}));
 		assertFalse(Entity.isValidPosition(new double[] {Double.NaN, Double.NaN}));
-		assertFalse(Entity.isValidPosition(new double[] {Double.POSITIVE_INFINITY, 0.0}));
-		assertFalse(Entity.isValidPosition(new double[] {0.0, Double.POSITIVE_INFINITY}));
-		assertFalse(Entity.isValidPosition(new double[] {Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY}));
+		assertTrue(Entity.isValidPosition(new double[] {Double.POSITIVE_INFINITY, 0.0}));
+		assertTrue(Entity.isValidPosition(new double[] {0.0, Double.POSITIVE_INFINITY}));
+		assertTrue(Entity.isValidPosition(new double[] {Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY}));
 		assertFalse(Entity.isValidPosition(new double[] {10, 0.0, 3}));
 		
 	}
@@ -117,11 +141,6 @@ public class EntityTest {
 	@Test(expected = IllegalArgumentException.class)
 	public void setPosition_NaN() throws IllegalArgumentException {
 		mutableShip1.setPosition(Double.NaN,200);
-	}
-	
-	@Test(expected = IllegalArgumentException.class)
-	public void setPosition_Infinite() throws IllegalArgumentException {
-		mutableShip1.setPosition(Double.NEGATIVE_INFINITY,200);
 	}
 	
 	@Test
@@ -316,6 +335,21 @@ public class EntityTest {
 		immutableShip1.overlap(null);
 	}
 	
+	/*
+	 * Test number 1 tests a bullet thats loaded on the given ship.
+	 * Test number 2 tests a ship that has the given bullet loaded on the ship.
+	 * Test number 3 tests 2 ships that overlap.
+	 * Test number 4 tests a given ship on itself.
+	 */
+	@Test
+	public void FilteredOverlap_Tests(){
+		mutableShip1.loadBulletOnShip(mutableBullet1);
+		assertFalse(mutableBullet1.overlapFiltered(mutableShip1));
+		assertFalse(mutableShip1.overlapFiltered(mutableBullet1));
+		assertTrue(mutableShip1.overlapFiltered(mutableShip2));
+		assertFalse(mutableShip1.overlapFiltered(mutableShip1));
+	}
+	
 	@Test
 	public void GetTimeToCollision_LegalCase() throws IllegalStateException{
 		double timeToCollision = immutableShip1.getTimeToCollision(immutableShip3);
@@ -382,6 +416,28 @@ public class EntityTest {
 		assertEquals(5.5E20, mass, EPSILON);
 	}
 	
+	@Test
+	public void collidesWithBoundary_LegalCase() {
+		world1000x1000.addEntity(mutableShip3);
+		world1000x1000.evolve(100, null);
+		assertEquals(mutableShip3.getVelocityX(), 0, EPSILON);
+		assertEquals(mutableShip3.getVelocityY(), -10, EPSILON);
+	}
 	
+	@Test
+	public void collidesWithCorner_LegalCase() {
+		world1000x1000.addEntity(mutableShip2);
+		world1000x1000.evolve(100, null);
+		assertEquals(mutableShip2.getVelocityX(), -10, EPSILON);
+		assertEquals(mutableShip2.getVelocityY(), -10, EPSILON);
+	}
 	
+	@Test
+	public void terminate_LegalCase() {
+		world1000x1000.addEntity(mutableShip2);
+		mutableShip2.terminate();
+		assertFalse(mutableShip2.hasWorld());
+		assertFalse(world1000x1000.allEntities.contains(mutableShip2));
+		assertTrue(mutableShip2.isTerminated());
+	}
 }

@@ -525,7 +525,7 @@ public class Ship extends Entity{
 	 */
 	public void collidesWithPlanetoid(Planetoid planetoid) {
 		World world = getWorld();
-		double shipRadius = getRadius();
+		double shipRadius = getRadius()+1;
 		double newPositionX = Math.random()*(world.getWorldWidth()-2*shipRadius) + shipRadius;
 		double newPositionY = Math.random()*(world.getWorldHeight()-2*shipRadius) + shipRadius;
 		this.setPosition(newPositionX, newPositionY);

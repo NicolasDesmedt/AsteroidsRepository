@@ -1366,7 +1366,7 @@ public class Part3TestFull {
     score += 4;
   }
   
-  /**
+
   
   @Test
   public void testAssignmentStatement_LocalVariableSameNameGlobalVariable() throws ModelException {
