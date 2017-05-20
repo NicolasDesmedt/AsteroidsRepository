@@ -51,8 +51,7 @@ public class ProgramFactory
 	@Override
 	public Statement createIfStatement(Expression condition, Statement ifBody, Statement elseBody,
 			SourceLocation sourceLocation) {
-		// TODO Auto-generated method stub
-		return null;
+		return new IfThenElse(condition, ifBody, elseBody, sourceLocation);
 	}
 
 	@Override
@@ -184,9 +183,8 @@ public class ProgramFactory
 	}
 
 	@Override
-	public Expression createEqualityExpression(Expression e1, Expression e2, SourceLocation location) {
-		// TODO Auto-generated method stub
-		return null;
+	public Expression<Boolean> createEqualityExpression(Expression e1, Expression e2, SourceLocation location) {
+		return new Equality(e1, e2, location);
 	}
 
 	@Override

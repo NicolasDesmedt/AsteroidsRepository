@@ -66,6 +66,10 @@ public class Program {
 		toDoList.add(0, statement);
 	}
 	
+	public Statement getStatementToDo(List<Statement> toDoList) {
+		return toDoList.get(0);
+	}
+	
 	private List<Statement> toDoList = new ArrayList<Statement>();
 	
 	public List<Object> getValuesPrinted() {
@@ -91,17 +95,28 @@ public class Program {
 			function.evaluateFunction();
 		}
 		System.out.println("TodoLIST:" + this.getToDoList() +"stop");
-		for (Statement statement : this.getToDoList()) {
-			System.out.println(statement);
+		if (!this.getToDoList().isEmpty()) {
 			try {
-				statement.executeStatement(this.getVariables());
+				this.getStatementToDo(this.getToDoList()).executeStatement(this.getVariables());
+				if (!isPutOnHold()) {
+					this.getToDoList().remove(0);
+					execute(this.getTimeLeft());
+				}
 			}catch(IllegalArgumentException|AssertionError e){
 				throw new IllegalArgumentException("Illegal statement execution");
 			}
+		}
+//		for (Statement statement : this.getToDoList()) {
+//			System.out.println(statement);
+//			try {
+//				statement.executeStatement(this.getVariables());
+//			}catch(IllegalArgumentException|AssertionError e){
+//				throw new IllegalArgumentException("Illegal statement execution");
+//			}
 //			if (!isPutOnHold()) {
 //				this.getToDoList().remove(statement);
 //				System.out.println("TodoLISTv2:" + this.getToDoList() +"stop");
-		}
+//		}
 		return getValuesPrinted();
 	}
 
