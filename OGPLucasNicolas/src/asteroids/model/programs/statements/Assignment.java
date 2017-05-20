@@ -44,7 +44,7 @@ public class Assignment extends NoActionStatement {
 		else{
 			this.getProgram().getVariables().put(this.getVar(), this.getValue());
 		}
-		System.out.println("assignement uitgevoerd");
+		System.out.println("assignement uitgevoerd" + variables);
 	}
 	
 }

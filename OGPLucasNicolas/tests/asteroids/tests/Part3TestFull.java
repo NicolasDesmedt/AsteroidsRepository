@@ -1579,7 +1579,7 @@ public class Part3TestFull {
       score += 5;
     }
   }
-  **/
+  
 
   // Sequence Statement
 /**
@@ -1709,7 +1709,7 @@ public class Part3TestFull {
       score += 5;
     }
   }
-/**
+  
   @Test
   public void testTurnStatement_InFunctionBody() throws ModelException {
     try {
@@ -1863,7 +1863,7 @@ public class Part3TestFull {
 /**
   // While Statement
 //TODO: hier geraakt
- * **/
+ 
   @Test
   public void testWhileStatement_ZeroIterations() throws ModelException {
     max_score += 5;
@@ -1874,7 +1874,8 @@ public class Part3TestFull {
     assertEquals(0, results.size());
     score += 5;
   }
-/**
+  **/
+
   @Test
   public void testWhileStatement_SeveralIterations() throws ModelException {
     max_score += 18;
@@ -1886,7 +1887,7 @@ public class Part3TestFull {
     assertArrayEquals(expecteds, results.toArray());
     score += 18;
   }
-
+/**
   @Test
   public void testWhileStatement_Interruptable() throws ModelException {
     max_score += 25;

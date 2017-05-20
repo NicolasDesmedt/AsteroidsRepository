@@ -32,8 +32,7 @@ public class ProgramFactory
 
 	@Override
 	public Statement createWhileStatement(Expression condition, Statement body, SourceLocation sourceLocation) {
-		// TODO Auto-generated method stub
-		return null;
+		return new While(condition, body, sourceLocation);
 	}
 
 	@Override
@@ -178,8 +177,7 @@ public class ProgramFactory
 
 	@Override
 	public Expression createLessThanExpression(Expression e1, Expression e2, SourceLocation location) {
-		// TODO Auto-generated method stub
-		return null;
+		return new LessThan(e1, e2, location);
 	}
 
 	@Override
@@ -188,9 +186,8 @@ public class ProgramFactory
 	}
 
 	@Override
-	public Expression createAdditionExpression(Expression e1, Expression e2, SourceLocation location) {
-		// TODO Auto-generated method stub
-		return null;
+	public Expression<Double> createAdditionExpression(Expression e1, Expression e2, SourceLocation location) {
+		return new Addition(e1, e2, location);
 	}
 
 	@Override

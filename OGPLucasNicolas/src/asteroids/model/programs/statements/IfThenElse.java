@@ -8,7 +8,7 @@ import asteroids.part3.programs.SourceLocation;
 
 public class IfThenElse extends NoActionStatement{
 
-	public IfThenElse(Expression<?> condition, Statement ifBody, Statement elseBody, SourceLocation sourceLocation) {
+	public IfThenElse(Expression<Boolean> condition, Statement ifBody, Statement elseBody, SourceLocation sourceLocation) {
 		super(sourceLocation);
 		this.condition = condition;
 		this.ifBody = ifBody;
@@ -21,11 +21,11 @@ public class IfThenElse extends NoActionStatement{
 	
 	private final Statement ifBody;
 	
-	public Expression<?> getCondition() {
+	public Expression<Boolean> getCondition() {
 		return this.condition;
 	}
 	
-	private final Expression<?> condition;
+	private final Expression<Boolean> condition;
 	
 	public Statement getElseBody() {
 		return this.elseBody;
