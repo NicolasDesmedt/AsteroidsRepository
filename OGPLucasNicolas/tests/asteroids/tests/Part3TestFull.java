@@ -2161,7 +2161,8 @@ public class Part3TestFull {
       score += 14;
     }
   }
-/**
+**/
+  /**
   @Test
   public void testShip_NoOtherShipsInWorld() throws ModelException {
     if (nbStudentsInTeam > 1) {
@@ -2178,7 +2179,7 @@ public class Part3TestFull {
       score += 8;
     }
   }
-
+/**
   // Asteroid
 
   @Test
@@ -2260,7 +2261,7 @@ public class Part3TestFull {
   }
 
   // Bullet
-   //TODO: hier bezig
+   
 **/
   /**
   @Test

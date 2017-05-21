@@ -109,9 +109,8 @@ public class ProgramFactory
 	}
 
 	@Override
-	public Expression createShipExpression(SourceLocation location) {
-		//return new ShipExpression(location);
-		return null;
+	public Expression<Entity> createShipExpression(SourceLocation location) {
+		return new ShipExpression(location);
 	}
 
 	@Override
