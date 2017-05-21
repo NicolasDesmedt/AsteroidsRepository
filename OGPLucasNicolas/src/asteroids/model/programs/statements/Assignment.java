@@ -4,7 +4,7 @@ import java.util.Map;
 
 import asteroids.model.programs.expressions.BooleanLiteral;
 import asteroids.model.programs.expressions.DoubleLiteral;
-import asteroids.model.programs.expressions.Entity;
+import asteroids.model.programs.expressions.EntityExpression;
 import asteroids.model.programs.expressions.Expression;
 import asteroids.model.programs.expressions.Null;
 import asteroids.model.programs.expressions.Type;

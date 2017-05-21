@@ -1,5 +1,13 @@
 package asteroids.model.programs.expressions;
 
-public class Any {
+import asteroids.part3.programs.SourceLocation;
 
-}
+//public class Any extends EntityExpression {
+
+	//public Any(SourceLocation sourceLocation) {
+		//super(sourceLocation);
+	//}
+	
+	//private static EntityExpression entity2;
+	
+//}

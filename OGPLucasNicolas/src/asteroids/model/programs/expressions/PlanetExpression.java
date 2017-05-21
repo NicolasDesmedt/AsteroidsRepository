@@ -1,5 +1,5 @@
 package asteroids.model.programs.expressions;
 
-public class Bullet {
+public class PlanetExpression {
 
 }

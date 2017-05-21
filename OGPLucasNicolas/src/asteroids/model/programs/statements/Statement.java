@@ -52,5 +52,9 @@ public abstract class Statement implements Cloneable {
 		//this.getProgram().getToDoList().remove(0);
 	}
 	
+	public void connectExpression(Expression<?> expression) {
+		expression.setProgram(this.getProgram());
+		expression.setShip(this.getShip());
+	}
 
 }

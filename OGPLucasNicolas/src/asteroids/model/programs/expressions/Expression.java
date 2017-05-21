@@ -2,6 +2,8 @@ package asteroids.model.programs.expressions;
 
 import java.util.Map;
 
+import asteroids.model.Program;
+import asteroids.model.Ship;
 import asteroids.part3.programs.SourceLocation;
 
 public abstract class Expression<T> implements Cloneable {
@@ -15,6 +17,8 @@ public abstract class Expression<T> implements Cloneable {
 	}
 	
 	private final SourceLocation sourceLocation;
+	private Program program;
+	private Ship ship;
 	
 	/**
 	 * Check whether the state of this expression can be changed.
@@ -47,6 +51,18 @@ public abstract class Expression<T> implements Cloneable {
 		} catch (CloneNotSupportedException exc) {
 			throw new AssertionError(exc);
 		}
+	}
+	
+	public void setProgram(Program program) {
+		this.program = program;
+	}
+	
+	public void setShip(Ship ship) {
+		this.ship = ship;
+	}
+	
+	public Ship getShip() {
+		return this.ship;
 	}
 	
 	@Override

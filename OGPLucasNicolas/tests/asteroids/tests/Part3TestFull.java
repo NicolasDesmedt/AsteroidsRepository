@@ -1960,7 +1960,7 @@ public class Part3TestFull {
 /**
   // Break Statement
 **/
-  
+  /**
   @Test
   public void testBreakStatement_NonNestedCase() throws ModelException {
     if (nbStudentsInTeam > 1) {
@@ -2019,7 +2019,7 @@ public class Part3TestFull {
       score += 16;
     }
   }
-
+// TODO: hier geraakt
   // Read Variable
 
   @Test
@@ -2063,7 +2063,7 @@ public class Part3TestFull {
       score += 3;
     }
   }
-
+/**
   @Test
   public void testReadVariable_DefinedInInvoingFunction() throws ModelException {
     try {
@@ -2122,7 +2122,8 @@ public class Part3TestFull {
   }
 
   // Self
-
+// TODO: hier bezig
+**/
   @Test
   public void testSelf() throws ModelException {
     max_score += 3;
@@ -2134,7 +2135,7 @@ public class Part3TestFull {
     assertArrayEquals(expecteds, results.toArray());
     score += 3;
   }
-
+/**
   // Ship
 
   @Test

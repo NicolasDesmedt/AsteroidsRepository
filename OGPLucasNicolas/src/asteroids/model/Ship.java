@@ -3,6 +3,7 @@ package asteroids.model;
 import java.util.HashSet;
 import java.util.Set;
 
+import asteroids.model.programs.expressions.Expression;
 import be.kuleuven.cs.som.annotate.*;
 /**
  * A class for flying a ship in space involving the mass, radius

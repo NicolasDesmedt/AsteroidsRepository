@@ -9,6 +9,7 @@ import java.util.Map;
 
 import asteroids.model.programs.expressions.Expression;
 import asteroids.model.programs.expressions.Null;
+import asteroids.model.programs.expressions.Self;
 import asteroids.model.programs.expressions.Type;
 import asteroids.model.programs.functions.*;
 import asteroids.model.programs.statements.*;
@@ -22,7 +23,7 @@ public class Program {
 		this.body = body;
 		this.body.setProgram(this);
 		addToToDoList(body);
-		getVariables().put("self", new Null(null));
+		getVariables().put("self", new Self(null));
 //		if (body instanceof Sequence) {
 //			List<Statement> statementsList = ((Sequence)body).getStatementList();
 //			for (Statement statement : statementsList) {

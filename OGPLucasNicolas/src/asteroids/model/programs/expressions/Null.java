@@ -4,7 +4,7 @@ import java.util.Map;
 
 import asteroids.part3.programs.SourceLocation;
 
-public class Null extends ReadVariable<Entity>{
+public class Null extends ReadVariable<EntityExpression>{
 
 	public Null(SourceLocation sourceLocation) {
 		super("null", sourceLocation);
@@ -21,7 +21,7 @@ public class Null extends ReadVariable<Entity>{
 	}
 
 	@Override
-	public Entity getValue(Map<String,Expression<?>> variables) {
+	public EntityExpression getValue(Map<String,Expression<?>> variables) {
 		return null;
 	}
 

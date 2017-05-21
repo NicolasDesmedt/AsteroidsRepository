@@ -2,11 +2,12 @@ package asteroids.model.programs.expressions;
 
 import java.util.Map;
 
+import asteroids.model.Entity;
 import asteroids.part3.programs.SourceLocation;
 
-public abstract class Entity extends Literals<Entity> {
+public class EntityExpression extends Literals<Entity> {
 
-	public Entity(Entity entity, SourceLocation sourceLocation) {
+	public EntityExpression(Entity entity, SourceLocation sourceLocation) {
 		super(sourceLocation);
 		this.entity = entity;
 	}

@@ -2,6 +2,8 @@ package asteroids.model.programs.expressions;
 
 import java.util.Map;
 
+import asteroids.model.Entity;
+import asteroids.model.Ship;
 import asteroids.part3.programs.SourceLocation;
 
 public class Self extends ReadVariable<Entity>{
@@ -23,6 +25,11 @@ public class Self extends ReadVariable<Entity>{
 	@Override
 	public Type getType(Map<String, Expression<?>> variables) {
 		return Type.ENTITY;
+	}
+	
+	@Override
+	public Entity getValue(Map<String, Expression<?>> variables) {
+		return (Entity)this.getShip();
 	}
 
 }

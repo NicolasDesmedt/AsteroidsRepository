@@ -52,7 +52,7 @@ public class While extends NoActionStatement{
 		if ((Boolean)this.getCondition().getValue(variables)){
 			this.getProgram().addToToDoListAtIndex(0,this.getBody());
 			this.getProgram().addToToDoListAtIndex(0, null);
-			System.out.println(this.getProgram().getToDoList());
+			//System.out.println(this.getProgram().getToDoList());
 //			this.getProgram().addToToDoListAtIndex(0,null);
 //			if (this.getFirstTime()) {
 //				this.getProgram().addToToDoListInSecond(this.getBody());

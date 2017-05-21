@@ -26,6 +26,7 @@ public class Print extends NoActionStatement {
 
 	@Override
 	public void executeStatement(Map<String, Expression<?>> variables) {
+		connectExpression(this.getExpression());
 		if (this.getExpression().getType(variables) == (Type.BOOL) || 
 				this.getExpression().getType(variables) == (Type.DOUBLE) )  {
 			System.out.println(this.getExpression().getValue(variables));

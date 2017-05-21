@@ -5,6 +5,7 @@ import java.util.List;
 import asteroids.part3.programs.IProgramFactory;
 import asteroids.part3.programs.SourceLocation;
 import asteroids.util.ModelException;
+import asteroids.model.Entity;
 import asteroids.model.Program;
 import asteroids.model.programs.expressions.*;
 import asteroids.model.programs.functions.*;
@@ -110,7 +111,7 @@ public class ProgramFactory
 
 	@Override
 	public Expression createShipExpression(SourceLocation location) {
-		// TODO Auto-generated method stub
+		//return new ShipExpression(location);
 		return null;
 	}
 
@@ -139,8 +140,8 @@ public class ProgramFactory
 	}
 
 	@Override
-	public Expression createAnyExpression(SourceLocation location) {
-		// TODO Auto-generated method stub
+	public Expression<Entity> createAnyExpression(SourceLocation location) {
+		//return new Any(location);
 		return null;
 	}
 
