@@ -2,6 +2,7 @@ package asteroids.model.programs.statements;
 
 import java.util.Map;
 
+import asteroids.model.Entity;
 import asteroids.model.programs.expressions.Expression;
 import asteroids.model.programs.expressions.Type;
 import asteroids.part3.programs.SourceLocation;
@@ -32,7 +33,10 @@ public class Print extends NoActionStatement {
 			System.out.println(this.getExpression().getValue(variables));
 		}
 		else{
-			System.out.println(this.getExpression().getValue(variables).toString());
+			String toPrint = null;
+			if(this.getExpression().getValue(variables) != null)
+				toPrint = this.getExpression().getValue(variables).toString();
+			System.out.println(toPrint);
 		}
 		this.getProgram().addToValuesPrinted(this.getExpression().getValue(variables));
 		//super.executeStatement(variables);

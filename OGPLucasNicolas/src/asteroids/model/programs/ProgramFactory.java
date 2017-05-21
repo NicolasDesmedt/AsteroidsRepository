@@ -100,8 +100,7 @@ public class ProgramFactory
 
 	@Override
 	public Expression createNullExpression(SourceLocation location) {
-		// TODO Auto-generated method stub
-		return null;
+		return new Null(location);
 	}
 
 	@Override

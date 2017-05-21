@@ -2108,7 +2108,7 @@ public class Part3TestFull {
   }
 
   // Null
-
+**/
   @Test
   public void testNull() throws ModelException {
     max_score += 3;
@@ -2123,7 +2123,7 @@ public class Part3TestFull {
 
   // Self
 
-**/
+
   /**
   @Test
   public void testSelf() throws ModelException {
@@ -2362,7 +2362,7 @@ public class Part3TestFull {
     score += 10;
   }
   **/
-
+/**
   @Test
   public void testPlanet_NoOtherEntitiesInWorld() throws ModelException {
     max_score += 6;

@@ -2,9 +2,10 @@ package asteroids.model.programs.expressions;
 
 import java.util.Map;
 
+import asteroids.model.Entity;
 import asteroids.part3.programs.SourceLocation;
 
-public class Null extends ReadVariable<EntityExpression>{
+public class Null extends ReadVariable<Entity>{
 
 	public Null(SourceLocation sourceLocation) {
 		super("null", sourceLocation);
@@ -21,7 +22,7 @@ public class Null extends ReadVariable<EntityExpression>{
 	}
 
 	@Override
-	public EntityExpression getValue(Map<String,Expression<?>> variables) {
+	public Entity getValue(Map<String,Expression<?>> variables) {
 		return null;
 	}
 
