@@ -141,8 +141,7 @@ public class ProgramFactory
 
 	@Override
 	public Expression<Entity> createAnyExpression(SourceLocation location) {
-		//return new Any(location);
-		return null;
+		return new Any(location);
 	}
 
 	@Override

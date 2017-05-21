@@ -2122,8 +2122,9 @@ public class Part3TestFull {
   }
 
   // Self
-// TODO: hier bezig
+
 **/
+  /**
   @Test
   public void testSelf() throws ModelException {
     max_score += 3;
@@ -2137,7 +2138,9 @@ public class Part3TestFull {
   }
 /**
   // Ship
-
+// TODO: hier bezig
+ * */
+  /**
   @Test
   public void testShip_OtherShipsInWorld() throws ModelException {
     if (nbStudentsInTeam > 1) {
@@ -2158,7 +2161,7 @@ public class Part3TestFull {
       score += 14;
     }
   }
-
+/**
   @Test
   public void testShip_NoOtherShipsInWorld() throws ModelException {
     if (nbStudentsInTeam > 1) {
@@ -2331,6 +2334,7 @@ public class Part3TestFull {
   }
 
   // Any
+   
 
   @Test
   public void testAny_SeveralEntitiesInWorld() throws ModelException {
@@ -2357,6 +2361,7 @@ public class Part3TestFull {
     assertTrue(allEntities.contains(results.get(0)));
     score += 10;
   }
+  **/
 
   @Test
   public void testPlanet_NoOtherEntitiesInWorld() throws ModelException {
@@ -2374,7 +2379,7 @@ public class Part3TestFull {
   }
 
   // Change Sign
-
+/**
   @Test
   public void testChangeSign_LegalCase() throws ModelException {
     max_score += 3;
