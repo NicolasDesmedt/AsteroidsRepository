@@ -1960,7 +1960,7 @@ public class Part3TestFull {
 /**
   // Break Statement
 **/
-  //TODO: hier geraakt
+  
   @Test
   public void testBreakStatement_NonNestedCase() throws ModelException {
     if (nbStudentsInTeam > 1) {
@@ -1975,7 +1975,7 @@ public class Part3TestFull {
       score += 16;
     }
   }
-/**
+
   @Test
   public void testBreakStatement_NestedCase() throws ModelException {
     if (nbStudentsInTeam > 1) {
@@ -2004,7 +2004,7 @@ public class Part3TestFull {
       score += 9;
     }
   }
-
+/**
   @Test
   public void testBreakStatement_InFunctionBody() throws ModelException {
     if (nbStudentsInTeam > 1) {

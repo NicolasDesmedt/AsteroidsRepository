@@ -81,6 +81,10 @@ public class Program {
 	
 	private List<Statement> toDoList = new ArrayList<Statement>();
 	
+	public Statement getStatementAt(int index, List<Statement> toDoList) {
+		return toDoList.get(index);
+	}
+	
 	public List<Object> getValuesPrinted() {
 		return valuesPrinted;
 	}

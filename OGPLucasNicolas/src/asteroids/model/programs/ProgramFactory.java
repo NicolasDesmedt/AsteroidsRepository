@@ -37,8 +37,7 @@ public class ProgramFactory
 
 	@Override
 	public Statement createBreakStatement(SourceLocation sourceLocation) {
-		// TODO Auto-generated method stub
-		return null;
+		return new Break(sourceLocation);
 	}
 
 	@Override
