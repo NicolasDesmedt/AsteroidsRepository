@@ -22,6 +22,8 @@ public class LessThan extends BinaryExpression<Boolean>{
 
 	@Override
 	public Boolean getValue(Map<String, Expression<?>> variables) {
+		assert ((this.getExpressionLhs().getType(variables) == Type.DOUBLE)
+				&& (this.getExpressionRhs().getType(variables) == Type.DOUBLE));
 		return (Double)this.getExpressionLhs().getValue(variables) < 
 				(Double)this.getExpressionRhs().getValue(variables);
 	}

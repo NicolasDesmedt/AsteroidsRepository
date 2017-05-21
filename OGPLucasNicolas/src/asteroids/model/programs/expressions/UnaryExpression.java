@@ -1,12 +1,41 @@
 package asteroids.model.programs.expressions;
 
+import java.util.Map;
+
 import asteroids.part3.programs.SourceLocation;
 
 public abstract class UnaryExpression<T> extends Expression<T>{
 
-	public UnaryExpression(SourceLocation sourceLocation) {
+	public UnaryExpression(Expression<?> expression, SourceLocation sourceLocation) {
 		super(sourceLocation);
-		// TODO Auto-generated constructor stub
+		this.expression = expression;
+	}
+	
+	public Expression<?> getExpression() {
+		return this.expression;
+	}
+	
+	private final Expression<?> expression;
+	
+	public abstract String operatorToString();
+	
+	@Override
+	public String toString() {
+		String result = "";
+		if (getExpression() instanceof BinaryExpression || 
+			getExpression() instanceof UnaryExpression){
+			result = "(" + getExpression().toString() + ")";
+		}else{
+			result = getExpression().toString();
+		}
+		result += operatorToString();
+		return result;
+	}
+	
+	public boolean isMutable() {
+		if (getExpression().isMutable())
+			return true;
+		return false;
 	}
 
 }

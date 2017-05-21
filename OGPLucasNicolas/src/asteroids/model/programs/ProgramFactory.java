@@ -82,15 +82,13 @@ public class ProgramFactory
 	}
 
 	@Override
-	public Expression createChangeSignExpression(Expression expression, SourceLocation sourceLocation) {
-		// TODO Auto-generated method stub
-		return null;
+	public Expression<Double> createChangeSignExpression(Expression expression, SourceLocation sourceLocation) {
+		return new ChangeSign(expression, sourceLocation);
 	}
 
 	@Override
-	public Expression createNotExpression(Expression expression, SourceLocation sourceLocation) {
-		// TODO Auto-generated method stub
-		return null;
+	public Expression<Boolean> createNotExpression(Expression expression, SourceLocation sourceLocation) {
+		return new Not(expression, sourceLocation);
 	}
 
 	@Override
@@ -99,7 +97,7 @@ public class ProgramFactory
 	}
 
 	@Override
-	public Expression createNullExpression(SourceLocation location) {
+	public Expression<Entity> createNullExpression(SourceLocation location) {
 		return new Null(location);
 	}
 
@@ -114,15 +112,13 @@ public class ProgramFactory
 	}
 
 	@Override
-	public Expression createAsteroidExpression(SourceLocation location) {
-		// TODO Auto-generated method stub
-		return null;
+	public Expression<Entity> createAsteroidExpression(SourceLocation location) {
+		return new AsteroidExpression(location);
 	}
 
 	@Override
-	public Expression createPlanetoidExpression(SourceLocation location) {
-		// TODO Auto-generated method stub
-		return null;
+	public Expression<Entity> createPlanetoidExpression(SourceLocation location) {
+		return new PlanetoidExpression(location);
 	}
 
 	@Override
@@ -131,9 +127,8 @@ public class ProgramFactory
 	}
 
 	@Override
-	public Expression createPlanetExpression(SourceLocation location) {
-		// TODO Auto-generated method stub
-		return null;
+	public Expression<Entity> createPlanetExpression(SourceLocation location) {
+		return new PlanetExpression(location);
 	}
 
 	@Override
@@ -142,37 +137,32 @@ public class ProgramFactory
 	}
 
 	@Override
-	public Expression createGetXExpression(Expression e, SourceLocation location) {
-		// TODO Auto-generated method stub
-		return null;
+	public Expression<Double> createGetXExpression(Expression e, SourceLocation location) {
+		return new GetX(e, location);
 	}
 
 	@Override
-	public Expression createGetYExpression(Expression e, SourceLocation location) {
-		// TODO Auto-generated method stub
-		return null;
+	public Expression<Double> createGetYExpression(Expression e, SourceLocation location) {
+		return new GetY(e, location);
 	}
 
 	@Override
-	public Expression createGetVXExpression(Expression e, SourceLocation location) {
-		// TODO Auto-generated method stub
-		return null;
+	public Expression<Double> createGetVXExpression(Expression e, SourceLocation location) {
+		return new GetVX(e, location);
 	}
 
 	@Override
-	public Expression createGetVYExpression(Expression e, SourceLocation location) {
-		// TODO Auto-generated method stub
-		return null;
+	public Expression<Double> createGetVYExpression(Expression e, SourceLocation location) {
+		return new GetVY(e, location);
 	}
 
 	@Override
-	public Expression createGetRadiusExpression(Expression e, SourceLocation location) {
-		// TODO Auto-generated method stub
-		return null;
+	public Expression<Double> createGetRadiusExpression(Expression e, SourceLocation location) {
+		return new GetRadius(e, location);
 	}
 
 	@Override
-	public Expression createLessThanExpression(Expression e1, Expression e2, SourceLocation location) {
+	public Expression<Boolean> createLessThanExpression(Expression e1, Expression e2, SourceLocation location) {
 		return new LessThan(e1, e2, location);
 	}
 
@@ -187,20 +177,18 @@ public class ProgramFactory
 	}
 
 	@Override
-	public Expression createMultiplicationExpression(Expression e1, Expression e2, SourceLocation location) {
+	public Expression<Double> createMultiplicationExpression(Expression e1, Expression e2, SourceLocation location) {
 		return new Multiplication(e1, e2, location);
 	}
 
 	@Override
-	public Expression createSqrtExpression(Expression e, SourceLocation location) {
-		// TODO Auto-generated method stub
-		return null;
+	public Expression<Double> createSqrtExpression(Expression e, SourceLocation location) {
+		return new Sqrt(e, location);
 	}
 
 	@Override
-	public Expression createGetDirectionExpression(SourceLocation location) {
-		// TODO Auto-generated method stub
-		return null;
+	public Expression<Double> createGetDirectionExpression(SourceLocation location) {
+		return new GetDirection(location);
 	}
 
 	@Override

@@ -4,6 +4,7 @@ import java.util.Map;
 
 import asteroids.model.Program;
 import asteroids.model.Ship;
+import asteroids.model.programs.statements.Statement;
 import asteroids.part3.programs.SourceLocation;
 
 public abstract class Expression<T> implements Cloneable {
@@ -65,10 +66,21 @@ public abstract class Expression<T> implements Cloneable {
 		return this.ship;
 	}
 	
+	public Statement getStatement() {
+		return this.statement;
+	}
+	
+	private Statement statement;
+	
 	@Override
 	public abstract String toString();
 	
 	public abstract Type getType(Map<String, Expression<?>> variables);
 	
 	public abstract T getValue(Map<String, Expression<?>> variables);
+
+	public void setStatement(Statement statement) {
+		this.statement = statement;
+		
+	}
 }

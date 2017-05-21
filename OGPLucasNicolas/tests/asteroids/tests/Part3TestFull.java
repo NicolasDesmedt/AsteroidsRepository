@@ -66,7 +66,7 @@ public class Part3TestFull {
   }
 
   //EIGEN TESTS
-  /**
+  
   @Test
   public void testAdditionStatement() throws ModelException {
     String code = "a := 10; " + "  print a; " + "  a := a + 2.0; " + " print a; ";
@@ -1380,7 +1380,7 @@ public class Part3TestFull {
   }
   
 
-  /**
+  
   @Test
   public void testAssignmentStatement_LocalVariableSameNameGlobalVariable() throws ModelException {
     max_score += 12;
@@ -1424,7 +1424,7 @@ public class Part3TestFull {
   }
 	
   
-  /**
+  
   @Test
   public void testAssignment_NameAlreadyUsedForFunction() throws ModelException {
     try {
@@ -1454,7 +1454,7 @@ public class Part3TestFull {
   }
 
   
-  /**
+  
   @Test
   public void testPrintStatement_DirectlyInFunctionBody() throws ModelException {
     try {
@@ -1468,7 +1468,7 @@ public class Part3TestFull {
       score += 5;
     }
   }
-  /**
+  
   @Test
   public void testPrintStatement_IndirectlyInFunctionBody() throws ModelException {
     try {
@@ -1487,7 +1487,7 @@ public class Part3TestFull {
 
   // Tests for correct return statements are part of the tests for
   // function calls.
-  /**
+  
   @Test
   public void testReturnStatement_NonInFunctionBody() throws ModelException {
     try {
@@ -1655,7 +1655,7 @@ public class Part3TestFull {
     assertNull(results);
     score += 3;
   }
-/**
+
   @Test
   public void testFireStatement_InFunctionBody() throws ModelException {
     try {
@@ -1718,7 +1718,7 @@ public class Part3TestFull {
       score += 5;
     }
   }
-/**
+
   @Test
   public void testTurnStatement_InFunctionBody() throws ModelException {
     try {
@@ -1763,7 +1763,7 @@ public class Part3TestFull {
       score += 3;
     }
   }
-/**
+
   @Test
   public void testThrusterOnStatement_InFunctionBody() throws ModelException {
     if (nbStudentsInTeam > 1) {
@@ -1814,7 +1814,7 @@ public class Part3TestFull {
       score += 3;
     }
   }
-/**
+
   @Test
   public void testThrusterOffStatement_InFunctionBody() throws ModelException {
     if (nbStudentsInTeam > 1) {
@@ -1855,7 +1855,7 @@ public class Part3TestFull {
     assertNull(results);
     score += 3;
   }
-/**
+
   @Test
   public void testSkipStatement_InFunctionBody() throws ModelException {
     try {
@@ -1929,7 +1929,7 @@ public class Part3TestFull {
     assertArrayEquals(expecteds, results.toArray());
     score += 20;
   }
-/**
+
   @Test
   public void testWhileStatement_InsideRecursiveFunction() throws ModelException {
     max_score += 20;
@@ -1957,10 +1957,10 @@ public class Part3TestFull {
       score += 5;
     }
   }
-/**
+
   // Break Statement
-**/
-  /**
+
+  
   @Test
   public void testBreakStatement_NonNestedCase() throws ModelException {
     if (nbStudentsInTeam > 1) {
@@ -2004,7 +2004,7 @@ public class Part3TestFull {
       score += 9;
     }
   }
-/**
+
   @Test
   public void testBreakStatement_InFunctionBody() throws ModelException {
     if (nbStudentsInTeam > 1) {
@@ -2063,7 +2063,7 @@ public class Part3TestFull {
       score += 3;
     }
   }
-/**
+
   @Test
   public void testReadVariable_DefinedInInvoingFunction() throws ModelException {
     try {
@@ -2108,7 +2108,7 @@ public class Part3TestFull {
   }
 
   // Null
-	/**
+	
   @Test
   public void testNull() throws ModelException {
     max_score += 3;
@@ -2124,7 +2124,7 @@ public class Part3TestFull {
   // Self
 
 
-  /**
+  
   @Test
   public void testSelf() throws ModelException {
     max_score += 3;
@@ -2136,11 +2136,9 @@ public class Part3TestFull {
     assertArrayEquals(expecteds, results.toArray());
     score += 3;
   }
-/**
+
   // Ship
-// TODO: hier bezig
- * */
-  /**
+  
   @Test
   public void testShip_OtherShipsInWorld() throws ModelException {
     if (nbStudentsInTeam > 1) {
@@ -2161,8 +2159,8 @@ public class Part3TestFull {
       score += 14;
     }
   }
-**/
-  /**
+
+  
   @Test
   public void testShip_NoOtherShipsInWorld() throws ModelException {
     if (nbStudentsInTeam > 1) {
@@ -2179,7 +2177,7 @@ public class Part3TestFull {
       score += 8;
     }
   }
-/**
+
   // Asteroid
 
   @Test
@@ -2222,6 +2220,7 @@ public class Part3TestFull {
 
   // Planetoid
 
+  
   @Test
   public void testPlanetoid_PlanetoidsInWorld() throws ModelException {
     if (nbStudentsInTeam > 1) {
@@ -2262,8 +2261,8 @@ public class Part3TestFull {
 
   // Bullet
    
-**/
-  /**
+
+  
   @Test
   public void testBullet_FiredBulletsInWorld() throws ModelException {
     max_score += 12;
@@ -2299,7 +2298,7 @@ public class Part3TestFull {
     assertArrayEquals(expecteds, results.toArray());
     score += 7;
   }
-/**
+
   // Planet
 
   @Test
@@ -2368,8 +2367,8 @@ public class Part3TestFull {
     assertTrue(allEntities.contains(results.get(0)));
     score += 10;
   }
-  **/
-/**
+  
+
   @Test
   public void testPlanet_NoOtherEntitiesInWorld() throws ModelException {
     max_score += 6;
@@ -2386,7 +2385,7 @@ public class Part3TestFull {
   }
 
   // Change Sign
-/**
+
   @Test
   public void testChangeSign_LegalCase() throws ModelException {
     max_score += 3;
@@ -2398,6 +2397,7 @@ public class Part3TestFull {
     assertArrayEquals(expecteds, results.toArray());
     score += 3;
   }
+  
 
   @Test
   public void testChangeSign_IllegalCase() throws ModelException {
@@ -2474,7 +2474,7 @@ public class Part3TestFull {
   }
 
   // Function Call
-
+//TODO: Function call
   @Test
   public void testFunctionCall_NoParameters() throws ModelException {
     max_score += 10;
@@ -2940,5 +2940,5 @@ public class Part3TestFull {
       score += 5;
     }
   }
-**/
+
 }

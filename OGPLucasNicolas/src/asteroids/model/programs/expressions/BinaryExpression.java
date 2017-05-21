@@ -51,7 +51,6 @@ public abstract class BinaryExpression<T> extends Expression<T>{
 	
 	@Override
 	public boolean equals(Object other) {
-		System.out.println("we gebruiken equals");
 		if ((other == null) || (getClass() != other.getClass()))
 			return false;
 		BinaryExpression<?> otherExpr = (BinaryExpression<?>) other;

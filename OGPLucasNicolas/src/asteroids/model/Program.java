@@ -23,7 +23,6 @@ public class Program {
 		this.body = body;
 		this.body.setProgram(this);
 		addToToDoList(body);
-		getVariables().put("self", new Self(null));
 //		if (body instanceof Sequence) {
 //			List<Statement> statementsList = ((Sequence)body).getStatementList();
 //			for (Statement statement : statementsList) {
