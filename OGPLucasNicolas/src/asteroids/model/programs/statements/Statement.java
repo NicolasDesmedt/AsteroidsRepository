@@ -32,7 +32,7 @@ public abstract class Statement implements Cloneable {
 	public void setProgram(Program program) {
 		this.program = program;
 		if (this instanceof Sequence) {
-			List<Statement> statementsList = ((Sequence)this).getStatementList();
+			List<Statement> statementsList = ((Sequence)this).getStatementsList();
 			for (Statement statement : statementsList) {
 				statement.setProgram(program);
 			}
@@ -48,7 +48,9 @@ public abstract class Statement implements Cloneable {
 	@Override
 	public abstract String toString();
 
-	public abstract void executeStatement(Map<String, Expression<?>> variables);
+	public void executeStatement(Map<String, Expression<?>> variables) {
+		//this.getProgram().getToDoList().remove(0);
+	}
 	
 
 }

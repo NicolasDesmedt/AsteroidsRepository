@@ -42,6 +42,12 @@ public class Assignment extends NoActionStatement {
 	@Override
 	public void executeStatement(Map<String, Expression<?>> variables) {
 		Expression<?> value = null;
+		Type typeCheck = null;
+		if (variables.containsKey(this.getVar())) {
+			value = variables.get(this.getVar());
+			typeCheck = value.getType(variables);
+			assert(this.getValue().getType(variables) == typeCheck);
+		}
 
 		if(getValue().getType(variables)==Type.BOOL)
 			value=new BooleanLiteral((Boolean) getValue().getValue(variables), getValue().getSourceLocation());
@@ -51,6 +57,7 @@ public class Assignment extends NoActionStatement {
 		
 		variables.remove(getVar());
 		variables.put(getVar(), value);
+		//super.executeStatement(variables);
 //		Type typeCheck = null;
 //		if (variables.containsKey(this.getVar())) {
 //			Expression<?> value = variables.get(this.getVar());

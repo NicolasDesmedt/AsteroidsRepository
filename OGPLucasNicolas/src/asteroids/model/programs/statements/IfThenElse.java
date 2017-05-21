@@ -57,7 +57,7 @@ public class IfThenElse extends NoActionStatement{
 			if (this.getElseBody() != null)
 				this.getProgram().addToToDoListInSecond(this.getElseBody());
 		}
-		
+		//super.executeStatement(variables);
 	}
 
 }

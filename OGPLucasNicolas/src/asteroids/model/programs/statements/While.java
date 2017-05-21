@@ -48,23 +48,28 @@ public class While extends NoActionStatement{
 	public void executeStatement(Map<String, Expression<?>> variables) {
 		assert this.getCondition().getType(variables) == Type.BOOL;
 		this.getBody().setProgram(this.getProgram());
-		Statement originalBody = this.getBody();
+		//Statement originalBody = this.getBody();
 		if ((Boolean)this.getCondition().getValue(variables)){
-			this.getProgram().addToToDoListAtIndex(0,null);
-			if (this.getFirstTime()) {
-				this.getProgram().addToToDoListInSecond(this.getBody());
-				setFirstTime(false);
-			}else{
-				if (this.getBody() instanceof Sequence) {
-					List<Statement> statementsList = ((Sequence)this.getBody()).getStatementList();
-					List<Statement> shallowCopy = statementsList.subList(0, statementsList.size());
-					Collections.reverse(shallowCopy);
-					for (Statement statement : shallowCopy)
-						this.getProgram().addToToDoListInSecond(statement);
-				}else{ 
-					this.getProgram().addToToDoListInSecond(this.getBody());
-				}
-			}
+			this.getProgram().addToToDoListAtIndex(0,this.getBody());
+			this.getProgram().addToToDoListAtIndex(0, null);
+			System.out.println(this.getProgram().getToDoList());
+//			this.getProgram().addToToDoListAtIndex(0,null);
+//			if (this.getFirstTime()) {
+//				this.getProgram().addToToDoListInSecond(this.getBody());
+//				setFirstTime(false);
+//			}else{
+//				if (this.getBody() instanceof Sequence) {
+//					List<Statement> statementsList = ((Sequence)this.getBody()).getStatementList();
+//					List<Statement> shallowCopy = statementsList.subList(0, statementsList.size());
+//					Collections.reverse(shallowCopy);
+//					for (Statement statement : shallowCopy)
+//						this.getProgram().addToToDoListInSecond(statement);
+//				}else{ 
+//					this.getProgram().addToToDoListInSecond(this.getBody());
+//				}
+//			}
+		}else{
+			super.executeStatement(variables);
 		}
 	}
 			

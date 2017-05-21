@@ -192,8 +192,7 @@ public class ProgramFactory
 
 	@Override
 	public Expression createMultiplicationExpression(Expression e1, Expression e2, SourceLocation location) {
-		// TODO Auto-generated method stub
-		return null;
+		return new Multiplication(e1, e2, location);
 	}
 
 	@Override

@@ -78,7 +78,7 @@ public class Part3TestFull {
   }
   
   //GEGEVEN
-  /**
+  
   @Test
   public void testCreateShip() throws ModelException {
     max_score += 12;
@@ -1366,7 +1366,7 @@ public class Part3TestFull {
   }
 
   // Assignment Statement
-  /**
+  
   @Test
   public void testAssignmentStatement_NewGlobalVariable() throws ModelException {
     max_score += 4;
@@ -1380,7 +1380,7 @@ public class Part3TestFull {
   }
   
 
-  
+  /**
   @Test
   public void testAssignmentStatement_LocalVariableSameNameGlobalVariable() throws ModelException {
     max_score += 12;
@@ -1406,9 +1406,9 @@ public class Part3TestFull {
     assertArrayEquals(expecteds, results.toArray());
     score += 12;
   }
-  **/
   
-  /**
+  
+  
   @Test
   public void testAssignment_ImproperType() throws ModelException {
     try {
@@ -1423,8 +1423,8 @@ public class Part3TestFull {
     }
   }
 	
-  /**
   
+  /**
   @Test
   public void testAssignment_NameAlreadyUsedForFunction() throws ModelException {
     try {
@@ -1440,7 +1440,7 @@ public class Part3TestFull {
   }
 
   // Print Statement
-  /**
+  
   @Test
   public void testPrintStatement_LegalCase() throws ModelException {
     max_score += 2;
@@ -1453,8 +1453,8 @@ public class Part3TestFull {
     score += 2;
   }
 
-  /**
   
+  /**
   @Test
   public void testPrintStatement_DirectlyInFunctionBody() throws ModelException {
     try {
@@ -1468,7 +1468,7 @@ public class Part3TestFull {
       score += 5;
     }
   }
-  
+  /**
   @Test
   public void testPrintStatement_IndirectlyInFunctionBody() throws ModelException {
     try {
@@ -1487,7 +1487,7 @@ public class Part3TestFull {
 
   // Tests for correct return statements are part of the tests for
   // function calls.
-  
+  /**
   @Test
   public void testReturnStatement_NonInFunctionBody() throws ModelException {
     try {
@@ -1655,7 +1655,7 @@ public class Part3TestFull {
     assertNull(results);
     score += 3;
   }
-
+/**
   @Test
   public void testFireStatement_InFunctionBody() throws ModelException {
     try {
@@ -1718,7 +1718,7 @@ public class Part3TestFull {
       score += 5;
     }
   }
-
+/**
   @Test
   public void testTurnStatement_InFunctionBody() throws ModelException {
     try {
@@ -1763,7 +1763,7 @@ public class Part3TestFull {
       score += 3;
     }
   }
-
+/**
   @Test
   public void testThrusterOnStatement_InFunctionBody() throws ModelException {
     if (nbStudentsInTeam > 1) {
@@ -1814,7 +1814,7 @@ public class Part3TestFull {
       score += 3;
     }
   }
-
+/**
   @Test
   public void testThrusterOffStatement_InFunctionBody() throws ModelException {
     if (nbStudentsInTeam > 1) {
@@ -1855,7 +1855,7 @@ public class Part3TestFull {
     assertNull(results);
     score += 3;
   }
-
+/**
   @Test
   public void testSkipStatement_InFunctionBody() throws ModelException {
     try {
@@ -1882,8 +1882,8 @@ public class Part3TestFull {
     assertEquals(0, results.size());
     score += 5;
   }
-**/
-  //TODO: tot hier
+
+  
   
   @Test
   public void testWhileStatement_SeveralIterations() throws ModelException {
@@ -1896,7 +1896,7 @@ public class Part3TestFull {
     assertArrayEquals(expecteds, results.toArray());
     score += 18;
   }
-/**
+
   @Test
   public void testWhileStatement_Interruptable() throws ModelException {
     max_score += 25;
@@ -1929,7 +1929,7 @@ public class Part3TestFull {
     assertArrayEquals(expecteds, results.toArray());
     score += 20;
   }
-
+/**
   @Test
   public void testWhileStatement_InsideRecursiveFunction() throws ModelException {
     max_score += 20;
@@ -1957,9 +1957,10 @@ public class Part3TestFull {
       score += 5;
     }
   }
-
+/**
   // Break Statement
-
+**/
+  //TODO: hier geraakt
   @Test
   public void testBreakStatement_NonNestedCase() throws ModelException {
     if (nbStudentsInTeam > 1) {
@@ -1974,7 +1975,7 @@ public class Part3TestFull {
       score += 16;
     }
   }
-
+/**
   @Test
   public void testBreakStatement_NestedCase() throws ModelException {
     if (nbStudentsInTeam > 1) {

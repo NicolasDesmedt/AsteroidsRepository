@@ -34,6 +34,7 @@ public class Print extends NoActionStatement {
 			System.out.println(this.getExpression().getValue(variables).toString());
 		}
 		this.getProgram().addToValuesPrinted(this.getExpression().getValue(variables));
+		//super.executeStatement(variables);
 	}
 
 }
