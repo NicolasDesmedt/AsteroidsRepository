@@ -127,9 +127,8 @@ public class ProgramFactory
 	}
 
 	@Override
-	public Expression createBulletExpression(SourceLocation location) {
-		// TODO Auto-generated method stub
-		return null;
+	public Expression<Entity> createBulletExpression(SourceLocation location) {
+		return new BulletExpression(location);
 	}
 
 	@Override

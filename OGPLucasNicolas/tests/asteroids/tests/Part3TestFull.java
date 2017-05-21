@@ -2019,7 +2019,7 @@ public class Part3TestFull {
       score += 16;
     }
   }
-// TODO: hier geraakt
+// TODO: Read Var
   // Read Variable
 
   @Test
@@ -2108,7 +2108,7 @@ public class Part3TestFull {
   }
 
   // Null
-**/
+	/**
   @Test
   public void testNull() throws ModelException {
     max_score += 3;
@@ -2260,7 +2260,8 @@ public class Part3TestFull {
   }
 
   // Bullet
-
+   //TODO: hier bezig
+**/
   @Test
   public void testBullet_FiredBulletsInWorld() throws ModelException {
     max_score += 12;
@@ -2269,6 +2270,8 @@ public class Part3TestFull {
     Set<? extends Bullet> bulletsOnShip1 = null;
     if (nbStudentsInTeam > 1)
       bulletsOnShip1 = facade.getBulletsOnShip(ship1);
+    	System.out.println("START " + bulletsOnShip1 + " STOP");
+    	System.out.println();
     facade.fireBullet(ship1);
     facade.fireBullet(ship1);
     facade.fireBullet(ship1);
@@ -2277,10 +2280,12 @@ public class Part3TestFull {
     assertEquals(1, results.size());
     assertTrue(facade.getWorldBullets(filledWorld).contains(results.get(0)));
     if (nbStudentsInTeam > 1)
+    	System.out.println();
+    	System.out.println("START " + bulletsOnShip1 + " STOP " + results.get(0));
       assertTrue(bulletsOnShip1.contains(results.get(0)));
     score += 12;
   }
-
+/**
   @Test
   public void testBullet_NoFiredBulletsInWorld() throws ModelException {
     max_score += 7;
