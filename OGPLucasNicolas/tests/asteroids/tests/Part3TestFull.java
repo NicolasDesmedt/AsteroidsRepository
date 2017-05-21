@@ -2262,6 +2262,7 @@ public class Part3TestFull {
   // Bullet
    //TODO: hier bezig
 **/
+  /**
   @Test
   public void testBullet_FiredBulletsInWorld() throws ModelException {
     max_score += 12;
@@ -2285,7 +2286,7 @@ public class Part3TestFull {
       assertTrue(bulletsOnShip1.contains(results.get(0)));
     score += 12;
   }
-/**
+
   @Test
   public void testBullet_NoFiredBulletsInWorld() throws ModelException {
     max_score += 7;
@@ -2297,7 +2298,7 @@ public class Part3TestFull {
     assertArrayEquals(expecteds, results.toArray());
     score += 7;
   }
-
+/**
   // Planet
 
   @Test

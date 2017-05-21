@@ -413,7 +413,7 @@ public class Ship extends Entity{
 	/**
 	 * A variable set registering all the bullets on this ship.
 	 */
-	public Set<Bullet> bullets = new HashSet<>();
+	private Set<Bullet> bullets = new HashSet<>();
 	
 	/**
 	 * Return a set containing all the bullets on this ship.
@@ -422,7 +422,7 @@ public class Ship extends Entity{
 	 */
 	@Basic
 	public Set<Bullet> getBulletsOnShip(){
-		return this.bullets;
+		return new HashSet<Bullet>(bullets);
 	}
 	
 	/**
@@ -431,7 +431,7 @@ public class Ship extends Entity{
 	 * @return
 	 */
 	public int getNbBulletsOnShip(){
-		return this.bullets.size();
+		return this.getBulletsOnShip().size();
 	}
 	
 	/**
@@ -442,7 +442,7 @@ public class Ship extends Entity{
 	public void removeBulletFromShip(Bullet bullet) throws IllegalArgumentException{
 		if (this.getBulletsOnShip().contains(bullet)){
 			bullet.setShip(null);
-			this.getBulletsOnShip().remove(bullet);
+			this.bullets.remove(bullet);
 		}else{
 			 throw new IllegalArgumentException ("The given bullet is not on the ship");
 		}

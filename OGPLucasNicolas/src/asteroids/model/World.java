@@ -370,7 +370,7 @@ public class World{
 	 */
 	public Set<Ship> getAllShips() {
 		Set<Ship> allShips = new HashSet<Ship>();
-		for (Entity entity : allEntities)
+		for (Entity entity : this.getAllEntities())
 			if (entity instanceof Ship)
 				allShips.add((Ship)entity);
 		return allShips;
@@ -386,7 +386,7 @@ public class World{
 	 */
 	public Set<Bullet> getAllBullets() {
 		Set<Bullet> allBullets = new HashSet<Bullet>();
-		for (Entity entity : allEntities)
+		for (Entity entity : this.getAllEntities())
 			if (entity instanceof Bullet)
 				allBullets.add((Bullet)entity);
 		return allBullets;
@@ -402,7 +402,7 @@ public class World{
 	 */
 	public Set<MinorPlanet> getAllMinorPlanets() {
 		Set<MinorPlanet> allMinorPlanets = new HashSet<MinorPlanet>();
-		for (Entity entity : allEntities)
+		for (Entity entity : this.getAllEntities())
 			if (entity instanceof MinorPlanet)
 				allMinorPlanets.add((MinorPlanet)entity);
 		return allMinorPlanets;
@@ -418,7 +418,7 @@ public class World{
 	 */
 	public Set<Asteroid> getAllAsteroids() {
 		Set<Asteroid> allAsteroids = new HashSet<Asteroid>();
-		for (Entity entity : allEntities)
+		for (Entity entity : this.getAllEntities())
 			if (entity instanceof Asteroid)
 				allAsteroids.add((Asteroid)entity);
 		return allAsteroids;
@@ -434,7 +434,7 @@ public class World{
 	 */
 	public Set<Planetoid> getAllPlanetoids() {
 		Set<Planetoid> allPlanetoids = new HashSet<Planetoid>();
-		for (Entity entity : allEntities)
+		for (Entity entity : this.getAllEntities())
 			if (entity instanceof Planetoid)
 				allPlanetoids.add((Planetoid)entity);
 		return allPlanetoids;

@@ -36,13 +36,16 @@ public class BulletExpression extends ReadVariable<Entity>{
 	public Entity getValue(Map<String, Expression<?>> variables) {
 		Set<Entity> allEntities = this.getShip().getWorld().getAllEntities();
 		allEntities.toArray();
-		List<Entity> allBullets = allEntities.stream()                // convert list to stream
-                .filter(x -> x instanceof Bullet)     // we dont like mkyong
+		List<Entity> allBullets = allEntities.stream()                
+                .filter(x -> x instanceof Bullet)     
                 .collect(Collectors.toList());
 		
 		List<Entity> filteredBullets = allBullets.stream()
 				.filter(x -> ((Bullet)x).getSource() == this.getShip())
 				.collect(Collectors.toList());
+		
+		if (filteredBullets.size() == 0)
+			return null;
 		
 		int randomNum = ThreadLocalRandom.current().nextInt(0, filteredBullets.size());
 
