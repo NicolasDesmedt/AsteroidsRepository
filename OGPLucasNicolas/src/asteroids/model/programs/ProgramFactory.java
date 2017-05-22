@@ -22,8 +22,8 @@ public class ProgramFactory
 
 	@Override
 	public Function createFunctionDefinition(String functionName, Statement body, SourceLocation sourceLocation) {
-		// TODO Auto-generated method stub
-		return null;
+		return new Function(functionName, body, sourceLocation);
+		//return null;
 	}
 
 	@Override
@@ -43,8 +43,7 @@ public class ProgramFactory
 
 	@Override
 	public Statement createReturnStatement(Expression value, SourceLocation sourceLocation) {
-		// TODO Auto-generated method stub
-		return null;
+		return new Return(sourceLocation, value);
 	}
 
 	@Override
@@ -69,16 +68,14 @@ public class ProgramFactory
 	}
 
 	@Override
-	public Expression createReadParameterExpression(String parameterName, SourceLocation sourceLocation) {
-		// TODO Auto-generated method stub
-		return null;
+	public Expression<?> createReadParameterExpression(String parameterName, SourceLocation sourceLocation) {
+		return new ReadParameter<>(parameterName, sourceLocation);
 	}
 
 	@Override
 	public Expression createFunctionCallExpression(String functionName, List<Expression> actualArgs,
 			SourceLocation sourceLocation) {
-		// TODO Auto-generated method stub
-		return null;
+		return new FunctionCall<>(functionName, actualArgs, sourceLocation);
 	}
 
 	@Override
