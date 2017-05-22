@@ -2271,8 +2271,6 @@ public class Part3TestFull {
     Set<? extends Bullet> bulletsOnShip1 = null;
     if (nbStudentsInTeam > 1)
       bulletsOnShip1 = facade.getBulletsOnShip(ship1);
-    	System.out.println("START " + bulletsOnShip1 + " STOP");
-    	System.out.println();
     facade.fireBullet(ship1);
     facade.fireBullet(ship1);
     facade.fireBullet(ship1);
@@ -2281,8 +2279,6 @@ public class Part3TestFull {
     assertEquals(1, results.size());
     assertTrue(facade.getWorldBullets(filledWorld).contains(results.get(0)));
     if (nbStudentsInTeam > 1)
-    	System.out.println();
-    	System.out.println("START " + bulletsOnShip1 + " STOP " + results.get(0));
       assertTrue(bulletsOnShip1.contains(results.get(0)));
     score += 12;
   }

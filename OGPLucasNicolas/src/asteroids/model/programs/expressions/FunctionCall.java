@@ -9,7 +9,21 @@ public class FunctionCall<T> extends Expression<T> {
 
 	public FunctionCall(String functionName, List<Expression> actualArgs, SourceLocation sourceLocation) {
 		super(sourceLocation);
+		this.functionName = functionName;
+		this.actualArgs = actualArgs;
 	}
+	
+	public String getFunctionName() {
+		return this.functionName;
+	}
+	
+	private String functionName;
+	
+	public List<Expression> getActualArgs(){
+		return this.actualArgs;
+	}
+	
+	private List<Expression> actualArgs;
 
 	@Override
 	public boolean isMutable() {
@@ -19,8 +33,8 @@ public class FunctionCall<T> extends Expression<T> {
 
 	@Override
 	public String toString() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.getFunctionName() + "(" +
+				this.getActualArgs() + ")";
 	}
 
 	@Override

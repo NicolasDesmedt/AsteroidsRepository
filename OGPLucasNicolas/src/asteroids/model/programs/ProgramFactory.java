@@ -73,7 +73,7 @@ public class ProgramFactory
 	}
 
 	@Override
-	public Expression createFunctionCallExpression(String functionName, List<Expression> actualArgs,
+	public Expression<?> createFunctionCallExpression(String functionName, List<Expression> actualArgs,
 			SourceLocation sourceLocation) {
 		return new FunctionCall<>(functionName, actualArgs, sourceLocation);
 	}
