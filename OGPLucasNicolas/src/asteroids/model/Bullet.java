@@ -6,8 +6,6 @@ import be.kuleuven.cs.som.annotate.*;
  * A class of bullets involving a mass, a radius, a source and a world.
  * And facilities to resolve collisions this bullet is a part of.
  * 
- * @invar	The mass of each bullet must be a valid mass for any bullet.
- * 			| isValidMass(getMass())
  * @invar	The radius of each bullet must be a valid radius for any bullet.
  * 			| isValidRadius(getRadius())
  * 
@@ -61,7 +59,8 @@ public class Bullet extends Entity{
 		
 	}
 	
-	public Bullet(double x, double y, double xVelocity, double yVelocity, double radius, double maxSpeed){
+	public Bullet(double x, double y, double xVelocity, double yVelocity, double radius, double maxSpeed)
+			throws IllegalArgumentException{
 		super(x, y, xVelocity, yVelocity, radius, maxSpeed);
 		this.setMassBullet();
 	}
@@ -83,12 +82,14 @@ public class Bullet extends Entity{
 	/**
 	 * Terminate this bullet and remove it from the ship if it belongs to one.
 	 *
-	 * @post   This bullet  is terminated.
+	 * @post This bullet is terminated.
 	 *       | new.isTerminated()
 	 * @post If the given bullet belongs to a ship, remove the bullet from the ship.
 	 * 		 | @see implementation
+	 * @effect	...
+	 * 		 | super.terminate()
 	 */
-	@Basic @Raw @Override
+	@Raw @Override
 	public void terminate() {
 		if (this.hasShip()){
 			 this.getShip().removeBulletFromShip(this);
@@ -103,6 +104,8 @@ public class Bullet extends Entity{
 	 *       | new.isTerminated()
 	 * @post If the given bullet belongs to a ship, ship is set to null.
 	 * 		 | @see implementation
+	 * @effect	...
+	 * 		 | super.terminate()
 	 */
 	public void shipTerminate() {
 		if (this.hasShip()){
@@ -116,16 +119,17 @@ public class Bullet extends Entity{
 	 * @return Returns the minimal mass
 	 *         | @see implementation
 	 */
-	@Raw
-	public double calculateMinimalMass(){
+	@Raw @Model
+	private double calculateMinimalMass(){
 		return ((4*Math.PI*Math.pow(this.getRadius(), 3)*bulletDensity)/3);
 	}
 	
 	/**
 	 * Set the mass of this bullet to the minimal mass.
 	 * 
-	 * @param 	mass
-	 * 			The given mass.
+	 * @post	The new mass of this bullet is equal to the mass calculated by the 
+	 * 			method calculateMinimalMass().
+	 * 			| getMass() == double calculateMinimalMass()
 	 */
 	@Raw
 	public void setMassBullet(){
@@ -135,7 +139,6 @@ public class Bullet extends Entity{
 	/**
      * Variable registering the minimal radius of all bullets.
      */
-	
 	public final static double minBulletRadius = 1;
 	
 	/**
@@ -144,22 +147,15 @@ public class Bullet extends Entity{
 	public final static double bulletDensity = 7.8E12;
 	
 	/**
-	 * Returns the mass for the given bullet assuming it has the minimal bullet density.
-	 * @return Returns the mass assuming it has bulletDensity
-	 *         | @see implementation
-	 */
-	public static double calculateMassBullet(double radius){
-		return ((4*Math.PI*Math.pow(radius, 3)*bulletDensity)/3);
-	}
-	
-	/**
      * Checks if this bullet can have the given radius as its radius.
      *
      * @param  radius
      *         The radius to check.
-     * @return The radius must be bigger than the minBulletRadius and not be infinite or NaN.
+     * @return True if and only if the given radius is bigger than the minimal bullet radius 
+     * 			and isn't infinite or NaN.
      *       	| @see implementation
      */
+	@Basic
 	public boolean isValidRadius(double radius){
 		if ( (radius >= minBulletRadius) && (!Double.isInfinite(radius)) && (!Double.isNaN(radius)) ) {
 			return true;
@@ -194,7 +190,6 @@ public class Bullet extends Entity{
      * @post	The ship of this bullet is equal to the given ship.
 	 *       	| new.getShip() == ship
 	 */
-	
 	public void setShip(Ship ship){
 		this.ship = ship;    
 	}
@@ -208,15 +203,18 @@ public class Bullet extends Entity{
 	/**
 	 * Returns the number of times the bullet has collided with a boundary of the world.
 	 */
+	@Basic
 	public int getCounterBoundaryCollisions() {
 		return this.counterBoundaryCollisions;
 	}
 	
 	/**
 	 * Increments the counterBoundaryCollisions of bullet with 1.
+	 * @post	The counter of the bullet is increased with 1.
+	 * 			| counterBoundaryCollisions++
 	 */
-	
-	public void incrementCounterBoundaryCollisions() {
+	@Model
+	private void incrementCounterBoundaryCollisions() {
 		this.counterBoundaryCollisions++;
 	}
 	
@@ -224,7 +222,7 @@ public class Bullet extends Entity{
 	 * Returns the maximum number of times the bullet can collide with a boundary 
 	 * of the world before the bullet dies.
 	 */
-	@Basic @Raw
+	@Basic @Raw @Immutable
 	public int getMaxBoundaryCollisions() {
 		return maxBoundaryCollisions;
 	}
@@ -245,6 +243,9 @@ public class Bullet extends Entity{
 	 * maxBoundaryCollisions times with the boundaries yet, is is handled as a normal
 	 * collision with a boundary, else if the bullet has collided maxBoundaryCollisions
 	 * times with the boundaries, it is terminated.
+	 * @effect	If the maximum number of bounces off the wall has been reached, the 
+	 * 			bullet dies.
+	 * 			| super.collidesWithBoundary()
 	 */
 	@Override
 	public void collidesWithBoundary(World world) {
@@ -271,9 +272,9 @@ public class Bullet extends Entity{
 	
 	/**
 	 * Returns the source of the bullet, if the bullet isn't fired of a ship
-	 * yet, the source is null.
+	 * yet, the source is equal to null.
 	 */
-	@Basic
+	@Basic @Immutable
 	public Ship getSource(){
 		return this.source;
 	}
@@ -286,13 +287,15 @@ public class Bullet extends Entity{
 	
 	/**
 	 * Resolve a collision between this bullet and a given entity.
-	 * If the bullet hits it's source ship, it is reloaded on the ship,
-	 * if hits a planetoid with a radius >= 30, the bullet is terminated
-	 * and the planetoid concieves 2 asteroids facing off in different directions,
-	 * else both the bullet and other entity are terminated.
 	 * 
 	 * @param 	other
 	 * 			The entity the bullet collides with.
+	 * @effect	If the bullet hits it's source ship, it is removed from the world
+	 * 			and reloaded on the ship, if hits a planetoid with a radius >= 30, 
+	 * 			the bullet is terminated and the planetoid concieves 2 asteroids facing 
+	 * 			off in different directions, else both the bullet and other entity 
+	 * 			are terminated.
+	 * 			| @see implementation
 	 */
 	public void hits(Entity other) {
 		if (this.getSource() == other){

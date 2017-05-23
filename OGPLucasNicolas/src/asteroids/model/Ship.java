@@ -5,6 +5,7 @@ import java.util.Set;
 
 import asteroids.model.programs.expressions.Expression;
 import be.kuleuven.cs.som.annotate.*;
+
 /**
  * A class for flying a ship in space involving the mass, radius
  * and orientation of the ship. With facilities to accelerate the ship by thrusting,
@@ -101,7 +102,18 @@ public class Ship extends Entity{
 		this(0,0,0,0,minRadiusShip,(Math.PI/2), 0);
 		
 	}
-	
+ 
+	/**
+	 * Terminate this ship.
+	 *
+	 * @post    ...
+	 *          | new.isTerminated()
+	 * @post    ...
+	 *          | for each bullet in old.getBulletsOnShip()
+	 *          | (new bullet).getShip() == null
+	 * @effect  ...
+	 * 			| super.terminate()
+	 */
 	@Override
 	public void terminate(){
 		Set<Bullet> toRemove = new HashSet<Bullet>();
@@ -114,8 +126,14 @@ public class Ship extends Entity{
 		
 	}
 	
+	/**
+	 * Returns the minimal mass possible for the given ship.
+	 * @return Returns the minimal mass
+	 *         | @see implementation
+	 */
+	@Raw @Model
 	public double calculateMinimalMass(){
-		return ((4*Math.PI*Math.pow(this.getRadius(), 3)*MIN_DENSITY)/3);
+		return ((4*Math.PI*Math.pow(this.getRadius(), 3)*minShipDensity)/3);
 	}
 	
 	/**
@@ -148,9 +166,18 @@ public class Ship extends Entity{
 			this.mass = mass;
 		}
 	}
-		
+	
+	/**
+	 * Check whether the given mass is a valid mass for any ship.
+	 * 
+	 * @param	mass
+	 * 			The mass to check.
+	 * @return	True if and only if the density of the ship is bigger than the minimal density if 
+	 * 			it has the given mass, an a number is smaller than the maximum value for double.
+	 * 			| result == ((getDensity(mass) >= minShipDensity) && (mass < Double.MAX_VALUE) && (!Double.isNaN(mass)))
+	 */
 	public boolean isValidMass(double mass){
-		if ((getDensity(mass) >= MIN_DENSITY) && (mass < Double.MAX_VALUE) && (!Double.isNaN(mass))){
+		if ((getDensity(mass) >= minShipDensity) && (mass < Double.MAX_VALUE) && (!Double.isNaN(mass))){
 			return true;
 		}else{
 			return false;
@@ -169,7 +196,7 @@ public class Ship extends Entity{
 		return density;
 	}
 	
-	public static final double MIN_DENSITY = 1.42E12;
+	public static final double minShipDensity = 1.42E12;
 
 	/**
 	 * Check whether the given radius is a valid radius for
@@ -197,6 +224,7 @@ public class Ship extends Entity{
 	public static double getMinRadius() {
 		return minRadiusShip;
 	}
+	
 	/**
 	 * A constant reflecting the minimum radius that applies to all ships.
 	 */
@@ -248,21 +276,16 @@ public class Ship extends Entity{
 	private double orientation;
 	
 	/**
-	 * Move this ship for a given duration based on its current
-	 * position and current velocity to a new position.
-	 * 
-	 * @param 	duration
-	 * 			The duration for how long the ship moves to its new position.
-	 * @effect	The new position of this ship is set to the old position of
-	 * 			this ship incremented with the product of the given duration
-	 * 			and the velocity of the ship.
-	 * 			| setPosition( {(getPosition()[0] + duration*getVelocity()[0]),
-	 * 			|				(getPosition()[1] + duration*getVelocity()[1])} )
-	 * @throws 	IllegalArgumentException
-	 * 			The given duration is not a valid duration for any ship.
-	 * 			| ! isValidDuration(duration)
+	 * Turn the ship with the given angle.
+	 *
+	 * @param  angle
+	 *         The angle over which the ship is turned.
+	 * @pre    The sum of the ship's orientation and 
+	 * 		   the given angle must be a valid orientation.
+	 *       | ship.isValidOrientation(getOrientation() + angle)
+	 * @effect The orientation is set to the current orientation plus the given angle.
+	 *       |  setOrientation(getOrientation() + angle)
 	 */
-	
 	public void turn(double angle){
 		assert isValidOrientation(getOrientation() + angle);
 		setOrientation(getOrientation() + angle);
@@ -388,6 +411,16 @@ public class Ship extends Entity{
 		bullet.setVelocity(0, 0);
 	}
 	
+	/**
+	 * Checks if the bullet is within the bounds of the ship to determine
+	 * if it can be loaded on the ship.
+	 * 
+	 * @param bullet
+	 * 		  The bullet to check.
+	 * @return True if and only is the given bullet is within the bounds of the ship
+	 * 		   | @see implementation
+	 */
+	@Model
 	public boolean inShip(Bullet bullet){
 		double shipPosX = getPositionX();
 		double shipPosY = getPositionY();
@@ -449,10 +482,21 @@ public class Ship extends Entity{
 	}
 	
 	/**
-	 * Move this ship a given amount of time, taking the state of the thruster
-	 * 	into account.
+	 * Move this ship for a given duration based on its current
+	 * position and current velocity to a new position.
 	 * 
-	 * @effect	
+	 * @param 	duration
+	 * 			The duration for how long the ship moves to its new position.
+	 * @effect	The new position of this ship is set to the old position of
+	 * 			this ship incremented with the product of the given duration
+	 * 			and the velocity of the ship.
+	 * 			| setPosition( {(getPosition()[0] + duration*getVelocity()[0]),
+	 * 			|				(getPosition()[1] + duration*getVelocity()[1])} )
+	 * @effect  ...
+	 * 			| super.move(duration)
+	 * @throws 	IllegalArgumentException
+	 * 			The given duration is not a valid duration for any ship.
+	 * 			| ! isValidDuration(duration)
 	 */
 	@Override
     public void move(double duration){
@@ -529,7 +573,6 @@ public class Ship extends Entity{
 	
 	/**
 	 * Resolve the collision between this ship and a planetoid.
-	 * 
 	 */
 	public void collidesWithPlanetoid(Planetoid planetoid) {
 		World world = getWorld();
@@ -540,15 +583,35 @@ public class Ship extends Entity{
 		world.evolve(0, null);
 	}
 	
+	/**
+	 * Load the given program on the ship.
+	 * 
+	 * @param 	program	
+	 * 			The program to load on the ship
+	 * @post	The ship's new program equals the given program
+	 * 			| new.getProgram() == program
+	 * @effect 	The program's ship is set to this ship
+	 *  		| program.setShip(this)
+	 */
 	public void loadProgramOnShip(Program program) {
 		this.program = program;
 		program.setShip(this);
 	}
 	
+	/**
+	 * Return the program loaded on this ship
+	 * 
+	 * @return	the program of this ship
+	 * 			| result == this.program
+	 */
+	@Basic
 	public Program getProgram() {
 		return this.program;
 	}
 	
+	/**
+	 * A variable registering the program of this ship.
+	 */
 	private Program program;
 	
 }

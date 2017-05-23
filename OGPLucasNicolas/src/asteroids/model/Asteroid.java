@@ -30,15 +30,21 @@ public class Asteroid extends MinorPlanet{
 	 * 			This radius does not change during the program's execution.
 	 * @param 	maxSpeed
 	 * 			The maximum speed of an asteroid.
-	 * @post	The new position of this new ship is equal to the given position.
+	 * @post	The new position of this new asteroid is equal to the given position.
 	 * 			| new.getPosition() == double[] {x,y}
-	 * @post	The new velocity of this new ship is equal to the given velocity.
+	 * @post	The new velocity of this new asteroid is equal to the given velocity.
 	 * 			| new.getVelocity() == double[] {xVelocity,yVelocity}
-	 * @post	The new radius of this new ship is equal to the given radius.
+	 * @post	The new radius of this new asteroid is equal to the given radius.
 	 * 			| new.getRadius == radius 
-	 * @post	The new maxSpeed of this new ship is equal to the given maxSpeed,
+	 * @post	The new maxSpeed of this new asteroid is equal to the given maxSpeed,
 	 * 			if no maxSpeed is given, it is equal to the SPEED_OF_LIGHT.
 	 * 			| new.getMaxspeed == maxSpeed 
+	 * @throws 	IllegalArgumentException
+	 * 			The given position is not a valid position for an asteroid.
+	 * 			| (! isValidPosition(position))
+	 * @throws 	IllegalArgumentException
+	 * 			The given radius is not a valid radius for any asteroid.
+	 * 			| (! isValidRadius(radius))
 	 */
 	public Asteroid(double x, double y, double xVelocity, double yVelocity, double radius) 
 			throws IllegalArgumentException{
@@ -46,20 +52,20 @@ public class Asteroid extends MinorPlanet{
 		
 	}
 	
-	public Asteroid(double x, double y, double xVelocity, double yVelocity, double radius, double maxSpeed){
+	public Asteroid(double x, double y, double xVelocity, double yVelocity, double radius, double maxSpeed)
+			throws IllegalArgumentException{
 		super(x, y, xVelocity, yVelocity, radius, maxSpeed);
 	}
 	
 	/**
-	 * Set the mass of this asteroid to the given mass.
+	 * Set the mass of this asteroid.
 	 * 
-	 * @param 	mass
-	 * 			The given mass.
-	 * @post	The new mass of this asteroid is equal to the given mass.
-	 * 			| getMass() == double mass
+	 * @post	The new mass of this asteroid is equal to the mass calculated by the 
+	 * 			method calculateMinimalMass().
+	 * 			| getMass() == double calculateMinimalMass()
 	 */
 	@Raw
-	public void setMassMinorPlanet(){
+	protected void setMass(){
 			this.mass = calculateMinimalMass();
 	}
 	
@@ -68,14 +74,14 @@ public class Asteroid extends MinorPlanet{
 	 * @return Returns the minimal mass
 	 *         | @see implementation
 	 */
-	@Raw
-	public double calculateMinimalMass(){
+	@Raw @Model
+	private double calculateMinimalMass(){
 		return ((4*Math.PI*Math.pow(this.getRadius(), 3)*asteroidDensity)/3);
 	}
 	
 	/**
-     * Variable registering the density of all asteroids.
+     * Variable registering the density of all asteroids in kg/m^3.
      */
-	public final static double asteroidDensity = 2.65E12;
+	private static final double asteroidDensity = 2.65E12;
 	
 }

@@ -14,6 +14,8 @@ import be.kuleuven.cs.som.annotate.*;
  * 			| isValidRadius(getRadius())
  * @invar	The mass of each entity must be a valid mass for any entity.
  * 			| isValidMass(getMass())
+ * @invar	The maxSpeed of each entity must be a valid maxSpeed for any entity.
+ * 			| isValidMaxSpeed(getMaxSpeed())
  * 
  * @author 	Nicolas Desmedt and Lucas Desard
  * @version	1.0
@@ -65,7 +67,7 @@ public abstract class Entity {
 		}
 	
 	protected Entity(double x, double y, double xVelocity, double yVelocity, double radius, double maxSpeed)
-		throws IllegalArgumentException{
+			throws IllegalArgumentException{
 		this.setMaxSpeed(maxSpeed);
 		this.setPosition(x,y);
 		this.setVelocity(xVelocity, yVelocity);
@@ -75,9 +77,9 @@ public abstract class Entity {
 	
 	/**
 	 * Return the position of this entity.
-	 * 	The position of an entity locates the entity in an unbounded two-dimensional space.
+	 * 	The position of an entity locates the entity in an unbounded two-dimensional space or world.
 	 */
-	@Basic @Raw @Model
+	@Basic @Raw
 	public double[] getPosition(){
 		return position.clone();
 	}
@@ -85,6 +87,7 @@ public abstract class Entity {
 	/**
 	 * Return the x-coordinate of the position of this entity.
 	 */
+	@Basic @Raw
 	public double getPositionX() {
 		return position[0];
 	}
@@ -92,6 +95,7 @@ public abstract class Entity {
 	/**
 	 * Return the y-coordinate of the position of this entity.
 	 */
+	@Basic @Raw
 	public double getPositionY() {
 		return position[1];
 	}
@@ -106,7 +110,7 @@ public abstract class Entity {
 	 *         | result == ( (!Double.isNaN(position[0])) && (!Double.isNaN(position[1])) &&
 	 *         |			 (!Double.isInfinite(position[0])) && (!Double.isInfinite(position[0])) && (position.length == 2) )
 	 */
-	@Raw @Model
+	@Raw
 	public static boolean isValidPosition(double[] position){
 		if ( (!Double.isNaN(position[0])) && (!Double.isNaN(position[1])) && (position.length == 2) ) {
 			return true;
@@ -146,7 +150,7 @@ public abstract class Entity {
 	 *  and a component in the y direction who determine the vessel’s movement 
 	 *  per time unit in the x and y direction respectively.
 	 */
-	@Basic @Raw @Model
+	@Basic @Raw
 	public double[] getVelocity(){
 		return velocity;
 	}
@@ -154,7 +158,7 @@ public abstract class Entity {
 	/**
 	 * Return the velocity of this entity in the x-direction.
 	 */
-	@Model
+	@Basic @Raw
 	public double getVelocityX() {
 		return velocity[0];
 	}
@@ -162,7 +166,7 @@ public abstract class Entity {
 	/**
 	 * Return the velocity of this entity in the y-direction.
 	 */
-	@Model
+	@Basic @Raw
 	public double getVelocityY() {
 		return velocity[1];
 	}
@@ -279,7 +283,7 @@ public abstract class Entity {
 	 * 	The radius of a entity is the distance between the
 	 *  center of the entity and the outer edge of the entity.
 	 */
-	@Basic @Immutable @Raw
+	@Basic @Raw
 	public double getRadius(){
 		return this.radius;
 	}
@@ -319,6 +323,7 @@ public abstract class Entity {
 	 * @return True if and only if the maximum speed consists of a double between 0 and SPEED_OF_LIGHT.
 	 *         | result == ((!Double.isNaN(maxSpeed)) && (0 < maxSpeed) && (maxSpeed< SPEED_OF_LIGHT))
 	 */
+	@Raw
 	public static boolean isValidMaxSpeed(double maxSpeed){
 		if ((!Double.isNaN(maxSpeed)) && (0 < maxSpeed) && (maxSpeed<= SPEED_OF_LIGHT)){
 			return true;
@@ -355,13 +360,13 @@ public abstract class Entity {
 	 * 
 	 * @param 	duration
 	 * 			The duration for how long the ship moves to its new position.
-	 * @effect	The new position of this ship is set to the old position of
-	 * 			this ship incremented with the product of the given duration
-	 * 			and the velocity of the ship.
+	 * @effect	The new position of this entity is set to the old position of
+	 * 			this entity incremented with the product of the given duration
+	 * 			and the velocity of the entity.
 	 * 			| setPosition( {(getPositionX() + duration*getVelocityX()),
 	 * 			|				(getPositionY() + duration*getVelocityY())} )
 	 * @throws 	IllegalArgumentException
-	 * 			The given duration is not a valid duration for any ship.
+	 * 			The given duration is not a valid duration for any entity.
 	 * 			| ! isValidDuration(duration)
 	 */
 	public void move(double duration) throws IllegalArgumentException{
@@ -381,7 +386,6 @@ public abstract class Entity {
 	 * 			greater than zero and not infinite.
 	 * 			| result == ( (!Double.isNaN(duration)) && (!Double.isInfinite(duration)) && (duration >= 0) )
 	 */
-	@Model
 	public static boolean isValidDuration(double duration){
 		if ( (!Double.isNaN(duration)) && (!Double.isInfinite(duration)) && (duration >= 0) ) {
 			return true;
@@ -403,7 +407,8 @@ public abstract class Entity {
 	 * 			The other entity is not effective.
 	 * 			| other == null
 	 */
-	public double getDistanceBetweenCenters(Entity other) throws NullPointerException{
+	@Model
+	private double getDistanceBetweenCenters(Entity other) throws NullPointerException{
 		if (other == null) throw new NullPointerException("The other entity is not effective");
 		double distance = (Math.sqrt(Math.pow((other.getPositionX() - this.getPositionX()), 2) + Math.pow((other.getPositionY() - this.getPositionY()), 2)));
 		return distance;
@@ -466,12 +471,9 @@ public abstract class Entity {
 	 *			one of the entities is not the source of the other, and they
 	 *			don't share the same source, and the entities are not the same entity.
 	 * 			| @see implementation
-	 * @throws 	NullPointerException
-	 * 			The other entity is not effective
-	 * 			| other == null
 	 */
 	@Model
-	public boolean overlapFiltered(Entity other){
+	protected boolean overlapFiltered(Entity other){
 		if (this == other) {
 			return false;
 		} else if ((this instanceof Ship) && (other instanceof Bullet) && (((Bullet)other).getShip() == this)){
@@ -506,7 +508,6 @@ public abstract class Entity {
 	 * 			The other entity is not effective
 	 * 			| other == null
 	 */
-	@Model
 	public double getTimeToCollision(Entity other)
 			throws IllegalArgumentException, NullPointerException{
 		if (other == null) throw new NullPointerException("The other entity is not effective");
@@ -603,7 +604,8 @@ public abstract class Entity {
 	 * 			smaller then 1.01*(sum of the radii).
 	 * 			| @see implementation
 	 */
-	public boolean apparentlyCollide(Entity other) {
+	@Model
+	private boolean apparentlyCollide(Entity other) {
 		if ( (this.getDistanceBetweenCenters(other) > 0.99*(this.getRadius() + other.getRadius()))
 				&& (this.getDistanceBetweenCenters(other) < 1.01*(this.getRadius() + other.getRadius())) )
 			return true;
@@ -612,7 +614,7 @@ public abstract class Entity {
 	
 	/**
 	 * Return the mass of this entity.
-	 * 	The mass of an entity is weight in kg.
+	 * The mass of an entity is the weight in kg.
 	 */
 	@Basic @Immutable @Model
 	public double getMass() {
@@ -630,8 +632,12 @@ public abstract class Entity {
 	 * 
 	 * @param 	world
 	 * 			The given world.
+	 * @effect	The new velocity of this entity is set to the opposite x, y or both,
+	 * 			depending on the collision, of the old velocity of	this entity .
+	 * 			| setVelocity( {(-)oldVelocityX, (-)oldVelocityY} )
 	 */
-	public void collidesWithBoundary(World world){
+	@Model
+	protected void collidesWithBoundary(World world){
 		if (world.getDistanceToNearestHorizontalBoundary(this) <
 				world.getDistanceToNearestVerticalBoundary(this) )
 			this.setVelocity(getVelocityX(), -getVelocityY());
@@ -647,7 +653,7 @@ public abstract class Entity {
 	 * Return the world this entity belongs to.
 	 * 	Returns null if this entity does not belong to a world.
 	 */
-	@Model
+	@Basic
 	public World getWorld() {
 		return this.world;
 	}
@@ -659,7 +665,7 @@ public abstract class Entity {
 	 * @return	True if and only if this entity belongs to a world.
 	 * 			| @see implementation
 	 */
-	@Model
+	@Basic
 	public boolean hasWorld(){
 		return this.world != null;
 	}
@@ -692,7 +698,7 @@ public abstract class Entity {
 	 * @post	The world of this entity is null.
 	 * 			| (new entity).getWorld() == null;
 	 */
-	@Raw
+	@Raw @Model
 	protected void removeFromWorld(){
     	this.world = null;
 	}
@@ -717,7 +723,7 @@ public abstract class Entity {
 	/**
 	 * Returns a boolean indicating whether or not this entity is terminated.
 	 */
-	@Basic @Raw @Model
+	@Basic @Raw
 	public boolean isTerminated(){
 		return this.isTerminated;
 	}
@@ -731,6 +737,10 @@ public abstract class Entity {
 	 * Resolves a collision between 2 ships or 2 minor planets.
 	 * 
 	 * @param other
+	 * 		  The entity the given entity bounces off.
+	 * @effect	The new velocity of these entities is updated according to
+	 * 			their mass.
+	 * 			| @see implementation
 	 */
 	public void bouncesOff(Entity other) {
 		double diffX = other.getPositionX() - this.getPositionX();

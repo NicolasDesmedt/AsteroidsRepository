@@ -6,6 +6,9 @@ import be.kuleuven.cs.som.annotate.*;
  * A class for a minorPlanet in space involving the mass, all the additional
  * properties are defined by the superclass.
  * 
+ * @invar	The radius of each minor planet must be a valid radius for any minor planet.
+ * 			| isValidRadius(getRadius())
+ * 
  * @version	1.0
  * @author 	Lucas Desard and Nicolas Desmedt
  * 			
@@ -43,6 +46,12 @@ public abstract class MinorPlanet extends Entity{
 	 * @post	The new maxSpeed of this new minorPlanet is equal to the given maxSpeed,
 	 * 			if no maxSpeed is given, it is equal to the SPEED_OF_LIGHT.
 	 * 			| new.getMaxspeed == maxSpeed 
+	 * @throws 	IllegalArgumentException
+	 * 			The given position is not a valid position for a minor planet.
+	 * 			| (! isValidPosition(position))
+	 * @throws 	IllegalArgumentException
+	 * 			The given radius is not a valid radius for any minor planet.
+	 * 			| (! isValidRadius(radius))
 	 */
 	public MinorPlanet(double x, double y, double xVelocity, double yVelocity, double radius, double mass) 
 			throws IllegalArgumentException{
@@ -50,29 +59,32 @@ public abstract class MinorPlanet extends Entity{
 		
 	}
 	
-	public MinorPlanet(double x, double y, double xVelocity, double yVelocity, double radius, double mass, double maxSpeed){
+	public MinorPlanet(double x, double y, double xVelocity, double yVelocity, double radius, double mass, double maxSpeed)
+			throws IllegalArgumentException{
 		super(x, y, xVelocity, yVelocity, radius, maxSpeed);
-		this.setMassMinorPlanet();
+		this.setMass();
 	}
 	
 	/**
-	 * A variable registering the minimal radius of a minorPlanet.
+	 * A variable registering the minimal radius of a minor planet.
 	 */
 	public final static double minMinorPlanetRadius = 5;
 	
 	/**
-	 * Return the minimal mass of this minorPlanet.
+	 * Return the minimal mass of this minor planet.
 	 */
-	public abstract void setMassMinorPlanet();
+	protected abstract void setMass();
 	
 	/**
-     * Checks if this minorPlanet can have the given radius as its radius.
+     * Checks if this minor planet can have the given radius as its radius.
      *
      * @param  radius
      *         The radius to check.
-     * @return The radius must be bigger than the minMinorPlanetRadius and not be infinite or NaN.
+     * @return True if and only if the given radius bigger is than the minimal minor planet
+     * 		   radius an is not infinite or NaN.
      *       	| @see implementation
      */
+	@Raw
 	public boolean isValidRadius(double radius){
 		if ( (radius >= minMinorPlanetRadius) && (!Double.isInfinite(radius)) && (!Double.isNaN(radius)) ) {
 			return true;
