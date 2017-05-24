@@ -34,15 +34,10 @@ public class Bullet extends Entity{
 	 * 			The mass of the new bullet (in kg).
 	 * @param 	maxSpeed
 	 * 			The maximum speed of the new bullet (in km/s).
-	 * @post	The new position of this new bullet is equal to the given position.
-	 * 			| new.getPosition() == double[] {x,y}
-	 * @post	If the given velocity does not result in a total speed 
-	 * 			which exceeds the maximum speed for this bullet, 
-	 * 			the velocity of this bullet is equal to the given velocity.
-	 * 			| if ( getSpeed(velocity) < maxSpeed )
-	 * 			| new.getVelocity() == double[] {xVelocity,yVelocity}
-	 * @post	The new radius of this new bullet is equal to the given radius.
-	 * 			| new.getRadius == radius
+	 * @effect	The new bullet is initialized as an entity with the given position, 
+	 * 			velocity, radius and maxSpeed.
+	 * 			If no maxSpeed is given, it is equal to the SPEED_OF_LIGHT.
+	 * 			| super(x, y, xVelocity, yVelocity, radius, maxSpeed)
 	 * @post	If the given mass is not a valid mass,
 	 * 			the new mass of the bullet is set to its minimum value,
 	 * 			else the new mass of this new bullet is equal to the given mass.

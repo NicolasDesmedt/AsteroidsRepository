@@ -32,15 +32,12 @@ public class Planetoid extends MinorPlanet{
 	 * 			The total distance traveled by the planetoid.
 	 * @param 	maxSpeed
 	 * 			The maximum speed of an planetoid.
-	 * @post	The new position of this new planetoid is equal to the given position.
-	 * 			| new.getPosition() == double[] {x,y}
-	 * @post	The new velocity of this new planetoid is equal to the given velocity.
-	 * 			| new.getVelocity() == double[] {xVelocity,yVelocity}
-	 * @post	The new radius of this new planetoid is equal to the given radius.
-	 * 			| new.getRadius == radius 
-	 * @post	The new maxSpeed of this new planetoid is equal to the given maxSpeed,
+	 * @effect	The new planetoid is initialized as an entity with the given position, 
+	 * 			velocity, radius and maxSpeed.
 	 * 			if no maxSpeed is given, it is equal to the SPEED_OF_LIGHT.
-	 * 			| new.getMaxspeed == maxSpeed 
+	 * 			| super(x, y, xVelocity, yVelocity, radius, maxSpeed)
+	 * @post	The new totalTraveledDistance of this new planetoid is equal to the given totalTraveledDistance.
+	 * 			| new.getTotalTraveledDistance == totalTraveledDistance
 	 * @throws 	IllegalArgumentException
 	 * 			The given position is not a valid position for an asteroid.
 	 * 			| (! isValidPosition(position))

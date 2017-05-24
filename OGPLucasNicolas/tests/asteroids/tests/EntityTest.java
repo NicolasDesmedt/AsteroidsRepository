@@ -32,16 +32,8 @@ public class EntityTest {
 	private static Ship mutableShip1, mutableShip2, mutableShip3;
 	
 	/**
-	 * Variable of a bullet referencing bullet with position [0,0], 
-	 * velocity[20,20] and radius 10.
-	 */
-	
-	private static Bullet mutableBullet1;
-	
-	/**
 	 * Variable of a world referencing a world with height and width 1000.
 	 */
-	
 	private static World world1000x1000;
 	
 	/**
@@ -66,9 +58,6 @@ public class EntityTest {
 	 * 
 	 * @post The variable mutableShip2 references a new ship with position [11,11], 
 	 * velocity[0,10], radius 9, orientation facing right (PI/2) and mass 10E15.
-	 * 
-	 * @post The variable mutableBullet1 references a new bullet with position [0,0], 
-	 * velocity[20,20] and radius 5.
 	 */
 	
 	@Before
@@ -76,7 +65,6 @@ public class EntityTest {
 		mutableShip1 = new Ship(0,0,20,20,10,0, 5.5E20);
 		mutableShip2 = new Ship(11,11,10,10,10,(Math.PI/2), 10E15);
 		mutableShip3 = new Ship(11,11,0,10,10,(Math.PI/2), 10E15);
-		mutableBullet1 = new Bullet(0,0,20,20,5);
 		world1000x1000 = new World (1000,1000);
 	}
 	
@@ -287,23 +275,6 @@ public class EntityTest {
 	}
 	
 	@Test
-	public void GetDistanceBetweenCenters_LegalCase(){
-		double distance = immutableShip1.getDistanceBetweenCenters(immutableShip2);
-		assertEquals(Math.sqrt(20000), distance, EPSILON);
-	}
-	
-	@Test
-	public void GetDistanceBetweenCenters_Itselfs(){
-		double distance = immutableShip1.getDistanceBetweenCenters(immutableShip1);
-		assertEquals(0, distance, EPSILON);
-	}
-	
-	@Test(expected = NullPointerException.class)
-	public void GetDistanceBetweenCenters_NullShip(){
-		immutableShip1.getDistanceBetweenCenters(null);
-	}
-	
-	@Test
 	public void GetDistanceBetween_LegalCase(){
 		double distance = immutableShip1.getDistanceBetween(immutableShip2);
 		assertEquals(Math.sqrt(20000)-immutableShip1.getRadius()-immutableShip2.getRadius(), distance, EPSILON);
@@ -333,21 +304,6 @@ public class EntityTest {
 	@Test(expected = NullPointerException.class)
 	public void Overlap_NullShip(){
 		immutableShip1.overlap(null);
-	}
-	
-	/*
-	 * Test number 1 tests a bullet thats loaded on the given ship.
-	 * Test number 2 tests a ship that has the given bullet loaded on the ship.
-	 * Test number 3 tests 2 ships that overlap.
-	 * Test number 4 tests a given ship on itself.
-	 */
-	@Test
-	public void FilteredOverlap_Tests(){
-		mutableShip1.loadBulletOnShip(mutableBullet1);
-		assertFalse(mutableBullet1.overlapFiltered(mutableShip1));
-		assertFalse(mutableShip1.overlapFiltered(mutableBullet1));
-		assertTrue(mutableShip1.overlapFiltered(mutableShip2));
-		assertFalse(mutableShip1.overlapFiltered(mutableShip1));
 	}
 	
 	@Test

@@ -46,19 +46,14 @@ public class Ship extends Entity{
 	 * 			The mass of the given new ship.
 	 * @param 	maxSpeed
 	 * 			The maximum speed of a ship.
-	 * @post	The new position of this new ship is equal to the given position.
-	 * 			| new.getPosition() == double[] {x,y}
-	 * @post	The new velocity of this new ship is equal to the given velocity.
-	 * 			| new.getVelocity() == double[] {xVelocity,yVelocity}
-	 * @post	The new radius of this new ship is equal to the given radius.
-	 * 			| new.getRadius == radius
+	 * @effect	The new ship is initialized as an entity with the given position, 
+	 * 			velocity, radius and maxSpeed.
+	 * 			if no maxSpeed is given, it is equal to the SPEED_OF_LIGHT.
+	 * 			| super(x, y, xVelocity, yVelocity, radius, maxSpeed)
 	 * @post	The new orientation of this new ship is equal to the given orientation.
 	 * 			| new.getOrientation == orientation
 	 * @post	The new mass of this new ship is equal to the given mass.
 	 * 			| new.getMass == mass
-	 * @post	The new maxSpeed of this new ship is equal to the given maxSpeed,
-	 * 			if no maxSpeed is given, it is equal to the SPEED_OF_LIGHT.
-	 * 			| new.getMaxspeed == maxSpeed 
 	 * @throws 	IllegalArgumentException
 	 * 			The given position is not a valid position for a ship.
 	 * 			| (! isValidPosition(position))
