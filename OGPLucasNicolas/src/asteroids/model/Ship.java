@@ -60,7 +60,6 @@ public class Ship extends Entity{
 	 * 			The given radius is not a valid radius for any ship.
 	 * 			| (! isValidRadius(radius))
 	 */
-	
 	public Ship(double x, double y, double xVelocity, double yVelocity, double radius, double orientation) 
 			throws IllegalArgumentException{
 		this(x, y, xVelocity, yVelocity, radius, orientation, 0, SPEED_OF_LIGHT);
@@ -91,7 +90,6 @@ public class Ship extends Entity{
 	 * 			and the orientation of the ship being PI/2.
 	 * 			| this(0,0,0,0,minRadius,(Math.PI/2));
 	 */
-
 	public Ship(){
 		this(0,0,0,0,minRadiusShip,(Math.PI/2), 0);
 		
