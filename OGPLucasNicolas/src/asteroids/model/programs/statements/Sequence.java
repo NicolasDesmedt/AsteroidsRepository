@@ -31,7 +31,8 @@ public class Sequence extends Statement {
 	@Override
 	public void executeStatement(Map<String, Expression<?>> variables) {
 		//super.executeStatement(variables);
-		this.getProgram().getToDoList().addAll(1, this.getStatementsList());
+		//this.getProgram().getToDoList().addAll(1, this.getStatementsList());
+		this.getProgram().addAllToToDoListInSecond(this.getStatementsList());
 //		List<Statement> statementsList = this.getStatementList();
 //		List<Statement> shallowCopy = statementsList.subList(0, statementsList.size());
 //		Collections.reverse(shallowCopy);

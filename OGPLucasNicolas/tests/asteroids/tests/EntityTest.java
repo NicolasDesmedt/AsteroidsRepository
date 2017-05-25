@@ -285,23 +285,7 @@ public class EntityTest {
 	public void Move_DurationIsNegative() throws IllegalArgumentException{
 		mutableShip1.move(-1);
 	}
-	
-	@Test
-	public void GetDistanceBetweenCenters_LegalCase(){
-		double distance = immutableShip1.getDistanceBetweenCenters(immutableShip2);
-		assertEquals(Math.sqrt(20000), distance, EPSILON);
-	}
-	
-	@Test
-	public void GetDistanceBetweenCenters_Itselfs(){
-		double distance = immutableShip1.getDistanceBetweenCenters(immutableShip1);
-		assertEquals(0, distance, EPSILON);
-	}
-	
-	@Test(expected = NullPointerException.class)
-	public void GetDistanceBetweenCenters_NullShip(){
-		immutableShip1.getDistanceBetweenCenters(null);
-	}
+
 	
 	@Test
 	public void GetDistanceBetween_LegalCase(){
@@ -333,21 +317,6 @@ public class EntityTest {
 	@Test(expected = NullPointerException.class)
 	public void Overlap_NullShip(){
 		immutableShip1.overlap(null);
-	}
-	
-	/*
-	 * Test number 1 tests a bullet thats loaded on the given ship.
-	 * Test number 2 tests a ship that has the given bullet loaded on the ship.
-	 * Test number 3 tests 2 ships that overlap.
-	 * Test number 4 tests a given ship on itself.
-	 */
-	@Test
-	public void FilteredOverlap_Tests(){
-		mutableShip1.loadBulletOnShip(mutableBullet1);
-		assertFalse(mutableBullet1.overlapFiltered(mutableShip1));
-		assertFalse(mutableShip1.overlapFiltered(mutableBullet1));
-		assertTrue(mutableShip1.overlapFiltered(mutableShip2));
-		assertFalse(mutableShip1.overlapFiltered(mutableShip1));
 	}
 	
 	@Test

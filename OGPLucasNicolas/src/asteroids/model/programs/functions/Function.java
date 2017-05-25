@@ -2,7 +2,9 @@ package asteroids.model.programs.functions;
 
 import java.util.List;
 
+import asteroids.model.Program;
 import asteroids.model.programs.expressions.Expression;
+import asteroids.model.programs.statements.Sequence;
 import asteroids.model.programs.statements.Statement;
 import asteroids.part3.programs.SourceLocation;
 
@@ -37,10 +39,19 @@ public class Function {
 		return "def " + this.getName() + 
 				" { " + this.getBody().toString() + " } ";
 	}
+	
+	public Program getProgram() {
+		return this.program;
+	}
+	
+	public void setProgram(Program program) {
+		this.program = program;
+	}
+	
+	private Program program;
 
 	public void evaluateFunction() {
-		// TODO Auto-generated method stub
-		
+		this.getProgram().addToFunctionsMap(this.getName(), this.getBody());
 	}
 
 }

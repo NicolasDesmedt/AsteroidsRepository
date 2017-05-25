@@ -8,18 +8,17 @@ import java.util.List;
 import java.util.Map;
 
 import asteroids.model.programs.expressions.Expression;
-import asteroids.model.programs.expressions.Null;
-import asteroids.model.programs.expressions.Self;
 import asteroids.model.programs.expressions.Type;
 import asteroids.model.programs.functions.*;
 import asteroids.model.programs.statements.*;
-import asteroids.util.ModelException;
 
 
 public class Program {
 	
 	public Program(List<Function> functions, Statement body) {
 		this.functions.addAll(functions);
+		for (Function function : functions)
+			function.setProgram(this);
 		this.body = body;
 		this.body.setProgram(this);
 		addToToDoList(body);
@@ -39,6 +38,16 @@ public class Program {
 	}
 
 	private final List<Function> functions = new ArrayList<Function>();
+	
+	private Map<String, Statement> functionsMap = new HashMap<>();
+	
+	public void addToFunctionsMap(String functionName, Statement body) {
+		functionsMap.put(functionName, body);
+	}
+	
+	
+	
+	private Map<String, Expression<?>> functionsReturn = new HashMap<>();
 	
 	private final Statement body;
 	
@@ -60,7 +69,15 @@ public class Program {
 	}
 	
 	public List<Statement> getToDoList() {
-		return this.toDoList;
+		return new ArrayList<Statement>(toDoList);
+	}
+	
+	public void removeFromToDoList(int index) {
+		toDoList.remove(index);
+	}
+	
+	public void addAllToToDoListInSecond(List<Statement> statementsList) {
+		toDoList.addAll(1,statementsList);
 	}
 	
 	public void addToToDoList(Statement statement) {
@@ -86,7 +103,7 @@ public class Program {
 	}
 	
 	public List<Object> getValuesPrinted() {
-		return valuesPrinted;
+		return new ArrayList<Object>(valuesPrinted);
 	}
 	
 	public <T> void addToValuesPrinted(T value) {
@@ -96,7 +113,15 @@ public class Program {
 	private List<Object> valuesPrinted = new ArrayList<>();
 	
 	public Map<String, Expression<?>> getVariables() {
-		return variables;
+		return new HashMap<String, Expression<?>>(variables);
+	}
+	
+	public void removeFromVariables(String variableName) {
+		variables.remove(variableName);
+	}
+	
+	public void addToVariables(String variableName, Expression<?> expression) {
+		variables.put(variableName, expression);
 	}
 	
 	private Map<String, Expression<?>> variables = new HashMap<>();
@@ -120,7 +145,7 @@ public class Program {
 				this.getStatementToDo(this.getToDoList()).executeStatement(this.getVariables());
 				//System.out.println("TIJD NA " + this.getTimeLeft());
 				if (!isPutOnHold()) {
-					this.getToDoList().remove(0);
+					this.removeFromToDoList(0);
 					execute(this.getTimeLeft());
 				}
 			}catch(IllegalArgumentException|AssertionError e){

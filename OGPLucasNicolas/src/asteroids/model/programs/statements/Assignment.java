@@ -55,8 +55,10 @@ public class Assignment extends NoActionStatement {
 			value=new DoubleLiteral((Double) getValue().getValue(variables), getValue().getSourceLocation());
 		else	value=new Null(getValue().getSourceLocation());
 		
-		variables.remove(getVar());
-		variables.put(getVar(), value);
+		this.getProgram().removeFromVariables(getVar());
+		this.getProgram().addToVariables(getVar(), value);
+		//variables.remove(getVar());
+		//variables.put(getVar(), value);
 		//super.executeStatement(variables);
 //		Type typeCheck = null;
 //		if (variables.containsKey(this.getVar())) {
