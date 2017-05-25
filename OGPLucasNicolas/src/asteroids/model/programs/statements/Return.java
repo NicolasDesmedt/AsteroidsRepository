@@ -35,8 +35,7 @@ public class Return extends NoActionStatement {
 	
 	@Override
 	public void executeStatement(Map<String, Expression<?>> variables) {
-		System.out.println("in Return");
-		System.out.println(this.getProgram());
+		assert (this.getFunctionName() != null);
 		this.getProgram().addToFunctionsReturn(this.getFunctionName(), this.getExpression());
 	}
 

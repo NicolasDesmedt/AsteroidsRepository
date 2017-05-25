@@ -58,6 +58,10 @@ public abstract class Expression<T> implements Cloneable {
 		this.program = program;
 	}
 	
+	public Program getProgram() {
+		return this.program;
+	}
+	
 	public void setShip(Ship ship) {
 		this.ship = ship;
 	}

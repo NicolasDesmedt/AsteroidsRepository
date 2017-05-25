@@ -4,6 +4,9 @@ import java.util.List;
 
 import asteroids.model.Program;
 import asteroids.model.programs.expressions.Expression;
+import asteroids.model.programs.statements.ActionStatement;
+import asteroids.model.programs.statements.NoActionStatement;
+import asteroids.model.programs.statements.Print;
 import asteroids.model.programs.statements.Return;
 import asteroids.model.programs.statements.Sequence;
 import asteroids.model.programs.statements.Statement;
@@ -63,12 +66,24 @@ public class Function {
 	}
 
 	public void evaluateFunction() {
-		assert (!this.getProgram().getGlobals().containsKey(this.getName()));
+		assert (!this.getProgram().getGlobals().containsKey(this.getName())): "1 Function";
+		boolean noIllegalStatementInBlock = true;
+		if (this.getBody() instanceof Sequence) {
+			List<Statement> statementsList = ((Sequence)this.getBody()).getStatementsList();
+			for (Statement statement : statementsList) {
+				if ((statement instanceof ActionStatement) || (statement instanceof Print)){
+					noIllegalStatementInBlock = false;
+				}
+			}
+		}
+		assert (!(this.getBody() instanceof ActionStatement)
+				&& (noIllegalStatementInBlock) ): "2 Function";
 		this.getProgram().addToFunctionsMap(this.getName(), this.getBody());
 		if (this.getBody() instanceof Return) {
 			((Return)this.getBody()).setFunctionName(this.getName());
 		}
 		else{
+			assert (this.getBody() instanceof Sequence): "3 Function";
 			Statement returnStatement = this.searchReturnStatement(getBody());
 			((Return)returnStatement).setFunctionName(getName());
 		}

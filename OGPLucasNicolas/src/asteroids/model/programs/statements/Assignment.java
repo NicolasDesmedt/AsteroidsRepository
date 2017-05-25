@@ -59,6 +59,8 @@ public class Assignment extends NoActionStatement {
 		this.getProgram().addToVariables(getVar(), value);
 		if (!this.getProgram().executingStatementsInFunction()) {
 			this.getProgram().addToGlobals(getVar(), value);
+		}else{
+			this.getProgram().addToLocals(this.getProgram().getCurrentFunction(), getVar(), value);
 		}
 		//variables.remove(getVar());
 		//variables.put(getVar(), value);

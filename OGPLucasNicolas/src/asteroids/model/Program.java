@@ -163,8 +163,12 @@ public class Program {
 	}
 	
 	public List<Object> execute(double dt) {
-		for (Function function : functions) {
-			function.evaluateFunction();
+		try{
+			for (Function function : functions) {
+				function.evaluateFunction();
+			}
+		}catch(IllegalArgumentException|AssertionError e){
+			throw new IllegalArgumentException(e.getMessage());
 		}
 		//System.out.println("TodoLIST:" + this.getToDoList() +"stop");
 		if (!this.getToDoList().isEmpty()) {
@@ -222,9 +226,35 @@ public class Program {
 	
 	private boolean putOnHold;
 
+	private String currentFunction;
+
 	public List<Object> executeProgram(double dt) {
 		putOnHold(false);
 		this.addTime(dt);
 		return this.execute(this.getTimeLeft());
+	}
+
+	public void setCurrentFunction(String functionName) {
+		this.currentFunction = functionName;
+	}
+	
+	public String getCurrentFunction() {
+		return this.currentFunction;
+	}
+
+	private Map<String, Map<String, Expression<?>>> localVariables = new HashMap<String, Map<String, Expression<?>>>();
+	
+	public Map<String, Map<String, Expression<?>>> getLocalVariables() {
+		return this.localVariables;
+	}
+	
+	public void addToLocals(String functionName, String varName, Expression<?> value) {
+		Map<String, Expression<?>> variable = new HashMap<>();
+		variable.put(varName, value);
+		this.localVariables.put(functionName, variable);
+	}
+	
+	public Expression<?> getLocalVarExpr(String functionName, String varName) {
+		return this.getLocalVariables().get(functionName).get(varName);
 	}
 }

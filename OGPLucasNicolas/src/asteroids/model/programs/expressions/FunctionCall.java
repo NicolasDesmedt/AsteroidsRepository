@@ -3,6 +3,7 @@ package asteroids.model.programs.expressions;
 import java.util.List;
 import java.util.Map;
 
+import asteroids.model.programs.statements.Sequence;
 import asteroids.model.programs.statements.Statement;
 import asteroids.part3.programs.SourceLocation;
 
@@ -46,18 +47,27 @@ public class FunctionCall<T> extends Expression<T> {
 
 	@Override
 	public T getValue(Map<String, Expression<?>> variables) {
+		assert (this.getShip().getProgram().getFunctionsMap().containsKey(getFunctionName())): "1 FunctionCall";
 		if (this.getActualArgs().isEmpty()) {
 //			this.getShip().getProgram().addToToDoListInSecond(
 //					this.getShip().getProgram().getFunctionsMap().get(getFunctionName()));
 //		}
 			this.getShip().getProgram().setExecutingStatementsInFunction(true);
+			this.getShip().getProgram().setCurrentFunction(this.getFunctionName());
 			Statement body = this.getShip().getProgram().getFunctionsMap().get(getFunctionName());
 			body.setProgram(this.getShip().getProgram());
-			body.executeStatement(variables);
+			if (body instanceof Sequence) {
+				List<Statement> statementsList = ((Sequence)body).getStatementsList();
+				for (Statement statement : statementsList) {
+					statement.executeStatement(variables);
+				}
+			}
+			else {
+				body.executeStatement(variables);
+			}
 			this.getShip().getProgram().setExecutingStatementsInFunction(false);
 		}
-		System.out.println(this.getShip().getProgram().getFunctionsReturn());
-		System.out.println(this.getShip().getProgram().getFunctionsReturn().get(getFunctionName()));
+		this.getShip().getProgram().getFunctionsReturn().get(getFunctionName()).setProgram(getProgram());
 		return (T)this.getShip().getProgram().getFunctionsReturn().get(getFunctionName()).getValue(variables);
 	}
 
