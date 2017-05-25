@@ -60,7 +60,6 @@ public abstract class Entity {
 	 * 			The given radius is not a valid radius for any entity.
 	 * 			| (! isValidRadius(radius))
 	 */
-	
 	protected Entity(double x, double y, double xVelocity, double yVelocity, double radius)
 			throws IllegalArgumentException{
 			this(x, y, xVelocity, yVelocity, radius, SPEED_OF_LIGHT);
