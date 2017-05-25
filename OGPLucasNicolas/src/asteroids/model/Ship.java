@@ -3,7 +3,6 @@ package asteroids.model;
 import java.util.HashSet;
 import java.util.Set;
 
-import asteroids.model.programs.expressions.Expression;
 import be.kuleuven.cs.som.annotate.*;
 
 /**

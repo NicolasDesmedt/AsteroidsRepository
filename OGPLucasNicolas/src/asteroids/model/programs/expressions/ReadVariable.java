@@ -2,7 +2,6 @@ package asteroids.model.programs.expressions;
 
 import java.util.Map;
 
-import asteroids.model.Entity;
 import asteroids.part3.programs.SourceLocation;
 
 public class ReadVariable<T> extends Expression<T> {
@@ -18,14 +17,13 @@ public class ReadVariable<T> extends Expression<T> {
 	
 	private String variableName;
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public T getValue(Map<String, Expression<?>> variables) {
-		//System.out.println(this.getVariableName() + ":= " + variables.get(this.getVariableName()));
 		try{ T value = (T)this.getProgram().getLocalVarExpr(
 				this.getProgram().getCurrentFunction(), this.getVariableName()).getValue(variables);
 			return value;
-		}catch (NullPointerException e) {
-			System.out.println(this.getProgram());
+		}catch (NullPointerException | IllegalArgumentException|AssertionError e) {
 			T value= (T)variables.get(this.getVariableName()).getValue(variables);
 			return value;
 			}
@@ -38,6 +36,7 @@ public class ReadVariable<T> extends Expression<T> {
 
 	@Override
 	public Type getType(Map<String, Expression<?>> variables) {
+		assert (variables.get(getVariableName()) != null);
 		if (variables.get(this.getVariableName()).getValue(variables) instanceof Boolean) {
 			return Type.BOOL;
 		}

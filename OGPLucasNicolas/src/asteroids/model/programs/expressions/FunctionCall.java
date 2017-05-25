@@ -29,8 +29,7 @@ public class FunctionCall<T> extends Expression<T> {
 
 	@Override
 	public boolean isMutable() {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override
@@ -41,21 +40,24 @@ public class FunctionCall<T> extends Expression<T> {
 
 	@Override
 	public Type getType(Map<String, Expression<?>> variables) {
-		// TODO Auto-generated method stub
-		return null;
+		T valueToCheck = this.getValue(variables);
+		if (valueToCheck instanceof Boolean)
+			return Type.BOOL;
+		else if (valueToCheck instanceof Double)
+			return Type.DOUBLE;
+		else
+			return Type.ENTITY;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public T getValue(Map<String, Expression<?>> variables) {
-		assert (this.getShip().getProgram().getFunctionsMap().containsKey(getFunctionName())): "1 FunctionCall";
+		assert (this.getProgram().getFunctionsMap().containsKey(getFunctionName()));
 		if (this.getActualArgs().isEmpty()) {
-//			this.getShip().getProgram().addToToDoListInSecond(
-//					this.getShip().getProgram().getFunctionsMap().get(getFunctionName()));
-//		}
-			this.getShip().getProgram().setExecutingStatementsInFunction(true);
-			this.getShip().getProgram().setCurrentFunction(this.getFunctionName());
-			Statement body = this.getShip().getProgram().getFunctionsMap().get(getFunctionName());
-			body.setProgram(this.getShip().getProgram());
+			this.getProgram().setExecutingStatementsInFunction(true);
+			this.getProgram().setCurrentFunction(this.getFunctionName());
+			Statement body = this.getProgram().getFunctionsMap().get(getFunctionName());
+			body.setProgram(this.getProgram());
 			if (body instanceof Sequence) {
 				List<Statement> statementsList = ((Sequence)body).getStatementsList();
 				for (Statement statement : statementsList) {
@@ -65,10 +67,12 @@ public class FunctionCall<T> extends Expression<T> {
 			else {
 				body.executeStatement(variables);
 			}
-			this.getShip().getProgram().setExecutingStatementsInFunction(false);
 		}
-		this.getShip().getProgram().getFunctionsReturn().get(getFunctionName()).setProgram(getProgram());
-		return (T)this.getShip().getProgram().getFunctionsReturn().get(getFunctionName()).getValue(variables);
+		this.getProgram().getFunctionsResult().get(getFunctionName()).setProgram(getProgram());
+		T result = (T)this.getProgram().getFunctionsResult().get(getFunctionName()).getValue(variables);
+		this.getProgram().setExecutingStatementsInFunction(false);
+		this.getProgram().setCurrentFunction(null);
+		return result;
 	}
 
 }

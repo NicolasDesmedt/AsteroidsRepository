@@ -2508,6 +2508,7 @@ public class Part3TestFull {
     score += 10;
   }
 
+  
   @Test
   public void testFunctionCall_AccessLocalVariableOutsideBody() throws ModelException {
     try {

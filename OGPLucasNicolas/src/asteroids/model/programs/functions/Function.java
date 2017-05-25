@@ -3,9 +3,7 @@ package asteroids.model.programs.functions;
 import java.util.List;
 
 import asteroids.model.Program;
-import asteroids.model.programs.expressions.Expression;
 import asteroids.model.programs.statements.ActionStatement;
-import asteroids.model.programs.statements.NoActionStatement;
 import asteroids.model.programs.statements.Print;
 import asteroids.model.programs.statements.Return;
 import asteroids.model.programs.statements.Sequence;
@@ -19,6 +17,13 @@ public class Function {
 		this.body = body;
 		this.sourceLocation = sourceLocation;
 	}
+	
+	public SourceLocation getSourceLocation() {
+		return sourceLocation;
+	}
+	
+	private final SourceLocation sourceLocation;
+	
 
 	public String getName() {
 		return name;
@@ -31,12 +36,6 @@ public class Function {
 	}
 
 	private final Statement body;
-	
-	public SourceLocation getSourceLocation() {
-		return sourceLocation;
-	}
-	
-	private final SourceLocation sourceLocation;
 	
 	@Override
 	public String toString() {
@@ -66,7 +65,7 @@ public class Function {
 	}
 
 	public void evaluateFunction() {
-		assert (!this.getProgram().getGlobals().containsKey(this.getName())): "1 Function";
+		assert (!this.getProgram().getGlobals().containsKey(this.getName()));
 		boolean noIllegalStatementInBlock = true;
 		if (this.getBody() instanceof Sequence) {
 			List<Statement> statementsList = ((Sequence)this.getBody()).getStatementsList();
@@ -77,13 +76,13 @@ public class Function {
 			}
 		}
 		assert (!(this.getBody() instanceof ActionStatement)
-				&& (noIllegalStatementInBlock) ): "2 Function";
+				&& (noIllegalStatementInBlock) );
 		this.getProgram().addToFunctionsMap(this.getName(), this.getBody());
 		if (this.getBody() instanceof Return) {
 			((Return)this.getBody()).setFunctionName(this.getName());
 		}
 		else{
-			assert (this.getBody() instanceof Sequence): "3 Function";
+			assert (this.getBody() instanceof Sequence);
 			Statement returnStatement = this.searchReturnStatement(getBody());
 			((Return)returnStatement).setFunctionName(getName());
 		}

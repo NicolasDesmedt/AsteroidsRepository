@@ -4,7 +4,6 @@ import java.util.List;
 
 import asteroids.part3.programs.IProgramFactory;
 import asteroids.part3.programs.SourceLocation;
-import asteroids.util.ModelException;
 import asteroids.model.Entity;
 import asteroids.model.Program;
 import asteroids.model.programs.expressions.*;
@@ -12,6 +11,7 @@ import asteroids.model.programs.functions.*;
 import asteroids.model.programs.statements.*;
 
 
+@SuppressWarnings({ "unchecked", "rawtypes" })
 public class ProgramFactory 
 	implements IProgramFactory<Expression, Statement, Function, Program> {
 

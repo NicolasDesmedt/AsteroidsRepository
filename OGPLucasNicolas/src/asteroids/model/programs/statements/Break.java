@@ -46,7 +46,6 @@ public class Break extends NoActionStatement {
 		assert (getWhileIsFound() == true);
 		for (int pos = 1; pos <= i; pos++) {
 			this.getProgram().removeFromToDoList(1);
-			//toDoList.remove(1);
 		}
 	}
 

@@ -12,15 +12,15 @@ public class Fire extends ActionStatement {
 	}
 	
 	@Override
+	public String toString() {
+		return "fire;";
+	}
+	
+	@Override
 	public void executeStatement(Map<String, Expression<?>> variables) {
 		super.executeStatement(variables);
 		if (!this.getProgram().isPutOnHold()) {
 			this.getShip().fireBullet();
 		}
-	}
-	
-	@Override
-	public String toString() {
-		return "fire;";
 	}
 }

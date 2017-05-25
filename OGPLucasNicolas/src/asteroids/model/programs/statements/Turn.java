@@ -17,17 +17,18 @@ public class Turn extends ActionStatement {
 	}
 	
 	private Expression<Double> angle;
+	
+	@Override
+	public String toString() {
+		return "turn "+ this.getAngle().toString() + ";";
+	}
 
 	@Override
 	public void executeStatement(Map<String, Expression<?>> variables) {
+		connectExpression(this.getAngle());
 		super.executeStatement(variables);
 		if (!this.getProgram().isPutOnHold()) {
 			this.getShip().turn(this.getAngle().getValue(variables));
 		}
-	}
-		
-	@Override
-	public String toString() {
-		return "turn "+ this.getAngle().toString() + ";";
 	}
 }

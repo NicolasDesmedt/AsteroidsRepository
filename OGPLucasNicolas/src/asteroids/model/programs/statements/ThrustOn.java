@@ -23,6 +23,4 @@ public class ThrustOn extends ActionStatement {
 			this.getShip().setThrust(true);
 		}
 	}
-	
-
 }

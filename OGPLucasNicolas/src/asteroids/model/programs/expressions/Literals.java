@@ -7,5 +7,10 @@ public abstract class Literals<T> extends Expression<T>{
 	public Literals(SourceLocation sourceLocation) {
 		super(sourceLocation);
 	}
+	
+	@Override
+	public boolean isMutable() {
+		return false;
+	}
 
 }
