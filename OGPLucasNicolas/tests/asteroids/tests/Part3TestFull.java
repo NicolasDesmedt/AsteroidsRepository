@@ -2471,6 +2471,7 @@ public class Part3TestFull {
 
   // Function Call
 //TODO: Function call
+ 
   @Test
   public void testFunctionCall_NoParameters() throws ModelException {
     max_score += 10;
@@ -2507,6 +2508,7 @@ public class Part3TestFull {
     score += 10;
   }
 
+  
   @Test
   public void testFunctionCall_AccessLocalVariableOutsideBody() throws ModelException {
     try {

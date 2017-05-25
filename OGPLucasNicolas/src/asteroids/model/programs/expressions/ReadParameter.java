@@ -11,12 +11,12 @@ public class ReadParameter<T> extends Expression<T> {
 		this.parameterName = parameterName;
 	}
 
+	@SuppressWarnings("unused")
 	private String parameterName;
 	
 	@Override
 	public boolean isMutable() {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override

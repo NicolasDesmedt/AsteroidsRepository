@@ -3,7 +3,6 @@ package asteroids.model.programs.expressions;
 import java.util.Comparator;
 import java.util.Map;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 import java.util.Set;
 
 import asteroids.model.Entity;

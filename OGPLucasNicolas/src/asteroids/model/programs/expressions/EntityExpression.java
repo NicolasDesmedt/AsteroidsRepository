@@ -17,11 +17,6 @@ public class EntityExpression extends Literals<Entity> {
 	}
 	
 	private final Entity entity;
-	
-	@Override
-	public boolean isMutable() {
-		return false;
-	}
 		
 	@Override
 	public String toString() {

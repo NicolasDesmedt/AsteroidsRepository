@@ -11,6 +11,11 @@ public class Sqrt extends UnaryExpression<Double>{
 	}
 	
 	@Override
+	public String operatorToString() {
+		return "sqrt";
+	}
+	
+	@Override
 	public Type getType(Map<String, Expression<?>> variables) {
 		return Type.DOUBLE;
 	}
@@ -19,10 +24,5 @@ public class Sqrt extends UnaryExpression<Double>{
 	public Double getValue(Map<String, Expression<?>> variables) {
 		assert (this.getExpression().getType(variables) == Type.DOUBLE);
 		return Math.sqrt((Double)this.getExpression().getValue(variables));
-	}
-
-	@Override
-	public String operatorToString() {
-		return "sqrt";
 	}
 }

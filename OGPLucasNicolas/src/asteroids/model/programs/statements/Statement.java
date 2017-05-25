@@ -5,7 +5,9 @@ import java.util.Map;
 
 import asteroids.model.Program;
 import asteroids.model.Ship;
+import asteroids.model.programs.expressions.BinaryExpression;
 import asteroids.model.programs.expressions.Expression;
+import asteroids.model.programs.expressions.UnaryExpression;
 import asteroids.part3.programs.SourceLocation;
 
 /**
@@ -48,14 +50,19 @@ public abstract class Statement implements Cloneable {
 	@Override
 	public abstract String toString();
 
-	public void executeStatement(Map<String, Expression<?>> variables) {
-		//this.getProgram().getToDoList().remove(0);
-	}
+	public abstract void executeStatement(Map<String, Expression<?>> variables);
 	
 	public void connectExpression(Expression<?> expression) {
 		expression.setProgram(this.getProgram());
 		expression.setShip(this.getShip());
 		expression.setStatement(this);
+		if (expression instanceof UnaryExpression){
+			connectExpression(((UnaryExpression<?>)expression).getExpression());
+		}
+		if (expression instanceof BinaryExpression){
+			connectExpression(((BinaryExpression<?>)expression).getExpressionLhs());
+			connectExpression(((BinaryExpression<?>)expression).getExpressionRhs());
+		}
 	}
 
 }

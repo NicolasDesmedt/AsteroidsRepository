@@ -47,6 +47,7 @@ public class IfThenElse extends NoActionStatement{
 	@Override
 	public void executeStatement(Map<String, Expression<?>> variables) {
 		assert this.getCondition().getType(variables) == Type.BOOL;
+		connectExpression(this.getCondition());
 		this.getIfBody().setProgram(this.getProgram());
 		if (this.getElseBody() != null)
 			this.getElseBody().setProgram(this.getProgram());
@@ -57,7 +58,6 @@ public class IfThenElse extends NoActionStatement{
 			if (this.getElseBody() != null)
 				this.getProgram().addToToDoListInSecond(this.getElseBody());
 		}
-		//super.executeStatement(variables);
 	}
 
 }

@@ -23,6 +23,4 @@ public class ThrustOff extends ActionStatement {
 			this.getShip().setThrust(false);
 		}
 	}
-	
-
 }

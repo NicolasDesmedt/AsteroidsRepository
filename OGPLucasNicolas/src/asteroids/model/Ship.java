@@ -3,7 +3,6 @@ package asteroids.model;
 import java.util.HashSet;
 import java.util.Set;
 
-import asteroids.model.programs.expressions.Expression;
 import be.kuleuven.cs.som.annotate.*;
 
 /**
@@ -67,7 +66,6 @@ public class Ship extends Entity{
 		this.setOrientation(orientation);
 		this.setMass(mass);
 		this.thrusterForce = defaultThrusterForce;	
-		
 	}
 	
 	/**
@@ -133,7 +131,6 @@ public class Ship extends Entity{
 	 * 			and the orientation of the ship being PI/2.
 	 * 			| this(0,0,0,0,minRadius,(Math.PI/2));
 	 */
-
 	public Ship(){
 		this(0,0,0,0,minRadiusShip,(Math.PI/2), 0);
 		

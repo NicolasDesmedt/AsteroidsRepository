@@ -1,7 +1,5 @@
 package asteroids.model.programs.expressions;
 
-import java.util.Map;
-
 import asteroids.part3.programs.SourceLocation;
 
 public abstract class UnaryExpression<T> extends Expression<T>{
@@ -17,6 +15,12 @@ public abstract class UnaryExpression<T> extends Expression<T>{
 	
 	private final Expression<?> expression;
 	
+	public boolean isMutable() {
+		if (getExpression().isMutable())
+			return true;
+		return false;
+	}
+	
 	public abstract String operatorToString();
 	
 	@Override
@@ -30,12 +34,6 @@ public abstract class UnaryExpression<T> extends Expression<T>{
 		}
 		result += operatorToString();
 		return result;
-	}
-	
-	public boolean isMutable() {
-		if (getExpression().isMutable())
-			return true;
-		return false;
 	}
 
 }
