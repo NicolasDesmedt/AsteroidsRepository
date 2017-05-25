@@ -298,7 +298,7 @@ public abstract class Entity {
 	 * 	The radius of a entity is the distance between the
 	 *  center of the entity and the outer edge of the entity.
 	 */
-	@Basic @Raw @Immutable
+	@Basic @Raw
 	public double getRadius(){
 		return this.radius;
 	}
