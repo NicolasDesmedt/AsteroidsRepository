@@ -45,13 +45,31 @@ public class Program {
 		functionsMap.put(functionName, body);
 	}
 	
+	public Map<String, Statement> getFunctionsMap() {
+		return new HashMap<String, Statement>(functionsMap);
+	}
 	
+	public Map<String, Expression<?>> getFunctionsReturn() {
+		return new HashMap<String, Expression<?>>(functionsReturn);
+	}
+	
+	public void addToFunctionsReturn(String functionName, Expression<?> expression) {
+		functionsReturn.put(functionName, expression);
+	}
 	
 	private Map<String, Expression<?>> functionsReturn = new HashMap<>();
 	
 	private final Statement body;
 	
-	private final Map<String, Type> globals = new HashMap<String, Type>();
+	public void addToGlobals(String variableName, Expression<?> expression) {
+		this.globals.put(variableName, expression);
+	}
+	
+	public Map<String, Expression<?>> getGlobals() {
+		return this.globals;
+	}
+	
+	private Map<String, Expression<?>> globals = new HashMap<String, Expression<?>>();
 	
 	public double getTimeLeft() {
 		//return round(timeLeft,5);
@@ -125,6 +143,16 @@ public class Program {
 	}
 	
 	private Map<String, Expression<?>> variables = new HashMap<>();
+	
+	private boolean executingStatementsInFunction = false;
+	
+	public boolean executingStatementsInFunction() {
+		return this.executingStatementsInFunction;
+	}
+	
+	public void setExecutingStatementsInFunction(Boolean bool) {
+		this.executingStatementsInFunction = bool;
+	}
 	
 	public static double round(double value, int places) {
 	    if (places < 0) throw new IllegalArgumentException();
