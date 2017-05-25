@@ -41,15 +41,33 @@ public class Asteroid extends MinorPlanet{
 	 * 			The given radius is not a valid radius for any asteroid.
 	 * 			| (! isValidRadius(radius))
 	 */
+	public Asteroid(double x, double y, double xVelocity, double yVelocity, double radius, double maxSpeed)
+			throws IllegalArgumentException{
+		super(x, y, xVelocity, yVelocity, radius, maxSpeed);
+	}
+	
+	/**
+	 * Initialize this new asteroid with given position, velocity and radius with
+	 * SPEED_OF_LIGHT as its maximum speed.
+	 * 
+	 * @param 	x
+	 * 			The x-coordinate of the position of this new asteroid (in km).
+	 * @param 	y
+	 * 			The y-coordinate of the position of this new asteroid (in km).
+	 * @param 	xVelocity
+	 * 			The movement per unit time of this new asteroid in the x direction (in km/s).
+	 * @param 	yVelocity
+	 * 			The movement per unit time of this new asteroid in the y direction (in km/s).
+	 * @param 	radius
+	 * 			The radius of this new circle-shaped asteroid (in km). 
+	 * 			This radius does not change during the program's execution.
+	 * @effect	This new asteroid is initialized as an asteroid with the given position, 
+	 * 			velocity and radius, and SPEED_OF_LIGHT as it's maximum speed.
+	 */
 	public Asteroid(double x, double y, double xVelocity, double yVelocity, double radius) 
 			throws IllegalArgumentException{
 		this(x, y, xVelocity, yVelocity, radius, SPEED_OF_LIGHT);
 		
-	}
-	
-	public Asteroid(double x, double y, double xVelocity, double yVelocity, double radius, double maxSpeed)
-			throws IllegalArgumentException{
-		super(x, y, xVelocity, yVelocity, radius, maxSpeed);
 	}
 	
 	/**

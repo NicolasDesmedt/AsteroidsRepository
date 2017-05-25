@@ -61,19 +61,6 @@ public class Ship extends Entity{
 	 * 			The given radius is not a valid radius for any ship.
 	 * 			| (! isValidRadius(radius))
 	 */
-	
-	public Ship(double x, double y, double xVelocity, double yVelocity, double radius, double orientation) 
-			throws IllegalArgumentException{
-		this(x, y, xVelocity, yVelocity, radius, orientation, 0, SPEED_OF_LIGHT);
-		
-	}
-	
-	public Ship(double x, double y, double xVelocity, double yVelocity, double radius, double orientation, double mass) 
-			throws IllegalArgumentException{
-		this(x, y, xVelocity, yVelocity, radius, orientation, mass, SPEED_OF_LIGHT);
-		
-	}
-	
 	public Ship(double x, double y, double xVelocity, double yVelocity, double radius, double orientation, double mass, double maxSpeed) 
 			throws IllegalArgumentException{
 		super(x, y, xVelocity, yVelocity, radius, maxSpeed);
@@ -83,6 +70,60 @@ public class Ship extends Entity{
 		
 	}
 	
+	/**
+	 * Initialize this new ship with given position, velocity, radius, orientation and mass with
+	 * SPEED_OF_LIGHT as its maximum speed.
+	 * 
+	 * @param 	x
+	 * 			The x-coordinate of the position of this new ship (in km).
+	 * @param 	y
+	 * 			The y-coordinate of the position of this new ship (in km).
+	 * @param 	xVelocity
+	 * 			The movement per unit time of this new ship in the x direction (in km/s).
+	 * @param 	yVelocity
+	 * 			The movement per unit time of this new ship in the y direction (in km/s).
+	 * @param 	radius
+	 * 			The radius of this new circle-shaped ship (in km). 
+	 * 			This radius does not change during the program's execution.
+	 * @param 	orientation
+	 * 			The direction in which this new ship is faced (in radians).
+	 * @param 	mass
+	 * 			The mass of the given new ship.
+	 * @effect	This new ship is initialized as a ship with the given position, 
+	 * 			velocity, radius, orientation and mass, and SPEED_OF_LIGHT as it's maximum speed.
+	 */
+	public Ship(double x, double y, double xVelocity, double yVelocity, double radius, double orientation, double mass) 
+			throws IllegalArgumentException{
+		this(x, y, xVelocity, yVelocity, radius, orientation, mass, SPEED_OF_LIGHT);
+		
+	}
+	
+	/**
+	 * Initialize this new ship with given position, velocity, radius and orientation with
+	 * mass set to it's minimal value and SPEED_OF_LIGHT as its maximum speed.
+	 * 
+	 * @param 	x
+	 * 			The x-coordinate of the position of this new ship (in km).
+	 * @param 	y
+	 * 			The y-coordinate of the position of this new ship (in km).
+	 * @param 	xVelocity
+	 * 			The movement per unit time of this new ship in the x direction (in km/s).
+	 * @param 	yVelocity
+	 * 			The movement per unit time of this new ship in the y direction (in km/s).
+	 * @param 	radius
+	 * 			The radius of this new circle-shaped ship (in km). 
+	 * 			This radius does not change during the program's execution.
+	 * @param 	orientation
+	 * 			The direction in which this new ship is faced (in radians).
+	 * @effect	This new ship is initialized as a ship with the given position, 
+	 * 			velocity, radius and orientation, and mass set to it's minimal value and
+	 * 			SPEED_OF_LIGHT as it's maximum speed.
+	 */
+	public Ship(double x, double y, double xVelocity, double yVelocity, double radius, double orientation) 
+			throws IllegalArgumentException{
+		this(x, y, xVelocity, yVelocity, radius, orientation, 0, SPEED_OF_LIGHT);
+		
+	}
 	/**
 	 * Initialize this new ship in the origin of the axes with zero velocity, with a radius 
 	 * set to its lowest possible value and with an orientation facing up at an angle of PI/2.

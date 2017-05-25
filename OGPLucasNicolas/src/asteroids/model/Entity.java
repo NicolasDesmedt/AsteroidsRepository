@@ -48,9 +48,7 @@ public abstract class Entity {
 	 * 			| new.getVelocity() == double[] {xVelocity,yVelocity}
 	 * @post	The new radius of this new entity is equal to the given radius.
 	 * 			| new.getRadius == radius
-	 * @post	The new orientation of this new entity is equal to the given orientation.
-	 * 			| new.getOrientation == orientation
-	 * @post	The new maxSpeed of this new ship is entity to the given maxSpeed,
+	 * @post	The new maxSpeed of this new entity is set to the given maxSpeed,
 	 * 			if no maxSpeed is given, it is equal to the SPEED_OF_LIGHT.
 	 * 			| new.getMaxspeed == maxSpeed 
 	 * @throws 	IllegalArgumentException
@@ -60,12 +58,6 @@ public abstract class Entity {
 	 * 			The given radius is not a valid radius for any entity.
 	 * 			| (! isValidRadius(radius))
 	 */
-	
-	protected Entity(double x, double y, double xVelocity, double yVelocity, double radius)
-			throws IllegalArgumentException{
-			this(x, y, xVelocity, yVelocity, radius, SPEED_OF_LIGHT);
-		}
-	
 	protected Entity(double x, double y, double xVelocity, double yVelocity, double radius, double maxSpeed)
 			throws IllegalArgumentException{
 		this.setMaxSpeed(maxSpeed);
@@ -74,6 +66,29 @@ public abstract class Entity {
 		if (!isValidRadius(radius)) throw new IllegalArgumentException("The given radius isn't a valid one");
 		this.radius = radius;
 	}
+	
+	/**
+	 * Initialize this new entity with given position, velocity and radius with
+	 * SPEED_OF_LIGHT as its maximum speed.
+	 * 
+	 * @param 	x
+	 * 			The x-coordinate of the position of this new entity (in km).
+	 * @param 	y
+	 * 			The y-coordinate of the position of this new entity (in km).
+	 * @param 	xVelocity
+	 * 			The movement per unit time of this new entity in the x direction (in km/s).
+	 * @param 	yVelocity
+	 * 			The movement per unit time of this new entity in the y direction (in km/s).
+	 * @param 	radius
+	 * 			The radius of this new circle-shaped entity (in km). 
+	 * 			This radius does not change during the program's execution.
+	 * @effect	This new entity is initialized as an entity with the given position, 
+	 * 			velocity and radius, and SPEED_OF_LIGHT as it's maximum speed.
+	 */
+	protected Entity(double x, double y, double xVelocity, double yVelocity, double radius)
+			throws IllegalArgumentException{
+			this(x, y, xVelocity, yVelocity, radius, SPEED_OF_LIGHT);
+		}
 	
 	/**
 	 * Return the position of this entity.

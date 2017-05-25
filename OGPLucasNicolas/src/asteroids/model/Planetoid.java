@@ -39,18 +39,12 @@ public class Planetoid extends MinorPlanet{
 	 * @post	The new totalTraveledDistance of this new planetoid is equal to the given totalTraveledDistance.
 	 * 			| new.getTotalTraveledDistance == totalTraveledDistance
 	 * @throws 	IllegalArgumentException
-	 * 			The given position is not a valid position for an asteroid.
+	 * 			The given position is not a valid position for an planetoid.
 	 * 			| (! isValidPosition(position))
 	 * @throws 	IllegalArgumentException
-	 * 			The given radius is not a valid radius for any asteroid.
+	 * 			The given radius is not a valid radius for any planetoid.
 	 * 			| (! isValidRadius(radius))
 	 */
-	public Planetoid(double x, double y, double xVelocity, double yVelocity, double radius, double totalTraveledDistance) 
-			throws IllegalArgumentException{
-		this(x, y, xVelocity, yVelocity, radius, totalTraveledDistance, SPEED_OF_LIGHT);
-		
-	}
-	
 	public Planetoid(double x, double y, double xVelocity, double yVelocity, double radius, double totalTraveledDistance, double maxSpeed)
 			throws IllegalArgumentException{
 		super(x, y, xVelocity, yVelocity, radius, maxSpeed);
@@ -60,6 +54,31 @@ public class Planetoid extends MinorPlanet{
 		if (radius-totalTraveledDistance*0.000001<minMinorPlanetRadius) {
 			terminate();
 		}
+	}
+	/**
+	 * Initialize this new planetoid with given position, velocity, radius and total traveled
+	 * distance with SPEED_OF_LIGHT as its maximum speed.
+	 * 
+	 * @param 	x
+	 * 			The x-coordinate of the position of this new planetoid (in km).
+	 * @param 	y
+	 * 			The y-coordinate of the position of this new planetoid (in km).
+	 * @param 	xVelocity
+	 * 			The movement per unit time of this new planetoid in the x direction (in km/s).
+	 * @param 	yVelocity
+	 * 			The movement per unit time of this new planetoid in the y direction (in km/s).
+	 * @param 	radius
+	 * 			The radius of this new circle-shaped planetoid (in km). 
+	 * 			This radius does not change during the program's execution.
+	 * @param 	totalTraveledDistance
+	 * 			The total distance traveled by the planetoid.
+	 * @effect	This new planetoid is initialized as a planetoid with the given position, 
+	 * 			velocity, radius and total traveled distance, and SPEED_OF_LIGHT as it's maximum speed.
+	 */
+	public Planetoid(double x, double y, double xVelocity, double yVelocity, double radius, double totalTraveledDistance) 
+			throws IllegalArgumentException{
+		this(x, y, xVelocity, yVelocity, radius, totalTraveledDistance, SPEED_OF_LIGHT);
+		
 	}
 	
 	/**

@@ -48,16 +48,34 @@ public class Bullet extends Entity{
 	 * 			The given argument is not a valid argument for a bullet.
 	 * 			| (! isValidPosition(position)) ||  (! isValidRadius(radius))
 	 */
-	public Bullet(double x, double y, double xVelocity, double yVelocity, double radius) 
-			throws IllegalArgumentException{
-		this(x, y, xVelocity, yVelocity, radius, SPEED_OF_LIGHT);
-		
-	}
-	
 	public Bullet(double x, double y, double xVelocity, double yVelocity, double radius, double maxSpeed)
 			throws IllegalArgumentException{
 		super(x, y, xVelocity, yVelocity, radius, maxSpeed);
 		this.setMassBullet();
+	}
+	
+	/**
+	 * Initialize this new bullet with given position, velocity and radius with
+	 * SPEED_OF_LIGHT as its maximum speed.
+	 * 
+	 * @param 	x
+	 * 			The x-coordinate of the position of this new bullet (in km).
+	 * @param 	y
+	 * 			The y-coordinate of the position of this new bullet (in km).
+	 * @param 	xVelocity
+	 * 			The movement per unit time of this new bullet in the x direction (in km/s).
+	 * @param 	yVelocity
+	 * 			The movement per unit time of this new bullet in the y direction (in km/s).
+	 * @param 	radius
+	 * 			The radius of this new circle-shaped bullet (in km). 
+	 * 			This radius does not change during the program's execution.
+	 * @effect	This new bullet is initialized as a bullet with the given position, 
+	 * 			velocity and radius, and SPEED_OF_LIGHT as it's maximum speed.
+	 */
+	public Bullet(double x, double y, double xVelocity, double yVelocity, double radius) 
+			throws IllegalArgumentException{
+		this(x, y, xVelocity, yVelocity, radius, SPEED_OF_LIGHT);
+		
 	}
 	
 	/**

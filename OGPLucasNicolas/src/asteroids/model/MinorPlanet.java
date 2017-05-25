@@ -32,7 +32,7 @@ public abstract class MinorPlanet extends Entity{
 	 * 			The radius of this new circle-shaped minorPlanet (in km). 
 	 * 			This radius does not change during the program's execution.
 	 * @param 	mass
-	 * 			The mass of the given new ship.
+	 * 			The mass of the given new minorPlanet.
 	 * @param 	maxSpeed
 	 * 			The maximum speed of an minorPlanet.
 	 * @effect	The new minor planet is initialized as an entity with the given position, 
@@ -48,16 +48,36 @@ public abstract class MinorPlanet extends Entity{
 	 * 			The given radius is not a valid radius for any minor planet.
 	 * 			| (! isValidRadius(radius))
 	 */
-	public MinorPlanet(double x, double y, double xVelocity, double yVelocity, double radius, double mass) 
-			throws IllegalArgumentException{
-		this(x, y, xVelocity, yVelocity, radius, mass, SPEED_OF_LIGHT);
-		
-	}
-	
 	public MinorPlanet(double x, double y, double xVelocity, double yVelocity, double radius, double mass, double maxSpeed)
 			throws IllegalArgumentException{
 		super(x, y, xVelocity, yVelocity, radius, maxSpeed);
 		this.setMass();
+	}
+	
+	/**
+	 * Initialize this new minorPlanet with given position, velocity, radius and mass with
+	 * SPEED_OF_LIGHT as its maximum speed.
+	 * 
+	 * @param 	x
+	 * 			The x-coordinate of the position of this new minorPlanet (in km).
+	 * @param 	y
+	 * 			The y-coordinate of the position of this new minorPlanet (in km).
+	 * @param 	xVelocity
+	 * 			The movement per unit time of this new minorPlanet in the x direction (in km/s).
+	 * @param 	yVelocity
+	 * 			The movement per unit time of this new minorPlanet in the y direction (in km/s).
+	 * @param 	radius
+	 * 			The radius of this new circle-shaped minorPlanet (in km). 
+	 * 			This radius does not change during the program's execution.
+	 * @param 	mass
+	 * 			The mass of the given new minorPlanet.
+	 * @effect	This new minorPlanet is initialized as a minorPlanet with the given position, 
+	 * 			velocity, radius and mass, and SPEED_OF_LIGHT as it's maximum speed.
+	 */
+	public MinorPlanet(double x, double y, double xVelocity, double yVelocity, double radius, double mass) 
+			throws IllegalArgumentException{
+		this(x, y, xVelocity, yVelocity, radius, mass, SPEED_OF_LIGHT);
+		
 	}
 	
 	/**
