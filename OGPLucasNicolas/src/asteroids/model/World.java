@@ -125,7 +125,7 @@ public class World{
 	 *       |	(new entity).getWorld() == null
 	 */
 	 public void terminate() {
-		 for (Entity entity : allEntities)
+		 for (Entity entity : getAllEntities())
 			 entity.removeFromWorld();
 		 allEntities.clear();
 		 this.isTerminated = true;
@@ -262,7 +262,7 @@ public class World{
 	 */
 	@Raw @Model
 	public boolean overlapsWithOtherEntities(Entity entity) {
-		for (Entity other : allEntities) {
+		for (Entity other : getAllEntities()) {
 			if (entity.overlapFiltered(other)){
 				return true;
 			}
@@ -340,7 +340,7 @@ public class World{
 	 */
 	public Entity getEntityAt(double x, double y) {
 		double[] position = {x,y};
-		for (Entity entity : allEntities) {
+		for (Entity entity : getAllEntities()) {
 			if ((entity.getPositionX() == position[0]) && (entity.getPositionY() == position[1]))
 				return entity;
 		}
@@ -629,7 +629,7 @@ public class World{
 	public Entity[] getFirstCollidingEntities() {
 		Entity[] firstCollidingEntities = new Entity[]{null,null};
 		double timeToNextCollision = getTimeToNextCollision();
-		for (Entity entity : allEntities) {
+		for (Entity entity : getAllEntities()) {
 			if (getTimeToNextCollisionEntity(entity) == timeToNextCollision) {
 				if (firstCollidingEntities[0] == null){
 					firstCollidingEntities[0] = entity;
@@ -744,7 +744,7 @@ public class World{
 	public void advanceAllEntities (double dt) {
 		assert this.getTimeToNextCollision() >= dt;
 		Set<Planetoid> smallPlanetoids = new HashSet<Planetoid>();
-		for (Entity entity : allEntities) {
+		for (Entity entity : getAllEntities()) {
 			entity.move(dt);
 			if (entity instanceof Planetoid && entity.getRadius()<MinorPlanet.minMinorPlanetRadius) {
 				smallPlanetoids.add((Planetoid)entity);

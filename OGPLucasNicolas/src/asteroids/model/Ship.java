@@ -381,7 +381,8 @@ public class Ship extends Entity{
 	/**
 	 * A variable registering the default thruster force.
 	 */
-	public final static double defaultThrusterForce = 1.1E18;
+	//public final static double defaultThrusterForce = 1.1E18;
+	public final static double defaultThrusterForce = 2E19;
 	
 	/**
 	 * Set the thruster force of this ship to a given thruster force.
