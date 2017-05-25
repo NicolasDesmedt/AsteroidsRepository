@@ -30,15 +30,10 @@ public class Asteroid extends MinorPlanet{
 	 * 			This radius does not change during the program's execution.
 	 * @param 	maxSpeed
 	 * 			The maximum speed of an asteroid.
-	 * @post	The new position of this new asteroid is equal to the given position.
-	 * 			| new.getPosition() == double[] {x,y}
-	 * @post	The new velocity of this new asteroid is equal to the given velocity.
-	 * 			| new.getVelocity() == double[] {xVelocity,yVelocity}
-	 * @post	The new radius of this new asteroid is equal to the given radius.
-	 * 			| new.getRadius == radius 
-	 * @post	The new maxSpeed of this new asteroid is equal to the given maxSpeed,
-	 * 			if no maxSpeed is given, it is equal to the SPEED_OF_LIGHT.
-	 * 			| new.getMaxspeed == maxSpeed 
+	 * @effect	The new asteroid is initialized as an entity with the given position, 
+	 * 			velocity, radius and maxSpeed.
+	 * 			If no maxSpeed is given, it is equal to the SPEED_OF_LIGHT.
+	 * 			| super(x, y, xVelocity, yVelocity, radius, maxSpeed)
 	 * @throws 	IllegalArgumentException
 	 * 			The given position is not a valid position for an asteroid.
 	 * 			| (! isValidPosition(position))

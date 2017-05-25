@@ -35,17 +35,12 @@ public abstract class MinorPlanet extends Entity{
 	 * 			The mass of the given new ship.
 	 * @param 	maxSpeed
 	 * 			The maximum speed of an minorPlanet.
-	 * @post	The new position of this new minorPlanet is equal to the given position.
-	 * 			| new.getPosition() == double[] {x,y}
-	 * @post	The new velocity of this new minorPlanet is equal to the given velocity.
-	 * 			| new.getVelocity() == double[] {xVelocity,yVelocity}
-	 * @post	The new radius of this new minorPlanet is equal to the given radius.
-	 * 			| new.getRadius == radius 
+	 * @effect	The new minor planet is initialized as an entity with the given position, 
+	 * 			velocity, radius and maxSpeed.
+	 * 			if no maxSpeed is given, it is equal to the SPEED_OF_LIGHT.
+	 * 			| super(x, y, xVelocity, yVelocity, radius, maxSpeed)
 	 * @post	The new mass of this new minorPlanet is equal to the given mass.
 	 * 			| new.getMass == mass
-	 * @post	The new maxSpeed of this new minorPlanet is equal to the given maxSpeed,
-	 * 			if no maxSpeed is given, it is equal to the SPEED_OF_LIGHT.
-	 * 			| new.getMaxspeed == maxSpeed 
 	 * @throws 	IllegalArgumentException
 	 * 			The given position is not a valid position for a minor planet.
 	 * 			| (! isValidPosition(position))

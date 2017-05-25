@@ -32,16 +32,8 @@ public class EntityTest {
 	private static Ship mutableShip1, mutableShip2, mutableShip3;
 	
 	/**
-	 * Variable of a bullet referencing bullet with position [0,0], 
-	 * velocity[20,20] and radius 10.
-	 */
-	
-	private static Bullet mutableBullet1;
-	
-	/**
 	 * Variable of a world referencing a world with height and width 1000.
 	 */
-	
 	private static World world1000x1000;
 	
 	/**
@@ -66,9 +58,6 @@ public class EntityTest {
 	 * 
 	 * @post The variable mutableShip2 references a new ship with position [11,11], 
 	 * velocity[0,10], radius 9, orientation facing right (PI/2) and mass 10E15.
-	 * 
-	 * @post The variable mutableBullet1 references a new bullet with position [0,0], 
-	 * velocity[20,20] and radius 5.
 	 */
 	
 	@Before
@@ -76,7 +65,6 @@ public class EntityTest {
 		mutableShip1 = new Ship(0,0,20,20,10,0, 5.5E20);
 		mutableShip2 = new Ship(11,11,10,10,10,(Math.PI/2), 10E15);
 		mutableShip3 = new Ship(11,11,0,10,10,(Math.PI/2), 10E15);
-		mutableBullet1 = new Bullet(0,0,20,20,5);
 		world1000x1000 = new World (1000,1000);
 	}
 	
@@ -285,7 +273,6 @@ public class EntityTest {
 	public void Move_DurationIsNegative() throws IllegalArgumentException{
 		mutableShip1.move(-1);
 	}
-
 	
 	@Test
 	public void GetDistanceBetween_LegalCase(){
