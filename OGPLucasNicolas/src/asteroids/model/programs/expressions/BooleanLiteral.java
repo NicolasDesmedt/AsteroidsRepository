@@ -3,7 +3,9 @@ package asteroids.model.programs.expressions;
 import java.util.Map;
 
 import asteroids.part3.programs.SourceLocation;
+import be.kuleuven.cs.som.annotate.Value;
 
+@Value
 public class BooleanLiteral extends Literals<Boolean>{
 
 	public BooleanLiteral(boolean bool, SourceLocation sourceLocation) {
