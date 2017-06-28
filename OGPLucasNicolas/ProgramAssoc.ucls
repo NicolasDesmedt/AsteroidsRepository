@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<class-diagram version="1.2.0" icons="true" always-add-relationships="false" generalizations="true" realizations="true" 
+  associations="true" dependencies="false" nesting-relationships="true" router="FAN">  
+  <class id="1" language="java" name="asteroids.model.Program" project="Asteroids" 
+    file="/Asteroids/src/asteroids/model/Program.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="736" y="341"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="2" language="java" name="asteroids.model.Entity" project="Asteroids" 
+    file="/Asteroids/src/asteroids/model/Entity.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="356" y="571"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="3" language="java" name="asteroids.model.Ship" project="Asteroids" 
+    file="/Asteroids/src/asteroids/model/Ship.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="361" y="328"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="4" language="java" name="asteroids.model.programs.expressions.Expression" project="Asteroids" 
+    file="/Asteroids/src/asteroids/model/programs/expressions/Expression.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="772" y="713"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="5" language="java" name="asteroids.model.programs.functions.Function" project="Asteroids" 
+    file="/Asteroids/src/asteroids/model/programs/functions/Function.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="772" y="106"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="6" language="java" name="asteroids.model.programs.statements.Statement" project="Asteroids" 
+    file="/Asteroids/src/asteroids/model/programs/statements/Statement.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1245" y="359"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="7" language="java" name="asteroids.model.programs.expressions.EntityExpression" project="Asteroids" 
+    file="/Asteroids/src/asteroids/model/programs/expressions/EntityExpression.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="356" y="752"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <association id="8">    
+    <bendpoint x="836" y="205"/>    
+    <end type="SOURCE" refId="5" navigable="false">      
+      <attribute id="9" name="program"/>      
+      <multiplicity id="10" minimum="0" maximum="1">        
+        <position height="17" width="25" x="818" y="226"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="1" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="11">    
+    <bendpoint x="704" y="521"/>    
+    <bendpoint x="709" y="612"/>    
+    <end type="SOURCE" refId="1" navigable="false">      
+      <attribute id="12" name="variables">        
+        <position height="19" width="58" x="669" y="629"/>      
+      </attribute>      
+      <multiplicity id="13" minimum="0" maximum="2147483647">        
+        <position height="17" width="23" x="727" y="630"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="4" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="14">    
+    <bendpoint x="838" y="512"/>    
+    <bendpoint x="838" y="612"/>    
+    <end type="SOURCE" refId="1" navigable="false">      
+      <attribute id="15" name="globals">        
+        <position height="19" width="48" x="774" y="629"/>      
+      </attribute>      
+      <multiplicity id="16" minimum="0" maximum="2147483647">        
+        <position height="17" width="23" x="825" y="629"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="4" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="17">    
+    <bendpoint x="1056" y="181"/>    
+    <end type="SOURCE" refId="6" navigable="false">      
+      <attribute id="18" name="program">        
+        <position height="19" width="54" x="876" y="226"/>      
+      </attribute>      
+      <multiplicity id="19" minimum="0" maximum="1">        
+        <position height="17" width="25" x="922" y="244"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="1" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="20">    
+    <bendpoint x="970" y="521"/>    
+    <bendpoint x="970" y="676"/>    
+    <end type="SOURCE" refId="1" navigable="false">      
+      <attribute id="21" name="functionsResult">        
+        <position height="19" width="92" x="876" y="655"/>      
+      </attribute>      
+      <multiplicity id="22" minimum="0" maximum="2147483647">        
+        <position height="17" width="23" x="910" y="685"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="4" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="23">    
+    <bendpoint x="1032" y="278"/>    
+    <end type="SOURCE" refId="1" navigable="false">      
+      <attribute id="24" name="body">        
+        <position height="19" width="35" x="1109" y="293"/>      
+      </attribute>      
+      <multiplicity id="25" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="6" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="26">    
+    <end type="SOURCE" refId="3"/>    
+    <end type="TARGET" refId="2"/>  
+  </generalization>  
+  <association id="27">    
+    <bendpoint x="1246" y="106"/>    
+    <end type="SOURCE" refId="5" navigable="false">      
+      <attribute id="28" name="body"/>      
+      <multiplicity id="29" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="6" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="30">    
+    <bendpoint x="644" y="708"/>    
+    <end type="SOURCE" refId="4" navigable="false">      
+      <attribute id="31" name="ship"/>      
+      <multiplicity id="32" minimum="0" maximum="1">        
+        <position height="17" width="25" x="460" y="441"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="3" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="33">    
+    <bendpoint x="1248" y="713"/>    
+    <end type="SOURCE" refId="4" navigable="false">      
+      <attribute id="34" name="statement"/>      
+      <multiplicity id="35" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="6" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="36">    
+    <bendpoint x="510" y="357"/>    
+    <end type="SOURCE" refId="1" navigable="false">      
+      <attribute id="37" name="ship"/>      
+      <multiplicity id="38" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="3" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="39">    
+    <bendpoint x="633" y="621"/>    
+    <bendpoint x="628" y="517"/>    
+    <end type="SOURCE" refId="4" navigable="false">      
+      <attribute id="40" name="program">        
+        <position height="19" width="54" x="609" y="436"/>      
+      </attribute>      
+      <multiplicity id="41" minimum="0" maximum="1">        
+        <position height="17" width="25" x="675" y="437"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="1" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="42">    
+    <bendpoint x="1021" y="376"/>    
+    <end type="SOURCE" refId="1" navigable="false">      
+      <attribute id="43" name="functionsMap"/>      
+      <multiplicity id="44" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="6" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="45">    
+    <bendpoint x="510" y="305"/>    
+    <end type="SOURCE" refId="3" navigable="false">      
+      <attribute id="46" name="program"/>      
+      <multiplicity id="47" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="1" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="48">    
+    <bendpoint x="1005" y="458"/>    
+    <end type="SOURCE" refId="1" navigable="false">      
+      <attribute id="49" name="toDoList">        
+        <position height="19" width="53" x="1063" y="397"/>      
+      </attribute>      
+      <multiplicity id="50" minimum="0" maximum="2147483647">        
+        <position height="17" width="23" x="1128" y="409"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="6" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="51">    
+    <bendpoint x="694" y="208"/>    
+    <end type="SOURCE" refId="1" navigable="false">      
+      <attribute id="52" name="functions">        
+        <position height="19" width="57" x="658" y="166"/>      
+      </attribute>      
+      <multiplicity id="53" minimum="0" maximum="2147483647">        
+        <position height="17" width="23" x="724" y="168"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="5" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="54">    
+    <end type="SOURCE" refId="7" navigable="false">      
+      <attribute id="55" name="entity"/>      
+      <multiplicity id="56" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="2" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+    sort-features="false" accessors="true" visibility="true">    
+    <attributes public="true" package="true" protected="true" private="true" static="true"/>    
+    <operations public="false" package="false" protected="false" private="false" static="true"/>  
+  </classifier-display>  
+  <association-display labels="true" multiplicity="true"/>
+</class-diagram>

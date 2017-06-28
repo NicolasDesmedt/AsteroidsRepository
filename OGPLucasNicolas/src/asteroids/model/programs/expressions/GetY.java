@@ -7,8 +7,8 @@ import asteroids.part3.programs.SourceLocation;
 
 public class GetY extends UnaryExpression<Double> {
 
-	public GetY(Expression<?> eYpression, SourceLocation sourceLocation) {
-		super(eYpression, sourceLocation);
+	public GetY(Expression<Entity> expression, SourceLocation sourceLocation) {
+		super(expression, sourceLocation);
 	}
 
 	@Override

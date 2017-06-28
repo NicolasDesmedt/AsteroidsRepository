@@ -95,12 +95,8 @@ public class Bullet extends Entity{
 	/**
 	 * Terminate this bullet and remove it from the ship if it belongs to one.
 	 *
-	 * @post This bullet is terminated.
-	 *       | new.isTerminated()
 	 * @post If the given bullet belongs to a ship, remove the bullet from the ship.
 	 * 		 | @see implementation
-	 * @effect	...
-	 * 		 | super.terminate()
 	 */
 	@Raw @Override
 	public void terminate() {

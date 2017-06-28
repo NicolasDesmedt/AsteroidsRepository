@@ -350,6 +350,21 @@ public class ShipTest {
 	public void collidesWithPlanetoid_LegalCase(){
 		world1000x1000.addEntity(mutableShip1);
 		Planetoid planetoid = new Planetoid(250, 250, 500, 0, 50, 0);
+		
+		int b = 2007;
+		System.out.println(b);
+		int a = 1;
+		while (a > 0) {
+			if (b == 2007) {
+				a = b >> 1;
+				b = a;
+			}
+			else {
+				a = a >> 1;
+			}
+			System.out.println(a);
+		}
+		
 		for(int i=0; i<1000; i++){
 			mutableShip1.collidesWithPlanetoid(planetoid);
 			assertTrue(world1000x1000.withinBoundaries(mutableShip1));

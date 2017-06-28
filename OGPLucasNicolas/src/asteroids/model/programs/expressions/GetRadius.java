@@ -7,7 +7,7 @@ import asteroids.part3.programs.SourceLocation;
 
 public class GetRadius extends UnaryExpression<Double> {
 
-	public GetRadius(Expression<?> expression, SourceLocation sourceLocation) {
+	public GetRadius(Expression<Entity> expression, SourceLocation sourceLocation) {
 		super(expression, sourceLocation);
 	}
 

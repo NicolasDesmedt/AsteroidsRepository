@@ -7,7 +7,7 @@ import asteroids.part3.programs.SourceLocation;
 
 public class GetVY extends UnaryExpression<Double> {
 
-	public GetVY(Expression<?> expression, SourceLocation sourceLocation) {
+	public GetVY(Expression<Entity> expression, SourceLocation sourceLocation) {
 		super(expression, sourceLocation);
 	}
 

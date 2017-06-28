@@ -7,7 +7,7 @@ import asteroids.part3.programs.SourceLocation;
 
 public class GetX extends UnaryExpression<Double> {
 
-	public GetX(Expression<?> expression, SourceLocation sourceLocation) {
+	public GetX(Expression<Entity> expression, SourceLocation sourceLocation) {
 		super(expression, sourceLocation);
 	}
 
